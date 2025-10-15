@@ -1,0 +1,13 @@
+class AssetsPath {
+  static const String _imageBaseUrl = 'assets/images';
+  static const String onBoardImg1 = '$_imageBaseUrl/onb1.png';
+  static const String onBoardImg2 = '$_imageBaseUrl/onb2.png';
+  static const String onBoardImg3 = '$_imageBaseUrl/onb3.png';
+  static const String heroparts = '$_imageBaseUrl/heroparts.png';
+  static const String cardbtn = '$_imageBaseUrl/card_btn.png';
+  // static const String cardbtn = '$_imageBaseUrl/cordbtn.png';
+  static const String cardtire = '$_imageBaseUrl/carTire.png';
+
+  static const String appbarIcon = '$_imageBaseUrl/appbar_icon.svg';
+  static const String notificationIcon = '$_imageBaseUrl/notification.svg';
+}
