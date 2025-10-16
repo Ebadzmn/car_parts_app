@@ -16,8 +16,9 @@ class searchWidget extends StatelessWidget {
           hintText: 'Search for make, model & products',
           hintStyle: GoogleFonts.montserrat(
             color: Colors.grey,
-            fontSize: 16.sp,
+            fontSize: 12.sp,
           ),
+
           filled: true,
           fillColor: Color(0xFF373737),
           enabledBorder: OutlineInputBorder(

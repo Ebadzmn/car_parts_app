@@ -15,12 +15,28 @@ class AppBarWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            SvgPicture.asset(AssetsPath.appbarIcon),
+            // ✅ Drawer Open Button
+            Builder(
+              builder: (context) => IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer(); // opens the drawer
+                },
+                icon: SvgPicture.asset(
+                  AssetsPath.appbarIcon,
+                  height: 24.h,
+                  width: 24.w,
+                ),
+              ),
+            ),
+
             SizedBox(width: 12.w),
-            CircleAvatar(child: Icon(Icons.person)),
+
+            const CircleAvatar(child: Icon(Icons.person)),
+
             SizedBox(width: 8.w),
+
             Text(
-              'HI Nick',
+              'Hi Nick',
               style: GoogleFonts.montserrat(
                 textStyle: TextStyle(
                   fontSize: 15.sp,
@@ -31,7 +47,13 @@ class AppBarWidget extends StatelessWidget {
             ),
           ],
         ),
-        SvgPicture.asset(AssetsPath.notificationIcon),
+
+        // Right side icon
+        SvgPicture.asset(
+          AssetsPath.notificationIcon,
+          height: 22.h,
+          width: 22.w,
+        ),
       ],
     );
   }

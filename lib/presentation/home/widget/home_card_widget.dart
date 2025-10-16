@@ -46,7 +46,7 @@ class HomeCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 120.w,
+                      width: 136.w,
                       height: 30.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(92.r),
@@ -91,7 +91,7 @@ class HomeCardWidget extends StatelessWidget {
                             'Premium Product',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
-                              fontSize: 12.sp,
+                              fontSize: 10.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               height: 1, // text vertical alignment fix
@@ -119,7 +119,7 @@ class HomeCardWidget extends StatelessWidget {
                       child: Text(
                         'Engine is the science of delivering power.',
                         style: GoogleFonts.montserrat(
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
                           color: Colors.white,
                         ),
                       ),

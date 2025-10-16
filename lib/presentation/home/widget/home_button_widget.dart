@@ -79,7 +79,7 @@ class HomeButtonWidget extends StatelessWidget {
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 12.sp,
+                                    fontSize: 10.sp,
                                   ),
                                 ),
                               ),

@@ -17,7 +17,7 @@ class HomeCarCardWidget extends StatelessWidget {
     if (screenHeight >= 1000) {
       childAspectRatioValue = 2.3 / 3; // বড় screen এর জন্য
     } else {
-      childAspectRatioValue = 2.6 / 4; // ছোট screen এর জন্য
+      childAspectRatioValue = 2.5 / 4; // ছোট screen এর জন্য
     }
     return Column(
       children: [
@@ -42,6 +42,7 @@ class HomeCarCardWidget extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 10.h),
         Row(
           children: [
             BlocBuilder<HomeBloc, HomeState>(
@@ -140,7 +141,7 @@ class HomeCarCardWidget extends StatelessWidget {
                                     Positioned(
                                       top: 0,
                                       right: 0,
-                                      left: 110,
+                                      left: 105.w,
                                       bottom: 0,
                                       child: Image.asset(AssetsPath.cardbtn),
                                     ),

@@ -2,44 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class customTextWidget extends StatelessWidget {
-  const customTextWidget({super.key});
+class CustomTextField extends StatelessWidget {
+  final String label;
+  final String hintText;
+  final TextEditingController? controller;
+  final TextInputType keyboardType;
+  final bool obscureText;
+
+  const CustomTextField({
+    super.key,
+    required this.label,
+    required this.hintText,
+    this.controller,
+    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: 'Enter your text',
-          labelStyle: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.w300,
-              fontSize: 13.sp,
-            ),
-          ),
-          hintText: 'Type something',
-          hintStyle: GoogleFonts.montserrat(),
-          filled: true,
-          fillColor: Color(0xFF383838),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 22,
-            horizontal: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: Colors.white, width: 1.5),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(
-              color: Colors.white, // 🔹 Border color when focused
-              width: 2,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// Label Text
+        Padding(
+          padding: const EdgeInsets.only(left: 8, bottom: 6),
+          child: Text(
+            label,
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
-      ),
+
+        /// TextField
+        TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: GoogleFonts.montserrat(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey,
+            ),
+            filled: true,
+            fillColor: const Color(0xFF383838),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 18,
+              horizontal: 12,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.r),
+              borderSide: const BorderSide(color: Colors.white, width: 1.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.r),
+              borderSide: const BorderSide(color: Colors.white, width: 2),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

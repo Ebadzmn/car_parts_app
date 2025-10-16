@@ -1,13 +1,11 @@
-import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/presentation/home/widget/appbar_widget.dart';
+import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_button_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -15,6 +13,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // ✅ Add Drawer here
+      drawer: DrawerWidget(),
+
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -22,7 +23,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 24.h),
-                AppBarWidget(),
+                AppBarWidget(), // You can add a menu icon here to open drawer
                 SizedBox(height: 24.h),
                 searchWidget(),
                 SizedBox(height: 24.h),
