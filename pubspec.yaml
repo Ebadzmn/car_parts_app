@@ -44,6 +44,7 @@ dependencies:
   dartz:
   flutter_screenutil:
   flutter_svg: 
+  pin_code_fields:
 
 dev_dependencies:
   flutter_test:

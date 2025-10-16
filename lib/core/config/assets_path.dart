@@ -11,4 +11,5 @@ class AssetsPath {
   static const String appbarIcon = '$_imageBaseUrl/appbar_icon.svg';
   static const String notificationIcon = '$_imageBaseUrl/notification.svg';
   static const String logo = '$_imageBaseUrl/logo1.png';
+  static const String notification = '$_imageBaseUrl/Chat.png';
 }
