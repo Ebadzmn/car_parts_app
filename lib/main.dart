@@ -5,6 +5,7 @@ import 'package:car_parts_app/presentation/auth/pages/otp_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_new_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
+import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             // home: ChangeBasicInfo(),
             // home: UserProfile(),
-            home: NotificationPages(),
+            home: HomePage(),
           ),
         );
       },

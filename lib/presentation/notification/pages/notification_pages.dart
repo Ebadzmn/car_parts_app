@@ -8,6 +8,9 @@ class NotificationPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = 1.sh; // sh = screen height
+    final screenWidth = 1.sw;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -23,7 +26,6 @@ class NotificationPages extends StatelessWidget {
                       width: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 0,
@@ -64,9 +66,15 @@ class NotificationPages extends StatelessWidget {
                     child:
                         //  NoNotificationWidget()
                         Container(
-                          height: 100.h,
+                          height: screenHeight >= 1000 ? 130.h : 90.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.white,
+                                width: 0.5,
+                              ),
+                            ),
                             borderRadius: BorderRadius.circular(12.r),
                             color: Color(0xFF424242),
                           ),

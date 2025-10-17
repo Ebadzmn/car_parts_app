@@ -107,7 +107,10 @@ class UserotpPage extends StatelessWidget {
                       Text(
                         'A six digits code has sanded to your email',
                         style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(color: Colors.white),
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ),
                       SizedBox(height: 30.sp),
@@ -152,7 +155,10 @@ class UserotpPage extends StatelessWidget {
                       Text(
                         'Code expires in: 02:59',
                         style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(color: Colors.white),
+                          textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ),
 
@@ -190,7 +196,10 @@ class UserotpPage extends StatelessWidget {
                         text: TextSpan(
                           text: "Don’t receive any code?",
                           style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(color: Colors.white),
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.sp,
+                            ),
                           ),
                           children: [
                             TextSpan(

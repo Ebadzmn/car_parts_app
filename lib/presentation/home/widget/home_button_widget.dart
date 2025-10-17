@@ -74,12 +74,15 @@ class HomeButtonWidget extends StatelessWidget {
                                 shadowColor: Colors.transparent,
                               ),
                               onPressed: () {},
-                              child: Text(
-                                category,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.sp,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  category,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10.sp,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -10,17 +10,12 @@ class HomeCarCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = 1.sh; // sh = screen height
-    final screenWidth = 1.sw; // sw = screen width
+    final screenHeight = 1.sh;
+    final screenWidth = 1.sw;
 
-    double childAspectRatioValue;
-    if (screenHeight >= 1000) {
-      childAspectRatioValue = 2.3 / 3; // বড় screen এর জন্য
-    } else {
-      childAspectRatioValue = 2.5 / 4; // ছোট screen এর জন্য
-    }
     return Column(
       children: [
+        // ======= Header Row =======
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,80 +37,132 @@ class HomeCarCardWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 10.h),
-        Row(
-          children: [
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeLoading) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (state is ProductError) {
-                  return Center(child: Text(''));
-                } else if (state is FetchCard) {
-                  return Expanded(
-                    // Add Expanded here
-                    child: GridView.builder(
-                      shrinkWrap:
-                          true, // Shrink the GridView to fit the content
-                      physics:
-                          NeverScrollableScrollPhysics(), // Disable scrolling within GridView
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.w,
-                        mainAxisSpacing: 18.h,
-                        childAspectRatio: childAspectRatioValue,
+
+        SizedBox(height: screenHeight * 0.01),
+
+        // ======= BlocBuilder =======
+        BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProductError) {
+              return const Center(child: Text('Error loading products'));
+            } else if (state is FetchCard) {
+              // ✅ Responsive grid based on screen width
+              int crossAxisCount = screenWidth < 600
+                  ? 2
+                  : screenWidth < 900
+                  ? 3
+                  : 4;
+
+              double childAspectRatio = screenWidth < 600 ? 2 / 2.9 : 2.2 / 3.2;
+
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 10.w,
+                  mainAxisSpacing: 10.h,
+                  childAspectRatio: childAspectRatio,
+                ),
+                itemCount: state.data.length,
+                itemBuilder: (context, index) {
+                  final item = state.data[index];
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1.2),
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF2E2C2A),
+                          Color(0xFF131313),
+                          Color(0xFF1D1D20),
+                        ],
+                        stops: [0.0, 0.5, 1.0],
                       ),
-                      itemCount: state.data.length,
-                      itemBuilder: (context, index) {
-                        final item = state.data[index];
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1.2),
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF2E2C2A),
-                                Color(0xFF131313),
-                                Color(0xFF1D1D20),
-                              ],
-                              stops: [0.0, 0.5, 1.0],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.sp),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Car name
+                          Text(
+                            item.carName,
+                            style: GoogleFonts.montserrat(
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.grey,
+                              color: Colors.grey,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                          // Car condition
+                          Text(
+                            item.carCondition,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()
+                                ..shader = const LinearGradient(
+                                  colors: [Color(0xFFE7BE00), Colors.white],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.topRight,
+                                ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
                             ),
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(13.sp),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.carName,
-                                  style: GoogleFonts.montserrat(
-                                    color: Colors.grey,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
+
+                          SizedBox(height: 8.h),
+
+                          // Car image — responsive width & height
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.r),
+                                color: Colors.black,
+                              ),
+                              child: Image.asset(
+                                AssetsPath.cardtire,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 8.h),
+
+                          // Price section
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'PRICE',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 10.sp,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                  maxLines: 1, // এক লাইনের বেশি হলে কেটে দেবে
-                                  overflow: TextOverflow
-                                      .ellipsis, // শেষের দিকে ... দেখাবে
-                                ),
-                                Text(
-                                  item.carCondition,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
+                                  Text(
+                                    '32.60',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
                                       foreground: Paint()
                                         ..shader =
                                             const LinearGradient(
                                               colors: [
-                                                Color(0xFFE7BE00),
-                                                Color.fromARGB(
-                                                  255,
-                                                  255,
-                                                  255,
-                                                  255,
-                                                ),
+                                                Color(0xFF5BB349),
+                                                Colors.white,
                                               ],
                                               begin: Alignment.topLeft,
                                               end: Alignment.topRight,
@@ -124,90 +171,24 @@ class HomeCarCardWidget extends StatelessWidget {
                                             ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Container(
-                                  height: 105.h,
-                                  width: 130.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    color: Colors.black,
-                                  ),
-                                  child: Image.asset(AssetsPath.cardtire),
-                                ),
-                                SizedBox(height: 6.h),
-                                Stack(
-                                  children: [
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      left: 105.w,
-                                      bottom: 0,
-                                      child: Image.asset(AssetsPath.cardbtn),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'PRICE',
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              fontSize: 10.sp,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '32.60',
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  foreground: Paint()
-                                                    ..shader =
-                                                        const LinearGradient(
-                                                          colors: [
-                                                            Color(0xFF5BB349),
-                                                            Colors.white,
-                                                          ],
-                                                          begin:
-                                                              Alignment.topLeft,
-                                                          end: Alignment
-                                                              .topRight,
-                                                        ).createShader(
-                                                          Rect.fromLTWH(
-                                                            0,
-                                                            0,
-                                                            200,
-                                                            20,
-                                                          ),
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                              Image.asset(
+                                AssetsPath.cardbtn,
+                                width: 30.w,
+                                height: 30.h,
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
                   );
-                }
-                return SizedBox();
-              },
-            ),
-          ],
+                },
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ],
     );

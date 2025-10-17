@@ -12,6 +12,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = 1.sh; // sh = screen height
+    final screenWidth = 1.sw; // sw = screen width
     return Scaffold(
       // ✅ Add Drawer here
       drawer: DrawerWidget(),
@@ -28,7 +30,7 @@ class HomePage extends StatelessWidget {
                 searchWidget(),
                 SizedBox(height: 24.h),
                 HomeCardWidget(),
-                SizedBox(height: 20.h),
+                SizedBox(height: 12.h),
                 HomeButtonWidget(),
                 HomeCarCardWidget(),
               ],
