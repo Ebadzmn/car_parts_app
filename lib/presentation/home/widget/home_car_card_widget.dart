@@ -38,8 +38,6 @@ class HomeCarCardWidget extends StatelessWidget {
           ],
         ),
 
-        SizedBox(height: screenHeight * 0.01),
-
         // ======= BlocBuilder =======
         BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -97,7 +95,7 @@ class HomeCarCardWidget extends StatelessWidget {
                               decoration: TextDecoration.underline,
                               decorationColor: Colors.grey,
                               color: Colors.grey,
-                              fontSize: 12.sp,
+                              fontSize: 11.sp,
                               fontWeight: FontWeight.w500,
                             ),
                             maxLines: 1,
@@ -108,7 +106,7 @@ class HomeCarCardWidget extends StatelessWidget {
                           Text(
                             item.carCondition,
                             style: GoogleFonts.montserrat(
-                              fontSize: 14.sp,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.bold,
                               foreground: Paint()
                                 ..shader = const LinearGradient(
