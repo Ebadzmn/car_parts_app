@@ -12,4 +12,8 @@ class AssetsPath {
   static const String notificationIcon = '$_imageBaseUrl/notification.svg';
   static const String logo = '$_imageBaseUrl/logo1.png';
   static const String notification = '$_imageBaseUrl/Chat.png';
+  static const String specification = '$_imageBaseUrl/specification.png';
+  static const String rating = '$_imageBaseUrl/rating.png';
+  static const String report = '$_imageBaseUrl/report.png';
+  static const String wish = '$_imageBaseUrl/wish.png';
 }

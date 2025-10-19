@@ -6,6 +6,9 @@ import 'package:car_parts_app/presentation/auth/pages/set_new_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
 import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
+import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
+import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
+import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
@@ -44,13 +47,18 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => di.sl<HomeBloc>()..add(FetchCardEvent()),
             ),
+            BlocProvider(
+              create: (context) =>
+                  di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
+            ),
           ],
           child: MaterialApp(
             theme: ThemeData(scaffoldBackgroundColor: Color(0xFF212121)),
             debugShowCheckedModeBanner: false,
             // home: ChangeBasicInfo(),
             // home: UserProfile(),
-            home: HomePage(),
+            // home: CarDetailsPage(carImages: []),
+            home: FaqsPage(),
           ),
         );
       },

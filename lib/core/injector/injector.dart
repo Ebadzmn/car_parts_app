@@ -4,6 +4,7 @@ import 'package:car_parts_app/domain/repositories/onboard/onboard_repositories.d
 import 'package:car_parts_app/domain/repositories/product/product_repositories.dart';
 import 'package:car_parts_app/domain/usecase/onboard/onboard_usecase.dart';
 import 'package:car_parts_app/domain/usecase/product/product_usecase.dart';
+import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -20,6 +21,7 @@ Future<void> init() async {
   sl.registerLazySingleton<OnboardRepositories>(() => OnbRepositoriesImpl());
 
   sl.registerFactory(() => HomeBloc(productUsecase: sl()));
+  sl.registerFactory(() => DetailsBloc());
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));
 
