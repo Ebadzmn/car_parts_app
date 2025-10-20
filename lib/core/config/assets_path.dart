@@ -16,4 +16,6 @@ class AssetsPath {
   static const String rating = '$_imageBaseUrl/rating.png';
   static const String report = '$_imageBaseUrl/report.png';
   static const String wish = '$_imageBaseUrl/wish.png';
+  static const String faqopen = '$_imageBaseUrl/faqopen.png';
+  static const String faqclose = '$_imageBaseUrl/faqclose.png';
 }

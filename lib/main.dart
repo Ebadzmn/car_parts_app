@@ -5,14 +5,18 @@ import 'package:car_parts_app/presentation/auth/pages/otp_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_new_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
+import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
+import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
+import 'package:car_parts_app/presentation/home/pages/steppar_wids.dart';
 import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
+import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/change_basic_info.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/change_contract.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/change_password.dart';
@@ -51,6 +55,11 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
             ),
+            BlocProvider(create: (context) => di.sl<FaqsBloc>()),
+            BlocProvider(
+              create: (context) =>
+                  di.sl<CategoryBloc>()..add(LoadCategoryEvent()),
+            ),
           ],
           child: MaterialApp(
             theme: ThemeData(scaffoldBackgroundColor: Color(0xFF212121)),
@@ -58,7 +67,8 @@ class MyApp extends StatelessWidget {
             // home: ChangeBasicInfo(),
             // home: UserProfile(),
             // home: CarDetailsPage(carImages: []),
-            home: FaqsPage(),
+            // home: FaqsPage(),
+            home: CustomHorizontalStepperPage(),
           ),
         );
       },

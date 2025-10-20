@@ -46,6 +46,7 @@ dependencies:
   flutter_svg: 
   pin_code_fields:
   carousel_slider:
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

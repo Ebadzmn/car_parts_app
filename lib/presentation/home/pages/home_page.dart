@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 24.h),
                 AppBarWidget(), // You can add a menu icon here to open drawer
                 SizedBox(height: 24.h),
-                searchWidget(),
+                SearchWidget(),
                 SizedBox(height: 24.h),
                 HomeCardWidget(),
                 SizedBox(height: 12.h),
