@@ -1,4 +1,5 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
+import 'package:car_parts_app/core/coreWidget/app_back_widget.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,46 +19,7 @@ class FaqsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    height: 30.h,
-                    width: 30.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.r),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 0,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 1),
-                          color: Colors.grey,
-                        ),
-                        BoxShadow(
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          offset: const Offset(2, 2),
-                          color: const Color(0xFF373737),
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.arrow_back_ios_new_outlined,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'Change Contact',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+              AppBackWidget(title: 'FAQs'),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),

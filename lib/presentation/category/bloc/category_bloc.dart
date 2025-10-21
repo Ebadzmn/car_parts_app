@@ -10,16 +10,45 @@ part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final CategoryUsecase categoryUsecase;
+
   CategoryBloc({required this.categoryUsecase}) : super(CategoryInitial()) {
     on<CategoryEvent>(_onCategoryEvent);
+    // on<LoadProductByCategoryEvent>(_onLoadProductByCategoryEvent);
+    // on<SelectCategoryEvent>(_onSelectCategoryEvent);
   }
+
+  // Future<void> _onSelectCategoryEvent(
+  //   SelectCategoryEvent event,
+  //   Emitter<CategoryState> emit,
+  // ) async {
+  //   if (state is CategoryLoaded) {
+  //     final currentState = state as CategoryLoaded;
+  //     List<String> updatedCategories = List.from(currentState.selectCategories);
+  //     if (updatedCategories.contains(event.categoryId)) {
+  //       updatedCategories.remove(event.categoryId);
+  //     } else {
+  //       updatedCategories.add(event.categoryId);
+  //     }
+  //     emit(currentState.copyWith(selectCategories: updatedCategories));
+  //   }
+  // }
+
+  // Future<void> _onLoadProductByCategoryEvent(
+  //   LoadProductByCategoryEvent event,
+  //   Emitter<CategoryState> emit,
+  // ) async {
+  //   final result = await categoryUsecase.getProductByCategory(event.categoryId);
+  //   result.fold(
+  //     (failure) => emit(CategoryError(message: failure.message)),
+  //     (products) => emit(CategoryLoaded(products, [event.categoryId])),
+  //   );
+  // }
 
   Future<void> _onCategoryEvent(
     CategoryEvent event,
     Emitter<CategoryState> emit,
   ) async {
     if (event is LoadCategoryEvent) {
-      emit(CategoryLoading());
       final result = await categoryUsecase();
       result.fold(
         (failure) => emit(CategoryError(message: failure.message)),

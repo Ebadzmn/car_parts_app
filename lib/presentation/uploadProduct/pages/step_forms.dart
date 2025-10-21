@@ -1,5 +1,8 @@
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
+import 'package:car_parts_app/presentation/uploadProduct/pages/image_upload.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StepForms extends StatelessWidget {
   final int step;
@@ -64,12 +67,14 @@ class StepThreeForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'Review Information',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Text(
+          'Main Picture Upload',
+          style: GoogleFonts.inter(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const SizedBox(height: 10),
-        const Text("✅ All information looks good."),
       ],
     );
   }

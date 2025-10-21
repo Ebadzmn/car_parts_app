@@ -8,3 +8,16 @@ abstract class HomeEvent extends Equatable {
 }
 
 class FetchCardEvent extends HomeEvent {}
+
+class FetchProductByCategoryEvent extends HomeEvent {
+  final String category;
+
+  const FetchProductByCategoryEvent(this.category);
+
+  @override
+  List<Object> get props => [category];
+}
+
+class ClearFilterEvent extends HomeEvent {
+  const ClearFilterEvent();
+}

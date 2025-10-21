@@ -18,4 +18,11 @@ class AssetsPath {
   static const String wish = '$_imageBaseUrl/wish.png';
   static const String faqopen = '$_imageBaseUrl/faqopen.png';
   static const String faqclose = '$_imageBaseUrl/faqclose.png';
+  static const String navhome = '$_imageBaseUrl/nav_home.png';
+  static const String nav2 = '$_imageBaseUrl/nav_2.png';
+  static const String navcat = '$_imageBaseUrl/nav_cat.png';
+  static const String navcart = '$_imageBaseUrl/nav_cart.png';
+  static const String upload = '$_imageBaseUrl/upload_product.png';
+  static const String addnewcat = '$_imageBaseUrl/add_new.png';
+  static const String myproduct = '$_imageBaseUrl/myproduct.png';
 }

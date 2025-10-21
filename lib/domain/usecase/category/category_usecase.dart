@@ -10,4 +10,10 @@ class CategoryUsecase {
   Future<Either<Failure, List<ProductEntities>>> call() {
     return categoryRepository.getProduct();
   }
+
+  Future<Either<Failure, List<ProductEntities>>> getProductByCategory(
+    String categoryId,
+  ) {
+    return categoryRepository.getProductByCategory(categoryId);
+  }
 }

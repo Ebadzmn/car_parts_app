@@ -16,4 +16,19 @@ class CategoryRepositoriesImpl implements CategoryRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ProductEntities>>> getProductByCategory(
+    String categoryId,
+  ) async {
+    try {
+      final allProduct = await CarLocalDatasource.getProduct();
+      final result = allProduct
+          .where((product) => product.carCategory == categoryId)
+          .toList();
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

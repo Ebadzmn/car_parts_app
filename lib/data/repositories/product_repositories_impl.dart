@@ -14,4 +14,18 @@ class ProductRepositoriesImpl implements ProductRepositories {
       return Left(CacheFailure(message: 'Local Error'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ProductEntities>>> getProductByCategory({
+    required String category,
+  }) async {
+    try {
+      final result = await CarLocalDatasource.getProduct()
+          .where((product) => product.carCategory == category)
+          .toList();
+      return Right(result);
+    } catch (e) {
+      return Left(CacheFailure(message: 'Local Error'));
+    }
+  }
 }

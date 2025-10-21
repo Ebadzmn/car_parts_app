@@ -13,11 +13,12 @@ final class HomeLoading extends HomeState {}
 
 final class FetchCard extends HomeState {
   final List<ProductEntities> data;
+  final String? currentCategory; // Track current category
 
-  FetchCard({required this.data});
+  FetchCard(this.currentCategory, {required this.data});
 
   FetchCard copyWith({List<ProductEntities>? data}) {
-    return FetchCard(data: data ?? this.data);
+    return FetchCard(currentCategory, data: data ?? this.data);
   }
 
   @override
