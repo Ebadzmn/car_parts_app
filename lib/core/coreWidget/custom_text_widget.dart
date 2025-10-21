@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final Function(String)? onChanged;
+  final int maxLines;
 
   const CustomTextField({
     super.key,
@@ -18,58 +19,68 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.onChanged,
+    this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        /// Label Text
-        Padding(
-          padding: const EdgeInsets.only(left: 8, bottom: 6),
-          child: Text(
-            label,
-            style: GoogleFonts.montserrat(
-              textStyle: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 14.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Label Text
+          Padding(
+            padding: EdgeInsets.only(left: 8.w, bottom: 6.h),
+            child: Text(
+              label,
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
-        ),
 
-        /// TextField
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: GoogleFonts.montserrat(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey,
+          /// TextField
+          TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            maxLines: maxLines,
+            style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: GoogleFonts.montserrat(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey,
+              ),
+              filled: true,
+              fillColor: const Color(0xFF383838),
+
+              /// Responsive padding
+              contentPadding: EdgeInsets.symmetric(
+                vertical: (maxLines > 1 ? 16.h : 14.h),
+                horizontal: 12.w,
+              ),
+
+              /// Border styles
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: const BorderSide(color: Colors.white, width: 1.2),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: const BorderSide(color: Colors.white, width: 1.8),
+              ),
             ),
-            filled: true,
-            fillColor: const Color(0xFF383838),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 18,
-              horizontal: 12,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.r),
-              borderSide: const BorderSide(color: Colors.white, width: 1.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.r),
-              borderSide: const BorderSide(color: Colors.white, width: 2),
-            ),
+            onChanged: onChanged,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
