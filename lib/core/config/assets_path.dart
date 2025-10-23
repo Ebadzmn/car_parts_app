@@ -25,4 +25,7 @@ class AssetsPath {
   static const String upload = '$_imageBaseUrl/upload_product.png';
   static const String addnewcat = '$_imageBaseUrl/add_new.png';
   static const String myproduct = '$_imageBaseUrl/myproduct.png';
+  static const String caution = '$_imageBaseUrl/caution.png';
+  static const String wish1 = '$_imageBaseUrl/wish1.png';
+  static const String favourite = '$_imageBaseUrl/favourite.png';
 }

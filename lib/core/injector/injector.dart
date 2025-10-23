@@ -10,6 +10,7 @@ import 'package:car_parts_app/domain/usecase/product/product_usecase.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
+import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -28,6 +29,8 @@ Future<void> init() async {
   sl.registerFactory(() => HomeBloc(productUsecase: sl()));
   sl.registerFactory(() => DetailsBloc());
   sl.registerFactory(() => FaqsBloc());
+  sl.registerFactory(() => DragBloc());
+
   sl.registerFactory(() => CategoryBloc(categoryUsecase: sl()));
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));

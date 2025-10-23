@@ -1,6 +1,8 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/details/widget/carosel_widget.dart';
+import 'package:car_parts_app/presentation/details/widget/rating_pop_up_widget.dart';
+import 'package:car_parts_app/presentation/details/widget/selectTab_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +75,52 @@ class CarDetailsPage extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 20.h),
+                SizedBox(height: 12.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+  onTap: () {
+showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: 'Form Popup',
+  barrierColor: Colors.black.withOpacity(0.4),
+  transitionDuration: const Duration(milliseconds: 300),
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return const ReportPopup();
+  },
+);
+
+  },
+  child: Image.asset(
+    AssetsPath.caution,
+    height: 24.h,
+    width: 24.h,
+  ),
+),
+
+                    SizedBox(width: 8.w),
+                    GestureDetector(
+                      onTap: () {
+                       showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: 'Form Popup',
+  barrierColor: Colors.black.withOpacity(0.4),
+  transitionDuration: const Duration(milliseconds: 300),
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return const RatingPopUpWidget();
+  },
+);
+                      },
+                      child: Image.asset(AssetsPath.wish1, height: 24.h, width: 24.h,)),
+                    SizedBox(width: 8.w),
+                    Image.asset(AssetsPath.favourite, height: 24.h, width: 24.h,),
+                  ],
+                ),
+
+                SizedBox(height: 12.h),
                 CaroselWidget(carImages: carImages),
                 SizedBox(height: 16.h),
 

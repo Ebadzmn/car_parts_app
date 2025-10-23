@@ -15,3 +15,12 @@ class CaroselPageChanged extends DetailsEvent {
   @override
   List<Object> get props => [index];
 }
+
+class SelectTabEvent extends DetailsEvent {
+  final int index;
+
+  const SelectTabEvent(this.index);
+
+  @override
+  List<Object> get props => [index];
+}

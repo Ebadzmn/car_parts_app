@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
+import 'package:car_parts_app/presentation/home/widget/drug_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -124,7 +125,12 @@ class HomeCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
+                    SizedBox(height: 18.h),
+                    Container(
+                      height: 50.h,
+                      width: 140.w,
+                      child: DragButtonWidget())         
+                    ],
                 ),
                 Image.asset(AssetsPath.heroparts, height: 170.h, width: 170.w),
               ],

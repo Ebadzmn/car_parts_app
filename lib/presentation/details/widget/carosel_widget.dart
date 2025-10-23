@@ -22,8 +22,9 @@ class CaroselWidget extends StatelessWidget {
               items: carImages
                   .map(
                     (imagePath) => Container(
+                      
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2.w),
+                        border: Border.all(color: Colors.white, width: 1.6.w),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: ClipRRect(
@@ -57,11 +58,11 @@ class CaroselWidget extends StatelessWidget {
 
                 double size;
                 if (distance == 0) {
-                  size = 20.w; // selected dot
+                  size = 18.w; // selected dot
                 } else if (distance == 1) {
-                  size = 16.w; // next to selected
+                  size = 14.w; // next to selected
                 } else if (distance == 2) {
-                  size = 12.w; // next to next
+                  size = 10.w; // next to next
                 } else {
                   size = 8.w; // smallest
                 }
@@ -70,11 +71,11 @@ class CaroselWidget extends StatelessWidget {
                   duration: const Duration(milliseconds: 400),
                   curve: Curves.easeInOut,
                   width: size,
-                  height: 8.h,
+                  height: 6.h,
                   margin: EdgeInsets.symmetric(horizontal: 4.w),
                   decoration: BoxDecoration(
                     color: distance == 0
-                        ? Colors.blueAccent
+                        ? Colors.grey
                         : Colors.grey.withOpacity(0.6),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
