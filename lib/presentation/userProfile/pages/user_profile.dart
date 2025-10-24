@@ -1,6 +1,7 @@
 import 'package:car_parts_app/core/config/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfile extends StatelessWidget {
@@ -42,9 +43,12 @@ class UserProfile extends StatelessWidget {
                       ],
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.arrow_back_ios_new_outlined,
-                        color: Colors.green,
+                      child: GestureDetector(
+                        onTap: () => context.pop(),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_outlined,
+                          color: Colors.green,
+                        ),
                       ),
                     ),
                   ),

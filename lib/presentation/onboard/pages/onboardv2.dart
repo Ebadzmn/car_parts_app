@@ -71,23 +71,40 @@ class Onboardv2 extends StatelessWidget {
                     ),
 
                     Positioned(
-                      bottom: 280.h,
+                      bottom: 270.h,
                       left: 30.w,
                       child: Container(
-                        height: 40.h,
-                        width: 100.w,
+                        height: 20.h,
+                        width: 56.w,
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          
                           borderRadius: BorderRadius.circular(20.r),
-                          boxShadow: [BoxShadow()],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white,
+                              spreadRadius: 0,
+                              blurRadius: 0,
+                              offset: const Offset(1, 3), // Shadow direction
+                            ),
+                             BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: const Offset(2, 3), // Shadow direction
+                            ),
+
+
+                          ],
                         ),
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          '${index + 1}/${items.length}',
-                          style: GoogleFonts.inter(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                        child: Center(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            '${index + 1}/${items.length}',
+                            style: GoogleFonts.inter(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -218,7 +235,7 @@ class Onboardv2 extends StatelessWidget {
                                         ? 'Get Started'
                                         : 'Next',
                                     style: GoogleFonts.inter(
-                                      fontSize: 18.sp,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                     ),

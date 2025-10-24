@@ -1,9 +1,11 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
@@ -27,13 +29,12 @@ class LoginPage extends StatelessWidget {
                     label: 'Email',
                     hintText: 'Please enter your email address',
                   ),
-                  SizedBox(height: 12.h),
+                 
                   CustomTextField(
                     label: 'Password',
                     hintText: 'Please enter your Password',
                   ),
 
-                  SizedBox(height: 12.h),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +74,9 @@ class LoginPage extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(AppRoutes.homeScreen);
+                      },
                       child: Text(
                         'Login',
                         style: GoogleFonts.montserrat(
@@ -100,12 +103,7 @@ class LoginPage extends StatelessWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Action when clicked
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Sign Up tapped!'),
-                                ),
-                              );
+                              context.push(AppRoutes.RegisterPage);
                             },
                         ),
                       ],

@@ -1,7 +1,9 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/app_color.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -58,18 +60,24 @@ class DrawerWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProfileInfoTile(
-                      icon: Icons.person_outline,
-                      title: 'User Profile',
-                      subtitle: 'Change profile image, name or password',
+                    GestureDetector(
+                      onTap: () => context.push(AppRoutes.userProfileScreen),
+                      child: ProfileInfoTile(
+                        icon: Icons.person_outline,
+                        title: 'User Profile',
+                        subtitle: 'Change profile image, name or password',
+                      ),
                     ),
 
                     SizedBox(height: 20.h),
 
-                    ProfileInfoTile(
-                      icon: Icons.privacy_tip_outlined,
-                      title: 'Privacy Policy',
-                      subtitle: 'Manage your data and permissions.',
+                    GestureDetector(
+                      onTap: () => context.push(AppRoutes.uploadProductScreen),
+                      child: ProfileInfoTile(
+                        icon: Icons.privacy_tip_outlined,
+                        title: 'Privacy Policy',
+                        subtitle: 'Manage your data and permissions.',
+                      ),
                     ),
 
                     SizedBox(height: 20.h),

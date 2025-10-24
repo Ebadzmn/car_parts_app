@@ -1,9 +1,10 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_event.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_state.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class DragButtonWidget extends StatelessWidget {
   const DragButtonWidget({super.key});
@@ -16,10 +17,10 @@ class DragButtonWidget extends StatelessWidget {
         listenWhen: (prev, curr) => curr.shouldNavigate,
         listener: (context, state) {
           if (state.shouldNavigate) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const NextPage()),
-            );
+            context.push(AppRoutes.detailsScreen).then((_) {
+              // ফিরে এলে আবার আগের অবস্থায় নিয়ে আসা
+              context.read<DragBloc>().add(const DragUpdateEvent(0));
+            });
           }
         },
         child: Scaffold(
@@ -43,14 +44,14 @@ class DragButtonWidget extends StatelessWidget {
                         left: 0,
                         top: 0,
                         bottom: 0,
-                        child: _BlinkingArrow(),
+                        child: const _BlinkingArrow(),
                       ),
                       Positioned(
                         right: 0,
                         left: 15,
                         top: 0,
                         bottom: 0,
-                        child: _BlinkingArrow(),
+                        child: const _BlinkingArrow(),
                       ),
                       // Right target button
                       Positioned(
@@ -60,7 +61,6 @@ class DragButtonWidget extends StatelessWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            
                             color: Colors.black,
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 2),
@@ -155,23 +155,6 @@ class _BlinkingArrowState extends State<_BlinkingArrow>
     return FadeTransition(
       opacity: _opacity,
       child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 22),
-    );
-  }
-}
-
-class NextPage extends StatelessWidget {
-  const NextPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.green,
-      body: Center(
-        child: Text(
-          '🎉 Navigated!',
-          style: TextStyle(color: Colors.white, fontSize: 28),
-        ),
-      ),
     );
   }
 }

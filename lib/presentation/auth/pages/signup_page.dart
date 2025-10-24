@@ -1,8 +1,10 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignupPage extends StatelessWidget {
@@ -28,30 +30,30 @@ class SignupPage extends StatelessWidget {
                       label: 'Full Name',
                       hintText: 'Please enter your full name',
                     ),
-                    SizedBox(height: 12.h),
+                  
                     CustomTextField(
                       label: 'Email',
                       hintText: 'Please enter your email address',
                     ),
-                    SizedBox(height: 12.h),
+                    
 
                     CustomTextField(
                       label: 'Address (Optional)',
                       hintText: 'Please enter your Address',
                     ),
-                    SizedBox(height: 12.h),
+                    
 
                     CustomTextField(
                       label: 'Password',
                       hintText: 'Please enter your Password',
                     ),
-                    SizedBox(height: 12.h),
+                
 
                     CustomTextField(
                       label: 'Confirm Password',
                       hintText: 'Please enter your Confirm Password',
                     ),
-                    SizedBox(height: 12.h),
+                   
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +89,9 @@ class SignupPage extends StatelessWidget {
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(AppRoutes.OtpPage);
+                        },
                         child: Text(
                           'Sign Up',
                           style: GoogleFonts.montserrat(

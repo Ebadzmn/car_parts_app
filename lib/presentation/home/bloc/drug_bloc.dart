@@ -11,7 +11,7 @@ class DragBloc extends Bloc<DragEvent, DragState> {
 
     on<DragEndEvent>((event, emit) {
       // Threshold distance for navigation
-      if (event.dx > 109) {
+      if (event.dx > 80) {
         emit(state.copyWith(shouldNavigate: true));
       } else {
         // Reset to start position

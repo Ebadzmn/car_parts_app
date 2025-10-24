@@ -6,6 +6,7 @@ import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart
 import 'package:car_parts_app/presentation/home/widget/home_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,7 +16,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = 1.sw;
 
+      // 🔹 Make status bar transparent & icons light
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.amber,
+        statusBarColor: Colors.amber,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       drawer: const DrawerWidget(),
       body: Stack(
         children: [

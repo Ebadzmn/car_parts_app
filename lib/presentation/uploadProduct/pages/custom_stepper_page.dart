@@ -2,6 +2,7 @@ import 'package:car_parts_app/presentation/uploadProduct/pages/step_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../bloc/stepper_bloc.dart';
 import '../bloc/stepper_event.dart';
@@ -35,50 +36,52 @@ class CustomHorizontalStepperPage extends StatelessWidget {
                           horizontal: 8.w,
                           vertical: 12.h,
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 40.h,
-                              width: 40.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.r),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 0,
-                                    spreadRadius: 1,
-                                    offset: Offset(0, 1),
-                                    color: Colors.grey,
-                                  ),
-                                  BoxShadow(
-                                    blurRadius: 1,
-                                    spreadRadius: 1,
-                                    offset: Offset(2, 2),
-                                    color: Color(0xFF373737),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_back_ios_new_outlined,
-                                  color: Colors.green,
-                                  size: 18.sp,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Flexible(
-                              child: Text(
-                                'Basic Information Change',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 14.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
+                        child:               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 40.h,
+                    width: 40.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 0,
+                          spreadRadius: 1,
+                          offset: Offset(0, 1),
+                          color: Colors.grey,
                         ),
+
+                        BoxShadow(
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                          offset: Offset(2, 2),
+                          color: Color(0xFF373737),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () => context.pop(),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_outlined,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Text(
+                    'Upload Product',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
                       ),
                       SizedBox(height: 16.h),
 
