@@ -1,8 +1,10 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Onboardv2 extends StatelessWidget {
@@ -224,10 +226,7 @@ class Onboardv2 extends StatelessWidget {
                                       );
                                     } else {
                                       // Handle Get Started action
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        '/home',
-                                      );
+                                      context.push(AppRoutes.LoginPage);
                                     }
                                   },
                                   child: Text(

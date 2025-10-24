@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Function(String)? onChanged;
   final int maxLines;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.onChanged,
     this.maxLines = 1,
+    this.validator,
   });
 
   @override
@@ -45,11 +47,12 @@ class CustomTextField extends StatelessWidget {
           ),
 
           /// TextField
-          TextField(
+          TextFormField(
             controller: controller,
             keyboardType: keyboardType,
             obscureText: obscureText,
             maxLines: maxLines,
+            validator: validator,
             style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
             decoration: InputDecoration(
               hintText: hintText,
@@ -76,6 +79,16 @@ class CustomTextField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.r),
                 borderSide: const BorderSide(color: Colors.white, width: 1.8),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: const BorderSide(color: Colors.red, width: 1.2),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: const BorderSide(color: Colors.red, width: 1.8),
+              ),
+
+
             ),
             onChanged: onChanged,
           ),

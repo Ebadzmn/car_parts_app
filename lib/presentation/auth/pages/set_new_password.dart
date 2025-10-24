@@ -4,19 +4,47 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SetnewPassword extends StatelessWidget {
-  const SetnewPassword({super.key});
+  SetnewPassword({super.key});
+
+  // 🔹 Controllers
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  // 🔹 ValueNotifier for error messages
+  final ValueNotifier<String?> errorMessage = ValueNotifier(null);
+
+  // 🔹 Validation Function
+  void _validateAndSubmit(BuildContext context) {
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    if (password.isEmpty || confirmPassword.isEmpty) {
+      errorMessage.value = 'Please fill in both password fields';
+    } else if (password.length < 8) {
+      errorMessage.value = 'Password must be at least 8 characters long';
+    } else if (password != confirmPassword) {
+      errorMessage.value = 'Passwords do not match';
+    } else {
+      errorMessage.value = null;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password set successfully ✅')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: EdgeInsets.all(20.sp),
             child: Column(
               children: [
-                SizedBox(height: 71.h),
+                SizedBox(height: 50.h),
 
+                // 🔹 Password Icon
                 Container(
                   height: 60.h,
                   width: 60.w,
@@ -26,11 +54,10 @@ class SetnewPassword extends StatelessWidget {
                       BoxShadow(
                         blurRadius: 0,
                         spreadRadius: 3,
-                        offset: Offset(-1, 1),
+                        offset: const Offset(-1, 1),
                         color: Colors.white,
                       ),
-
-                      BoxShadow(
+                      const BoxShadow(
                         blurRadius: 1,
                         spreadRadius: 3,
                         offset: Offset(1, 2),
@@ -38,13 +65,10 @@ class SetnewPassword extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Icon(
-                    Icons.password_rounded,
-                    size: 42.sp,
-                    color: Colors.white,
-                  ),
+                  child: Icon(Icons.password_rounded, size: 42.sp, color: Colors.white),
                 ),
-                SizedBox(height: 6.h),
+                SizedBox(height: 10.h),
+
                 Text(
                   'Set new password',
                   style: GoogleFonts.montserrat(
@@ -57,35 +81,60 @@ class SetnewPassword extends StatelessWidget {
 
                 SizedBox(height: 26.h),
 
+                // 🔹 Password Field
                 CustomTextField(
+                  controller: passwordController,
                   label: 'Password',
                   hintText: 'Please enter your password',
+                  obscureText: true,
                 ),
+                SizedBox(height: 12.h),
 
-                SizedBox(height: 12),
-
+                // 🔹 Confirm Password Field
                 CustomTextField(
-                  label: 'Confirm password',
-                  hintText: 'Please enter your Confirm password',
+                  controller: confirmPasswordController,
+                  label: 'Confirm Password',
+                  hintText: 'Please re-enter your password',
+                  obscureText: true,
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 10.h),
+
+                // 🔹 Error Message (auto updates)
+                ValueListenableBuilder<String?>(
+                  valueListenable: errorMessage,
+                  builder: (context, message, _) {
+                    if (message == null) return const SizedBox.shrink();
+                    return Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        message,
+                        style: TextStyle(color: Colors.redAccent, fontSize: 12.sp),
+                      ),
+                    );
+                  },
+                ),
+
+                SizedBox(height: 14.h),
 
                 Row(
                   children: [
-                    Icon(Icons.dangerous_rounded, color: Colors.yellow),
-                    Text(
-                      'Your password must be at least 8 characters. Include \n multiple words to make it more secure.',
-                      style: GoogleFonts.montserrat(
-                        textStyle: TextStyle(color: Colors.white),
-                        fontSize: 9.sp,
+                    const Icon(Icons.warning_amber_rounded, color: Colors.yellow),
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: Text(
+                        'Your password must be at least 8 characters long.\nInclude multiple words to make it more secure.',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(color: Colors.white, fontSize: 9.sp),
+                        ),
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 18.h),
+                SizedBox(height: 20.h),
 
+                // 🔹 Submit Button
                 Container(
                   height: 44.h,
                   width: double.infinity,
@@ -98,9 +147,9 @@ class SetnewPassword extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                     ),
-                    onPressed: () {},
+                    onPressed: () => _validateAndSubmit(context),
                     child: Text(
-                      'Send OTP',
+                      'Set Password',
                       style: GoogleFonts.montserrat(
                         fontSize: 16.sp,
                         color: Colors.black,
