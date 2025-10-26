@@ -1,4 +1,5 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
+import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
 import 'package:car_parts_app/core/injector/injector.dart' as di;
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider(create: (context) => di.sl<FaqsBloc>()),
             BlocProvider(create: (context) => di.sl<DragBloc>()),
+            BlocProvider(create: (context) => di.sl<BottomNavBloc>()),
             BlocProvider(
               create: (context) =>
                   di.sl<CategoryBloc>()..add(LoadCategoryEvent()),

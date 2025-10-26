@@ -17,7 +17,7 @@ class HomeCardWidget extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
         return Container(
-          height: 200.h,
+          height: 205.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.sp),
             boxShadow: [
@@ -102,7 +102,7 @@ class HomeCardWidget extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: 18.h),
+                    SizedBox(height: 15.h),
                     Text(
                       'Engine',
                       style: GoogleFonts.montserrat(
@@ -114,7 +114,7 @@ class HomeCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 3.h),
                     SizedBox(
                       width: 140.w,
                       child: Text(
@@ -125,7 +125,7 @@ class HomeCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 18.h),
+                    SizedBox(height: 16.h),
                     Container(
                       height: 50.h,
                       width: 140.w,

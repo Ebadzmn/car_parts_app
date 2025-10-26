@@ -8,7 +8,7 @@ class CarLocalDatasource {
       ProductEntities(
         carName: 'Toyota Corolla 2020',
         carDescription: 'A reliable and fuel-efficient sedan.',
-        carCondition: 'Used (White)',
+        carCondition: 'Used',
         carImage: 'https://example.com/images/corolla1.jpg',
         carPrice: '18000',
         carCategory: 'enadb',
@@ -26,7 +26,7 @@ class CarLocalDatasource {
       ),
       ProductEntities(
         carName: 'Honda Civic 2019',
-        carCondition: 'Used (Black)',
+        carCondition: 'Used',
         carImage: 'https://example.com/images/civic1.jpg',
         carDescription: 'A reliable and fuel-efficient sedan.',
         carPrice: '17000',
@@ -45,7 +45,7 @@ class CarLocalDatasource {
       ),
       ProductEntities(
         carName: 'Ford F-150 2021',
-        carCondition: 'Used (Blue)',
+        carCondition: 'New',
         carDescription: 'A powerful and spacious pickup truck.',
         carImage: 'https://example.com/images/f150_1.jpg',
         carPrice: '35000',
@@ -64,7 +64,7 @@ class CarLocalDatasource {
       ),
       ProductEntities(
         carName: 'BMW X5 2022',
-        carCondition: 'Used (Silver)',
+        carCondition: 'Refub',
         carDescription: 'A luxurious and spacious SUV.',
         carImage: 'https://example.com/images/bmwx5_1.jpg',
         carPrice: '60000',

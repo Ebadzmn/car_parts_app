@@ -1,3 +1,4 @@
+import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
 import 'package:car_parts_app/data/repositories/category_repositories_impl.dart';
 import 'package:car_parts_app/data/repositories/onb_repositories_impl.dart';
 import 'package:car_parts_app/data/repositories/product_repositories_impl.dart';
@@ -30,6 +31,7 @@ Future<void> init() async {
   sl.registerFactory(() => DetailsBloc());
   sl.registerFactory(() => FaqsBloc());
   sl.registerFactory(() => DragBloc());
+  sl.registerFactory(() => BottomNavBloc());
 
   sl.registerFactory(() => CategoryBloc(categoryUsecase: sl()));
 

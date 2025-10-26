@@ -1,4 +1,5 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
+import 'package:car_parts_app/core/coreWidget/bottom_nav_widget.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/details/widget/carosel_widget.dart';
 import 'package:car_parts_app/presentation/details/widget/rating_pop_up_widget.dart';
@@ -27,6 +28,7 @@ class CarDetailsPage extends StatelessWidget {
     ];
 
     return Scaffold(
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -388,9 +390,11 @@ showGeneralDialog(
                     ),
                   ),
                 ),
+                      
               ],
             ),
           ),
+     
         ),
       ),
     );

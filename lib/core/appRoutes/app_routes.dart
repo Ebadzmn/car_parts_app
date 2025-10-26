@@ -6,7 +6,9 @@ import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
+import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
+import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
@@ -27,11 +29,13 @@ class AppRoutes {
    static const String set_new_password = '/set-new-password'; 
    static const String forgetPassword = '/forget-password'; 
    static const String setOtpPassword = '/set-otp-password'; 
+   static const String MainScreen = '/main-screen';
+   static const String ProductByCategoryScreen = '/product-by-category-screen';
 }
 
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.setOtpPassword,
+  initialLocation: AppRoutes.MainScreen,
   routes: [
     GoRoute(
       path: AppRoutes.splashScreen,
@@ -41,6 +45,11 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
       path: AppRoutes.OnboardPage,
       builder: (context, state) => const Onboardv2(),
+    ),
+
+    GoRoute(
+      path: AppRoutes.MainScreen,
+      builder: (context, state) =>  MainScreen(),
     ),
 
     GoRoute(
@@ -156,6 +165,19 @@ GoRoute(
   path: AppRoutes.setOtpPassword,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: SetOtpPass(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
+  path: AppRoutes.ProductByCategoryScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: ProductByCategoryPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,
