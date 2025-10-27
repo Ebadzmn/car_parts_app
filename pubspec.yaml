@@ -51,6 +51,7 @@ dependencies:
   flutter_animate: ^4.5.0
   slide_to_act: ^2.0.2
   gradient_slide_to_act: ^0.0.2
+  cupertino_native: ^0.1.1
 
 dev_dependencies:
   flutter_test:

@@ -118,12 +118,12 @@ class CategoryPages extends StatelessWidget {
                                 boxShadow: [
                                   BoxShadow(
                                     blurRadius: 2.r,
-                                    spreadRadius: 1.r,
+                                    spreadRadius: 0.r,
                                     offset: Offset(0, 1.h),
                                     color: Colors.grey,
                                   ),
                                   BoxShadow(
-                                    blurRadius: 2.r,
+                                    blurRadius: 0.r,
                                     spreadRadius: 0,
                                     offset: Offset(2.w, 2.h),
                                     color: const Color(0xFF5F615E),

@@ -7,6 +7,7 @@ import 'package:car_parts_app/presentation/home/widget/home_button_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,6 +39,8 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 24.h),
+
+                
                 const AppBarWidget(),
                 SizedBox(height: 24.h),
                 const SearchWidget(),

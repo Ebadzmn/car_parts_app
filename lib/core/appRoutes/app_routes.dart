@@ -35,6 +35,7 @@ class AppRoutes {
    static const String ProductByCategoryScreen = '/product-by-category-screen';
    static const String DrugBuiltScreen = '/drug-built-screen';
    static const String SellarScreen = '/sellar-screen';
+   static const String TestPage = '/test-page';
 }
 
 
@@ -50,6 +51,8 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.DrugBuiltScreen,
       builder: (context, state) => const DrugBuiltWidget(),
     ),
+
+     
 
         GoRoute(
       path: AppRoutes.OnboardPage,

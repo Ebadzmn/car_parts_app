@@ -30,6 +30,10 @@ class RatingPopUpWidget extends StatelessWidget {
               stops: [0.0, 0.5, 1.0],
             ),
             borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

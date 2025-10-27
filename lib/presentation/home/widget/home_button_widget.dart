@@ -69,10 +69,24 @@ class HomeButtonWidget extends StatelessWidget {
                                     ),
                                     BoxShadow(
                                       blurRadius: 1,
-                                      spreadRadius: 1,
+                                      spreadRadius: 2,
                                       offset: Offset(2, 2),
                                       color: Color(0xFF373737),
                                     ),
+
+
+                                    // BoxShadow(
+                                    //   blurRadius: 0,
+                                    //   spreadRadius: 2,
+                                    //   offset: Offset(0, 0),
+                                    //   color: Colors.grey,
+                                    // ),
+                                    // BoxShadow(
+                                    //   blurRadius: 1,
+                                    //   spreadRadius: 1,
+                                    //   offset: Offset(2, 2),
+                                    //   color: Color(0xFF373737),
+                                    // ),
                                   ],
                           ),
                           child: ElevatedButton(

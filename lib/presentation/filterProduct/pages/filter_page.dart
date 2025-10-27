@@ -47,14 +47,29 @@ class FilterDrawer extends StatelessWidget {
                       const SizedBox(height: 20),
 
                       // Categories
-                      Text(
-                        'Categories',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Categories',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          IconButton(
+                            onPressed: () => bloc.add(ToggleShowAllCategories()),
+                            icon: Icon(
+                              state.showAllCategories
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                       ...List.generate(
                         state.showAllCategories ? categories.length : 5,
@@ -68,7 +83,7 @@ class FilterDrawer extends StatelessWidget {
                               categories[index],
                               style: GoogleFonts.montserrat(
                                 fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
@@ -80,34 +95,34 @@ class FilterDrawer extends StatelessWidget {
                         },
                       ),
                       if (categories.length > 5)
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () =>
-                                bloc.add(ToggleShowAllCategories()),
-                            child: Text(
-                              state.showAllCategories
-                                  ? 'Show Less'
-                                  : 'Show More',
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
+                        
 
                       const Divider(color: Colors.white),
 
                       // Brands
-                      Text(
-                        'Brands',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Brands',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          IconButton(
+                            onPressed: () => bloc.add(ToggleShowAllBrands()),
+                            icon: Icon(
+                              state.showAllBrands
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                       ...List.generate(
                         state.showAllBrands ? brands.length : 5,
@@ -117,13 +132,19 @@ class FilterDrawer extends StatelessWidget {
                             checkColor: Colors.white,
                             value: state.selectedBrands[index],
                             onChanged: (_) => bloc.add(ToggleBrand(index)),
-                            title: Text(
-                              brands[index],
-                              style: GoogleFonts.montserrat(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
+                            title: Row(
+                              children: [
+                                Text(
+                                  brands[index],
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+
+                                
+                              ],
                             ),
                             controlAffinity: ListTileControlAffinity.leading,
                             contentPadding: const EdgeInsets.symmetric(
