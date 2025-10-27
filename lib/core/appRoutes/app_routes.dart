@@ -7,8 +7,10 @@ import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
+import 'package:car_parts_app/presentation/home/widget/drug_built_widget.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
 import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
+import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
@@ -31,15 +33,22 @@ class AppRoutes {
    static const String setOtpPassword = '/set-otp-password'; 
    static const String MainScreen = '/main-screen';
    static const String ProductByCategoryScreen = '/product-by-category-screen';
+   static const String DrugBuiltScreen = '/drug-built-screen';
+   static const String SellarScreen = '/sellar-screen';
 }
 
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.MainScreen,
+  initialLocation: AppRoutes.splashScreen,
   routes: [
     GoRoute(
       path: AppRoutes.splashScreen,
       builder: (context, state) => const SplashScreen(),
+    ),
+
+     GoRoute(
+      path: AppRoutes.DrugBuiltScreen,
+      builder: (context, state) => const DrugBuiltWidget(),
     ),
 
         GoRoute(
@@ -178,6 +187,19 @@ GoRoute(
   path: AppRoutes.ProductByCategoryScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: ProductByCategoryPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
+  path: AppRoutes.ProductByCategoryScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: SellerAccount(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,

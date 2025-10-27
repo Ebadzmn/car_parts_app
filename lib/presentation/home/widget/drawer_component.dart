@@ -19,10 +19,11 @@ class ProfileInfoTile extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 34.h,
-          width: 40.w,
+          height: 35.h,
+          width: 35.w,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(72.r),
+            shape: BoxShape.circle,
+            
             boxShadow: const [
               BoxShadow(
                 blurRadius: 0,

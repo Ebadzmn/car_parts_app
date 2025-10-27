@@ -7,6 +7,7 @@ import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/filterProduct/pages/filter_page.dart';
 import 'package:car_parts_app/presentation/filterProduct/pages/product_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
+import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +19,7 @@ class MainScreen extends StatelessWidget {
     const HomePage(),
     ProductPage(),
     const CategoryPages(),
-    const HomePage(), // Profile or other
+    const SellerAccount(), // Profile or other
   ];
 
   @override
