@@ -16,4 +16,3 @@ class DragState extends Equatable {
   @override
   List<Object?> get props => [dx, shouldNavigate];
 }
-

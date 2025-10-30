@@ -22,4 +22,3 @@ class DragEndEvent extends DragEvent {
   @override
   List<Object?> get props => [dx];
 }
-

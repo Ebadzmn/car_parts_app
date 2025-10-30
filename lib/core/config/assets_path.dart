@@ -28,4 +28,5 @@ class AssetsPath {
   static const String caution = '$_imageBaseUrl/caution.png';
   static const String wish1 = '$_imageBaseUrl/wish1.png';
   static const String favourite = '$_imageBaseUrl/favourite.png';
+  static const String sellarpic = '$_imageBaseUrl/sellerpic.png';
 }

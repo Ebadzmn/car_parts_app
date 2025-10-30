@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/bottom_nav_widget.dart';
+import 'package:car_parts_app/presentation/home/pages/testing.dart';
 import 'package:car_parts_app/presentation/home/widget/appbar_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/bottom_nav_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
@@ -30,12 +31,12 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      drawer: const DrawerWidget(),
+      drawer:  DrawerWidget(),
       body: Stack(
         children: [
           // 🔹 Main Scrollable Content
           SingleChildScrollView(
-            padding: EdgeInsets.all(16.sp),
+            padding: EdgeInsets.all(10.sp),
             child: Column(
               children: [
                 SizedBox(height: 24.h),
@@ -49,7 +50,9 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 12.h),
                 const HomeButtonWidget(),
                 const HomeCarCardWidget(),
-                SizedBox(height: 120.h), // spacing under navbar
+                SellerCardWidget(),
+                SizedBox(height: 120.h), 
+        // spacing under navbar
               ],
             ),
           ),

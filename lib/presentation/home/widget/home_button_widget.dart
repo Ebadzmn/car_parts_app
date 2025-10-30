@@ -41,13 +41,13 @@ class HomeButtonWidget extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+                  padding:  EdgeInsets.symmetric( vertical: 4.h),
                   child: Row(
                     children: categories.map((category) {
                       final isSelected = category == selectedCategory;
 
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.w),
                           decoration: BoxDecoration(

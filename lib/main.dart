@@ -9,6 +9,7 @@ import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
+import 'package:car_parts_app/presentation/home/pages/testing.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(scaffoldBackgroundColor: Color(0xFF212121)),
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter
+            
 
             // home: ChangeBasicInfo(),
             // home: LoginPage(),
