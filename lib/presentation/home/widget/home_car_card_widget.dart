@@ -8,7 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeCarCardWidget extends StatelessWidget {
-  const HomeCarCardWidget({super.key});
+  final String title;
+   HomeCarCardWidget({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ List<Color> getGradientColors(String condition) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'ALL',
+                title,
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontSize: 18.sp,

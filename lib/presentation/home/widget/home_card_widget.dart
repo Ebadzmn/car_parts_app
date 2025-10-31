@@ -168,7 +168,7 @@ class HomeCardWidget extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
         return Container(
-          height: 200.h, // height increased to fit drag button
+          height: 220.h, // height increased to fit drag button
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.sp),
             boxShadow: [

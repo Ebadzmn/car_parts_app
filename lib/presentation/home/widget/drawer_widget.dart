@@ -72,7 +72,7 @@ class DrawerWidget extends StatelessWidget {
                     SizedBox(height: 20.h),
 
                     GestureDetector(
-                      onTap: () => context.push(AppRoutes.uploadProductScreen),
+                      onTap: () => context.push(AppRoutes.PrivacyPolicyScreen),
                       child: ProfileInfoTile(
                         icon: Icons.privacy_tip_outlined,
                         title: 'Privacy Policy',
@@ -82,26 +82,35 @@ class DrawerWidget extends StatelessWidget {
 
                     SizedBox(height: 20.h),
 
-                    ProfileInfoTile(
-                      icon: Icons.person_outline,
-                      title: 'Terms & Conditions',
-                      subtitle: 'Read terms & conditions before use',
+                    GestureDetector(
+                      onTap: () => context.push(AppRoutes.TearmsConditionScreen),
+                      child: ProfileInfoTile(
+                        icon: Icons.person_outline,
+                        title: 'Terms & Conditions',
+                        subtitle: 'Read terms & conditions before use',
+                      ),
                     ),
 
                     SizedBox(height: 20.h),
 
-                    ProfileInfoTile(
-                      icon: Icons.person_outline,
-                      title: 'About',
-                      subtitle: 'Learn more about our app and mission.',
+                    GestureDetector(
+                      onTap: () => context.push(AppRoutes.AboutScreen),
+                      child: ProfileInfoTile(
+                        icon: Icons.person_outline,
+                        title: 'About',
+                        subtitle: 'Learn more about our app and mission.',
+                      ),
                     ),
 
                     SizedBox(height: 20.h),
 
-                    ProfileInfoTile(
-                      icon: Icons.person_outline,
-                      title: 'FAQ',
-                      subtitle: 'Find answers to common questions.',
+                    GestureDetector(
+                      onTap: () => context.push(AppRoutes.FaqsPage),
+                      child: ProfileInfoTile(
+                        icon: Icons.person_outline,
+                        title: 'FAQ',
+                        subtitle: 'Find answers to common questions.',
+                      ),
                     ),
 
                     SizedBox(height: 20.h),

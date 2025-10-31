@@ -1,6 +1,7 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
 import 'package:car_parts_app/core/injector/injector.dart' as di;
+import 'package:car_parts_app/presentation/about/testing.dart';
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
-import 'package:car_parts_app/presentation/home/pages/testing.dart';
+import 'package:car_parts_app/presentation/home/widget/become_a_seller.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
@@ -70,10 +71,11 @@ class MyApp extends StatelessWidget {
                   di.sl<CategoryBloc>()..add(LoadCategoryEvent()),
             ),
           ],
-          child: MaterialApp.router(
+          child: MaterialApp(
             theme: ThemeData(scaffoldBackgroundColor: Color(0xFF212121)),
             debugShowCheckedModeBanner: false,
-            routerConfig: appRouter
+            home: HomePage(),
+            // routerConfig: appRouter
             
 
             // home: ChangeBasicInfo(),

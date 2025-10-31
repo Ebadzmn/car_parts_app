@@ -8,23 +8,26 @@ class SellerAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = 1.sh; // total screen height
+    final width = 1.sw;
 
-    double containerHeight = screenHeight <= 1000.h ? 150 : 120.h;
+    // ✅ Device size logic
+    bool isTablet = width > 600; // tablet/ipad detection
+
+    // Different height for mobile and tablet
+    double cardHeight = isTablet ? 150.h : 115.h;
 
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: SingleChildScrollView(
-            // overflow fix
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Seller Account',
                   style: GoogleFonts.montserrat(
-                    fontSize: 24.sp,
+                    fontSize: isTablet ? 28.sp : 24.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                     fontStyle: FontStyle.italic,
@@ -34,28 +37,34 @@ class SellerAccount extends StatelessWidget {
                 SizedBox(height: 20.h),
 
                 buildSellerCard(
-                  height: containerHeight,
+                  height: cardHeight,
+                  width: width,
                   image: AssetsPath.upload,
                   title: 'Upload Product',
                   subtitle: 'Add new products to your store inventory',
+                  isTablet: isTablet,
                 ),
 
                 SizedBox(height: 20.h),
 
                 buildSellerCard(
-                  height: containerHeight,
+                  height: cardHeight,
+                  width: width,
                   image: AssetsPath.addnewcat,
                   title: 'Add New Category',
                   subtitle: 'Create and organize product categories',
+                  isTablet: isTablet,
                 ),
 
                 SizedBox(height: 20.h),
 
                 buildSellerCard(
-                  height: containerHeight,
+                  height: cardHeight,
+                  width: width,
                   image: AssetsPath.myproduct,
                   title: 'My Products',
                   subtitle: 'View and manage your existing products',
+                  isTablet: isTablet,
                 ),
               ],
             ),
@@ -67,48 +76,62 @@ class SellerAccount extends StatelessWidget {
 
   Widget buildSellerCard({
     required double height,
+    required double width,
     required String image,
     required String title,
     required String subtitle,
+    required bool isTablet,
   }) {
     return Container(
       height: height,
-      width: double.infinity,
+      width: width,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white54, width: 1.3),
-        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.white54, width: 1.2.w),
+        borderRadius: BorderRadius.circular(14.r),
         color: const Color(0xFF373737),
       ),
       child: Padding(
-        padding: EdgeInsets.all(10.w),
+        padding: EdgeInsets.all(12.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(image, height: 40.h),
-                SizedBox(height: 12.h),
-                Text(
-                  title,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            Expanded(
+              child: Row(
+                children: [
+                  Image.asset(image, height: isTablet ? 50.h : 32.h, fit: BoxFit.contain),
+                  SizedBox(width: 14.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: GoogleFonts.montserrat(
+                            fontSize: isTablet ? 18.sp : 14.5.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 5.h),
+                        Text(
+                          subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.montserrat(
+                            fontSize: isTablet ? 13.sp : 11.5.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white54,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white54,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Icon(Icons.arrow_forward_ios, color: Colors.green, size: 26.sp),
+            Icon(Icons.arrow_forward_ios,
+                color: Colors.green, size: isTablet ? 28.sp : 22.sp),
           ],
         ),
       ),

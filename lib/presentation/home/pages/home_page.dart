@@ -1,12 +1,13 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/bottom_nav_widget.dart';
-import 'package:car_parts_app/presentation/home/pages/testing.dart';
+import 'package:car_parts_app/presentation/home/widget/become_a_seller.dart';
 import 'package:car_parts_app/presentation/home/widget/appbar_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/bottom_nav_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_button_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_card_widget.dart';
+import 'package:car_parts_app/presentation/home/widget/new_arrivals.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
 
 import 'package:flutter/material.dart';
@@ -49,9 +50,10 @@ class HomePage extends StatelessWidget {
                 const HomeCardWidget(),
                 SizedBox(height: 12.h),
                 const HomeButtonWidget(),
-                const HomeCarCardWidget(),
+                HomeCarCardWidget(title: 'ALLS',),
                 SellerCardWidget(),
-                SizedBox(height: 120.h), 
+                SizedBox(height: 20.h), 
+                NewArrivalsWidget(title: 'NEW ARRIVALS',),
         // spacing under navbar
               ],
             ),

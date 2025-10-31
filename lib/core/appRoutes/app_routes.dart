@@ -1,3 +1,4 @@
+import 'package:car_parts_app/presentation/about/about_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/forget_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/otp_page.dart';
@@ -5,13 +6,16 @@ import 'package:car_parts_app/presentation/auth/pages/set_new_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
+import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/home/widget/drug_built_widget.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
+import 'package:car_parts_app/presentation/privacyPolicy/privacy_policy.dart';
 import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
 import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
+import 'package:car_parts_app/presentation/tearm_condition/page/tearms_condition.dart';
 import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +40,11 @@ class AppRoutes {
    static const String DrugBuiltScreen = '/drug-built-screen';
    static const String SellarScreen = '/sellar-screen';
    static const String TestPage = '/test-page';
+   static const String FaqsPage = '/faqs-page';
+   static const String TearmsConditionScreen = '/tearms-condition-screen';
+   static const String PrivacyPolicyScreen = '/privacy-policy-screen';  
+      static const String AboutScreen = '/about-screen';  
+
 }
 
 
@@ -148,6 +157,19 @@ GoRoute(
 ),
 
 GoRoute(
+  path: AppRoutes.AboutScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: AboutEPartsPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
   path: AppRoutes.set_new_password,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: SetnewPassword(),
@@ -161,9 +183,37 @@ GoRoute(
 ),
 
 GoRoute(
+  path: AppRoutes.TearmsConditionScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: TermsCondition(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+ 
+
+GoRoute(
   path: AppRoutes.forgetPassword,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: ForgetPassword(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
+  path: AppRoutes.PrivacyPolicyScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: PrivacyPolicyPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,
@@ -190,6 +240,19 @@ GoRoute(
   path: AppRoutes.ProductByCategoryScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: ProductByCategoryPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
+  path: AppRoutes.FaqsPage,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: FaqsPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,
