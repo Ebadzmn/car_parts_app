@@ -2,6 +2,7 @@ import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/bottom_nav_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/become_a_seller.dart';
 import 'package:car_parts_app/presentation/home/widget/appbar_widget.dart';
+import 'package:car_parts_app/presentation/home/widget/becomev2.dart';
 import 'package:car_parts_app/presentation/home/widget/bottom_nav_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_button_widget.dart';
@@ -51,7 +52,8 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 12.h),
                 const HomeButtonWidget(),
                 HomeCarCardWidget(title: 'ALLS',),
-                SellerCardWidget(),
+                BecomeSellerCardWidget(),
+                // SellerCardWidget(),
                 SizedBox(height: 20.h), 
                 NewArrivalsWidget(title: 'NEW ARRIVALS',),
         // spacing under navbar

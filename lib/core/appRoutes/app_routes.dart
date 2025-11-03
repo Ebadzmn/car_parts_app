@@ -5,6 +5,7 @@ import 'package:car_parts_app/presentation/auth/pages/otp_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_new_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/set_otp_pass.dart';
 import 'package:car_parts_app/presentation/auth/pages/signup_page.dart';
+import 'package:car_parts_app/presentation/category/pages/add_new_category.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
@@ -44,6 +45,9 @@ class AppRoutes {
    static const String TearmsConditionScreen = '/tearms-condition-screen';
    static const String PrivacyPolicyScreen = '/privacy-policy-screen';  
       static const String AboutScreen = '/about-screen';  
+      static const String AddNewCategoryScreen = '/add-new-category-screen';
+
+
 
 }
 
@@ -223,6 +227,20 @@ GoRoute(
   ),
 ),
 
+
+GoRoute(
+  path: AppRoutes.SellarScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: SellerAccount(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
 GoRoute(
   path: AppRoutes.setOtpPassword,
   pageBuilder: (context, state) => CustomTransitionPage(
@@ -262,10 +280,11 @@ GoRoute(
   ),
 ),
 
+
 GoRoute(
-  path: AppRoutes.ProductByCategoryScreen,
+  path: AppRoutes.AddNewCategoryScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
-    child: SellerAccount(),
+    child: AddNewCategory(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,

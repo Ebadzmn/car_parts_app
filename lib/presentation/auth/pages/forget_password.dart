@@ -1,6 +1,8 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -29,6 +31,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           backgroundColor: Colors.green,
         ),
       );
+      context.push(AppRoutes.OtpPage);
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:car_parts_app/core/injector/injector.dart' as di;
 import 'package:car_parts_app/presentation/about/testing.dart';
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
+import 'package:car_parts_app/presentation/category/pages/add_new_category.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
@@ -71,11 +72,11 @@ class MyApp extends StatelessWidget {
                   di.sl<CategoryBloc>()..add(LoadCategoryEvent()),
             ),
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
             theme: ThemeData(scaffoldBackgroundColor: Color(0xFF212121)),
             debugShowCheckedModeBanner: false,
-            home: HomePage(),
-            // routerConfig: appRouter
+           
+            routerConfig: appRouter
             
 
             // home: ChangeBasicInfo(),

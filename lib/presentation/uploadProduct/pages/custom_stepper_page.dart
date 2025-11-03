@@ -1,3 +1,4 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/presentation/uploadProduct/pages/step_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,52 +37,49 @@ class CustomHorizontalStepperPage extends StatelessWidget {
                           horizontal: 8.w,
                           vertical: 12.h,
                         ),
-                        child:               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 40.h,
-                    width: 40.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 0,
-                          spreadRadius: 1,
-                          offset: Offset(0, 1),
-                          color: Colors.grey,
+                        child:             Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 0,
+                              spreadRadius: 1,
+                              offset: Offset(0, 1),
+                              color: Colors.grey,
+                            ),
+          
+                            BoxShadow(
+                              blurRadius: 1,
+                              spreadRadius: 1,
+                              offset: Offset(2, 2),
+                              color: Color(0xFF373737),
+                            ),
+                          ],
                         ),
-
-                        BoxShadow(
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          offset: Offset(2, 2),
-                          color: Color(0xFF373737),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => context.pop(),
-                        child: Icon(
-                          Icons.arrow_back_ios_new_outlined,
-                          color: Colors.green,
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Upload Product',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'Upload Product',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+                  
                       ),
                       SizedBox(height: 16.h),
 
@@ -210,40 +208,56 @@ class CustomHorizontalStepperPage extends StatelessWidget {
                           ),
 
                           // Next Button
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10.h,
-                                horizontal: 14.w,
-                              ),
-                            ),
-                            onPressed: state.currentStep < 3
-                                ? () => bloc.add(NextStepEvent())
-                                : null,
-                            child: Row(
-                              children: [
-                                Text(
-                                  state.currentStep == 3 ? "Finish" : "Next",
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(width: 4.w),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 14.sp,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
+                        ElevatedButton(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.transparent,
+    shadowColor: Colors.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8.r),
+    ),
+    padding: EdgeInsets.symmetric(
+      vertical: 10.h,
+      horizontal: 14.w,
+    ),
+  ),
+  onPressed: () {
+    if (state.currentStep < 3) {
+      bloc.add(NextStepEvent());
+    } else {
+      /// ✅ Finish Pressed → Show Snackbar & Navigate
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Product Uploaded Successfully!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      /// 1 second delay → after snack, navigate
+     
+        context.pop();
+  
+    }
+  },
+  child: Row(
+    children: [
+      Text(
+        state.currentStep == 3 ? "Finish" : "Next",
+        style: GoogleFonts.montserrat(
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+      ),
+      SizedBox(width: 4.w),
+      Icon(
+       Icons.arrow_forward_ios,
+        size: 14.sp,
+        color: Colors.white,
+      ),
+    ],
+  ),
+),
+
                         ],
                       ),
                     ],

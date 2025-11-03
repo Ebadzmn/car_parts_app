@@ -1,6 +1,8 @@
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SellerAccount extends StatelessWidget {
@@ -10,13 +12,12 @@ class SellerAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = 1.sw;
 
-    // ✅ Device size logic
-    bool isTablet = width > 600; // tablet/ipad detection
+    bool isTablet = width > 600; // Detect tablet device
 
-    // Different height for mobile and tablet
     double cardHeight = isTablet ? 150.h : 115.h;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -43,6 +44,9 @@ class SellerAccount extends StatelessWidget {
                   title: 'Upload Product',
                   subtitle: 'Add new products to your store inventory',
                   isTablet: isTablet,
+                  onTap: () {
+                    context.push(AppRoutes.uploadProductScreen);
+                  },
                 ),
 
                 SizedBox(height: 20.h),
@@ -54,6 +58,9 @@ class SellerAccount extends StatelessWidget {
                   title: 'Add New Category',
                   subtitle: 'Create and organize product categories',
                   isTablet: isTablet,
+                  onTap: () {
+                    context.push(AppRoutes.AddNewCategoryScreen);
+                  },
                 ),
 
                 SizedBox(height: 20.h),
@@ -65,6 +72,9 @@ class SellerAccount extends StatelessWidget {
                   title: 'My Products',
                   subtitle: 'View and manage your existing products',
                   isTablet: isTablet,
+                  onTap: () {
+                    Navigator.pushNamed(context, "/myProducts");
+                  },
                 ),
               ],
             ),
@@ -81,58 +91,71 @@ class SellerAccount extends StatelessWidget {
     required String title,
     required String subtitle,
     required bool isTablet,
+    required VoidCallback onTap,
   }) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white54, width: 1.2.w),
-        borderRadius: BorderRadius.circular(14.r),
-        color: const Color(0xFF373737),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Image.asset(image, height: isTablet ? 50.h : 32.h, fit: BoxFit.contain),
-                  SizedBox(width: 14.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          title,
-                          style: GoogleFonts.montserrat(
-                            fontSize: isTablet ? 18.sp : 14.5.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          subtitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.montserrat(
-                            fontSize: isTablet ? 13.sp : 11.5.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white54,
-                          ),
-                        ),
-                      ],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14.r),
+      splashColor: Colors.white24,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white54, width: 1.2.w),
+          borderRadius: BorderRadius.circular(14.r),
+          color: const Color(0xFF373737),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      image,
+                      height: isTablet ? 50.h : 32.h,
+                      fit: BoxFit.contain,
                     ),
-                  ),
-                ],
+                    SizedBox(width: 14.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: GoogleFonts.montserrat(
+                              fontSize: isTablet ? 18.sp : 14.5.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+                          Text(
+                            subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.montserrat(
+                              fontSize: isTablet ? 13.sp : 11.5.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Icon(Icons.arrow_forward_ios,
-                color: Colors.green, size: isTablet ? 28.sp : 22.sp),
-          ],
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.green,
+                size: isTablet ? 28.sp : 22.sp,
+              ),
+            ],
+          ),
         ),
       ),
     );

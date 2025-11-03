@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -52,6 +54,7 @@ class _SetOtpPassState extends State<SetOtpPass> {
           content: Text('Please enter a valid 6-digit OTP'),
           backgroundColor: Colors.redAccent,
         ),
+        
       );
     } else {
       // ✅ OTP verify logic এখানে লিখো (API call etc.)
@@ -61,6 +64,7 @@ class _SetOtpPassState extends State<SetOtpPass> {
           backgroundColor: Colors.green,
         ),
       );
+      context.push(AppRoutes.set_new_password);
     }
   }
 

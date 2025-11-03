@@ -76,11 +76,16 @@ class LoginPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          'Forget Password',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
+                        GestureDetector(
+                          onTap: () {
+                            context.push(AppRoutes.forgetPassword);
+                          },
+                          child: Text(
+                            'Forget Password',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],

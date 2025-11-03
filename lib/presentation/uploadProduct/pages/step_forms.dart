@@ -32,15 +32,17 @@ class StepOneForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomTextField(label: 'Full Name', hintText: 'Enter your full name'),
-        CustomTextField(label: 'Email', hintText: 'Enter your email'),
+        CustomTextField(label: 'Product Name', hintText: 'Enter your product name'),
+        CustomTextField(label: 'Category', hintText: 'Enter your category'),
 
         CustomTextField(
-          label: 'Phone Number',
-          hintText: 'Enter your phone number',
+          label: 'Brand',
+          hintText: 'Enter your brand',
         ),
 
-        CustomTextField(label: 'Full Name', hintText: 'Enter your full name'),
+        CustomTextField(label: 'Chassis Number', hintText: 'Enter your chassis number'),
+        CustomTextField(label: 'Price', hintText: 'Enter your price'),
+        CustomTextField(label: 'Condition', hintText: 'Enter your condition'),
       ],
     );
   }

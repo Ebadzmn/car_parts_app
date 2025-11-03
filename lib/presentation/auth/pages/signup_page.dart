@@ -183,7 +183,7 @@ class SignupPage extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             // context.push(AppRoutes.LoginPage);
-                            context.push(AppRoutes.OtpPage);
+                            context.push(AppRoutes.LoginPage);
                           },
                       ),
                     ],
