@@ -10,6 +10,8 @@ class HomeButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = 1.sw;
+    final bool isTablet = screenWidth > 600;  // Tablet check
     final allProducts = CarLocalDatasource.getProduct();
     final categories = allProducts.map((e) => e.carCategory).toSet().toList();
     categories.insert(0, 'All');
@@ -49,7 +51,7 @@ class HomeButtonWidget extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 6.w),
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: isTablet ? 8.h : 2.h),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(22.r),
                             border: isSelected
@@ -75,18 +77,7 @@ class HomeButtonWidget extends StatelessWidget {
                                     ),
 
 
-                                    // BoxShadow(
-                                    //   blurRadius: 0,
-                                    //   spreadRadius: 2,
-                                    //   offset: Offset(0, 0),
-                                    //   color: Colors.grey,
-                                    // ),
-                                    // BoxShadow(
-                                    //   blurRadius: 1,
-                                    //   spreadRadius: 1,
-                                    //   offset: Offset(2, 2),
-                                    //   color: Color(0xFF373737),
-                                    // ),
+                                
                                   ],
                           ),
                           child: ElevatedButton(

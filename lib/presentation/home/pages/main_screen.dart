@@ -24,6 +24,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  // Tablet check
     return BlocProvider(
       create: (_) => BottomNavBloc(),
       child: BlocBuilder<BottomNavBloc, BottomNavState>(
@@ -110,6 +111,8 @@ class MainScreen extends StatelessWidget {
     required String iconPath,
   }) {
     final bool isSelected = currentIndex == index;
+        final screenWidth = MediaQuery.of(context).size.width;
+    final bool isTablet = screenWidth > 600;
 
     return GestureDetector(
       onTap: () {
@@ -143,7 +146,7 @@ class MainScreen extends StatelessWidget {
         ),
         child: Image.asset(
           iconPath,
-          height: 22.h,
+          height:  22.h,
           width: 22.h,
           color: isSelected ? Colors.black : Colors.white,
         ),

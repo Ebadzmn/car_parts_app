@@ -73,7 +73,7 @@ class SellerAccount extends StatelessWidget {
                   subtitle: 'View and manage your existing products',
                   isTablet: isTablet,
                   onTap: () {
-                    Navigator.pushNamed(context, "/myProducts");
+                    context.push(AppRoutes.Myproduct);
                   },
                 ),
               ],

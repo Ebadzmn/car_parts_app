@@ -11,6 +11,7 @@ import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/home/widget/drug_built_widget.dart';
+import 'package:car_parts_app/presentation/myproduct/myproduct.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
 import 'package:car_parts_app/presentation/privacyPolicy/privacy_policy.dart';
 import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
@@ -121,6 +122,20 @@ GoRoute(
     },
   ),
 ),
+
+GoRoute(
+  path: AppRoutes.Myproduct,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: const MyProductPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
 
 GoRoute(
   path: AppRoutes.LoginPage,
