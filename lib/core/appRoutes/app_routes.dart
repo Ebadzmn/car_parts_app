@@ -46,6 +46,7 @@ class AppRoutes {
    static const String PrivacyPolicyScreen = '/privacy-policy-screen';  
       static const String AboutScreen = '/about-screen';  
       static const String AddNewCategoryScreen = '/add-new-category-screen';
+      static const String Myproduct = '/myproduct';
 
 
 
@@ -213,6 +214,7 @@ GoRoute(
     },
   ),
 ),
+
 
 GoRoute(
   path: AppRoutes.PrivacyPolicyScreen,
