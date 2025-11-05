@@ -30,51 +30,56 @@ List<Color> getGradientColors(String condition) {
     final screenHeight = 1.sh;
     final screenWidth = 1.sw;
 
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
+    return Scaffold(
+    
+      body: SafeArea(
+        
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 16.w , vertical: 16.h),
           child: Center(
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Minimize vertical space
+           // Minimize vertical space
               children: [
             
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 0,
-                              spreadRadius: 1,
-                              offset: Offset(0, 1),
-                              color: Colors.grey,
+                      GestureDetector(
+                        onTap: () {
+                          context.pop();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 0,
+                                spreadRadius: 1,
+                                offset: Offset(0, 1),
+                                color: Colors.grey,
+                              ),
+                                    
+                              BoxShadow(
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                                offset: Offset(2, 2),
+                                color: Color(0xFF373737),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_ios_new_outlined,
+                              color: Colors.green,
                             ),
-            
-                            BoxShadow(
-                              blurRadius: 1,
-                              spreadRadius: 1,
-                              offset: Offset(2, 2),
-                              color: Color(0xFF373737),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.arrow_back_ios_new_outlined,
-                            color: Colors.green,
                           ),
                         ),
                       ),
                       SizedBox(width: 12.w),
                       Text(
-                        'Basic Information Change',
+                        'Parts & Accessories',
                         style: GoogleFonts.montserrat(
                           fontSize: 12.sp,
                           color: Colors.white,

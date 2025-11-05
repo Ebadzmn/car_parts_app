@@ -1,6 +1,7 @@
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NotificationPages extends StatelessWidget {
@@ -21,37 +22,42 @@ class NotificationPages extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 0,
-                            spreadRadius: 1,
-                            offset: Offset(0, 1),
-                            color: Colors.grey,
+                    GestureDetector(
+                      onTap: () {
+                        context.pop();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 0,
+                              spreadRadius: 1,
+                              offset: Offset(0, 1),
+                              color: Colors.grey,
+                            ),
+                      
+                            BoxShadow(
+                              blurRadius: 1,
+                              spreadRadius: 1,
+                              offset: Offset(2, 2),
+                              color: Color(0xFF373737),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.green,
                           ),
-
-                          BoxShadow(
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                            offset: Offset(2, 2),
-                            color: Color(0xFF373737),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_back_ios_new_outlined,
-                          color: Colors.green,
                         ),
                       ),
                     ),
                     SizedBox(width: 10.w),
                     Text(
-                      'Basic Information Change',
+                      'Notifications',
                       style: GoogleFonts.montserrat(
                         fontSize: 12.sp,
                         color: Colors.white,

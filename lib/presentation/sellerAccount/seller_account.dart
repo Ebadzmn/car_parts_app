@@ -59,7 +59,7 @@ class SellerAccount extends StatelessWidget {
                   subtitle: 'Create and organize product categories',
                   isTablet: isTablet,
                   onTap: () {
-                    context.push(AppRoutes.AddNewCategoryScreen);
+                  context.push(AppRoutes.AddNewCategoryScreen);
                   },
                 ),
 

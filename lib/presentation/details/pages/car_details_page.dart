@@ -73,7 +73,7 @@ class CarDetailsPage extends StatelessWidget {
                     ),
                     SizedBox(width: 10.w),
                     Text(
-                      'Change Contact',
+                      'Product Details',
                       style: GoogleFonts.montserrat(
                         fontSize: 16.sp,
                         color: Colors.white,

@@ -12,6 +12,7 @@ import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/home/widget/drug_built_widget.dart';
 import 'package:car_parts_app/presentation/myproduct/myproduct.dart';
+import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
 import 'package:car_parts_app/presentation/privacyPolicy/privacy_policy.dart';
 import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
@@ -48,6 +49,7 @@ class AppRoutes {
       static const String AboutScreen = '/about-screen';  
       static const String AddNewCategoryScreen = '/add-new-category-screen';
       static const String Myproduct = '/myproduct';
+      static const String NotificationScreen = '/notification-screen';
 
 
 
@@ -110,10 +112,12 @@ final GoRouter appRouter = GoRouter(
   ),
 ),
 
+
+
 GoRoute(
-  path: AppRoutes.uploadProductScreen,
+  path: AppRoutes.Myproduct,
   pageBuilder: (context, state) => CustomTransitionPage(
-    child: const CustomHorizontalStepperPage(),
+    child: const MyProductPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,
@@ -123,10 +127,11 @@ GoRoute(
   ),
 ),
 
+
 GoRoute(
-  path: AppRoutes.Myproduct,
+  path: AppRoutes.uploadProductScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
-    child: const MyProductPage(),
+    child: const CustomHorizontalStepperPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,
@@ -275,6 +280,19 @@ GoRoute(
   path: AppRoutes.ProductByCategoryScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
     child: ProductByCategoryPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ),
+),
+
+GoRoute(
+  path: AppRoutes.NotificationScreen,
+  pageBuilder: (context, state) => CustomTransitionPage(
+    child: NotificationPages(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,

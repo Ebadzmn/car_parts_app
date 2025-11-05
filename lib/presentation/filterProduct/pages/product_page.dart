@@ -1,3 +1,4 @@
+import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/presentation/filterProduct/pages/filter_page.dart';
 import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
@@ -88,10 +89,10 @@ class ProductPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: IconButton(
-            icon: Icon(
-              Icons.filter_list_off_outlined,
+            icon: Image.asset(
+              AssetsPath.filterPng,
               color: Colors.white,
-              size: 24.sp,
+              fit: BoxFit.contain,
             ),
             onPressed: () {
               _scaffoldKey.currentState?.openDrawer();
@@ -102,7 +103,7 @@ class ProductPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20.h),
-        HomeCarCardWidget(title: '',)
+        HomeCarCardWidget(title: 'New Arrival',)
               ],
             ),
           ),

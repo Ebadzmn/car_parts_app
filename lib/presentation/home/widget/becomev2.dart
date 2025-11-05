@@ -100,7 +100,7 @@ class BecomeSellerCardWidget extends StatelessWidget {
                       listenWhen: (prev, curr) => curr.shouldNavigate,
                       listener: (context, state) {
                         if (state.shouldNavigate) {
-                          context.push(AppRoutes.detailsScreen).then((_) {
+                          context.push(AppRoutes.SellarScreen).then((_) {
                             context.read<DragBloc>().add(const DragUpdateEvent(0));
                           });
                         }

@@ -49,11 +49,21 @@ List<Color> getGradientColors(String condition) {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              Text(
-                'See More',
-                style: GoogleFonts.montserrat(
-                  fontSize: 16.sp,
-                  color: Colors.grey,
+              GestureDetector(
+                onTap: () {
+                  context.push(
+                    AppRoutes.ProductByCategoryScreen,
+                  );
+                },
+                child: Text(
+                  'See More',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 16.sp,
+                    color: Colors.grey,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.grey,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
             ],

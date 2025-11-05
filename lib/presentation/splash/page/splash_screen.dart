@@ -107,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    AssetsPath.logo,
+                    AssetsPath.newLogo,
                     width: 150.w,
                     height: 150.h,
                   ),
@@ -176,7 +176,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Positioned(
               top: screenWidth * 0.1, // প্রয়োজন অনুযায়ী স্থানান্তর করতে পারেন
               child: Image.asset(
-                AssetsPath.logo, // আপনার logo path
+                AssetsPath.newLogo, // আপনার logo path
                 width: 150.w,         // size adjust করতে পারেন
                 height: 150.h,
               ),
