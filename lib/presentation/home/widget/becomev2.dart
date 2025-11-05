@@ -19,7 +19,7 @@ class BecomeSellerCardWidget extends StatelessWidget {
     final bool isTablet = screenWidth >= 600;
 
     return Container(
-      height: isTablet ? 320.h : 200.h,
+      height: isTablet ? 320.h : 220.h,
       decoration: BoxDecoration(
         color: const Color(0xFF5BB349),
         borderRadius: BorderRadius.circular(20.r),
