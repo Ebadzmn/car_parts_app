@@ -23,16 +23,16 @@ class HomePage extends StatelessWidget {
     final screenWidth = 1.sw;
 
       // 🔹 Make status bar transparent & icons light
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.amber,
-        statusBarColor: Colors.amber,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     // systemNavigationBarColor: Colors.amber,
+    //     // statusBarColor: Colors.amber,
+    //     statusBarIconBrightness: Brightness.light,
+    //   ),
+    // );
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+     
       drawer:  DrawerWidget(),
       body: Stack(
         children: [
@@ -42,8 +42,6 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 24.h),
-
-                
                 const AppBarWidget(),
                 SizedBox(height: 24.h),
                 const SearchWidget(),

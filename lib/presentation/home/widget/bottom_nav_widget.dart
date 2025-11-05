@@ -15,7 +15,7 @@ class BottomNavBarwidget extends StatelessWidget {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: 16.h, // slightly above bottom edge (floating look)
+      bottom: 20.h, // slightly above bottom edge (floating look)
       child: Center(
         child: Container(
           height: 60.h,
