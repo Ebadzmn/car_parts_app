@@ -5,13 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpPage extends StatelessWidget {
-  OtpPage({super.key});
+  final String email;
+  OtpPage({super.key, required this.email});
 
   final TextEditingController _otpController = TextEditingController();
+  
   final ValueNotifier<String?> errorMessage = ValueNotifier(null);
 
   void _verifyOtp(BuildContext context) {
+
     final otp = _otpController.text;
+  
+    
 
     if (otp.isEmpty) {
       errorMessage.value = 'Please enter the OTP code';

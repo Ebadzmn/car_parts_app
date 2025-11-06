@@ -1,8 +1,11 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
+import 'package:car_parts_app/data/model/auth/sign_up_model.dart';
+import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,22 +13,72 @@ import 'package:google_fonts/google_fonts.dart';
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
 
+  // ✅ Controllers and ValueNotifier as final (Stateless-safe)
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-
+  final fullNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final contactController = TextEditingController();
+  final passwordController = TextEditingController();
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
+
+  // ✅ submitForm takes context as parameter
+  void submitForm(BuildContext context) {
+    if (!_formKey.currentState!.validate()) return;
+
+    if (!isChecked.value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please accept Terms and Conditions')),
+      );
+      return;
+    }
+
+    final model = SignupModel(
+      name: fullNameController.text.trim(),
+      email: emailController.text.trim(),
+      contact: contactController.text.trim(),
+      password: passwordController.text,
+    );
+
+    // ✅ Use correct BuildContext from button (not null)
+    context.read<AuthBloc>().add(SignUpEvent(signupModel: model));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(18.sp),
-        child: Center(
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => const AlertDialog(
+                  title: Text('Loading'),
+                  content: SizedBox(
+                    height: 48,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+              );
+            } else {
+              if (Navigator.canPop(context)) Navigator.pop(context);
+            }
+
+            if (state is SignUpSuccess) {
+              final message = state.response['message'] ?? 'Signup success';
+              final email = emailController.text.trim();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+              context.push(AppRoutes.OtpPage ,extra: email);
+            } else if (state is AuthError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
           child: Form(
             key: _formKey,
             child: Column(
@@ -63,11 +116,11 @@ class SignupPage extends StatelessWidget {
                   },
                 ),
 
-                // Address (Optional)
+                // Contact Number (Optional)
                 CustomTextField(
-                  controller: addressController,
-                  label: 'Address (Optional)',
-                  hintText: 'Please enter your Address',
+                  controller: contactController,
+                  label: 'Contact Number (Optional)',
+                  hintText: 'Please enter your contact number',
                 ),
 
                 // Password
@@ -87,23 +140,6 @@ class SignupPage extends StatelessWidget {
                   },
                 ),
 
-                // Confirm Password
-                CustomTextField(
-                  controller: confirmPasswordController,
-                  label: 'Confirm Password',
-                  hintText: 'Please confirm your password',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
-                    }
-                    if (value != passwordController.text) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                ),
-
                 // Terms Checkbox
                 ValueListenableBuilder<bool>(
                   valueListenable: isChecked,
@@ -113,7 +149,8 @@ class SignupPage extends StatelessWidget {
                       children: [
                         Checkbox(
                           value: value,
-                          onChanged: (newValue) => isChecked.value = newValue!,
+                          onChanged: (newValue) =>
+                              isChecked.value = newValue ?? false,
                         ),
                         Expanded(
                           child: Text(
@@ -136,17 +173,7 @@ class SignupPage extends StatelessWidget {
                   width: double.infinity,
                   height: 44.h,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (!isChecked.value) {
-                          context.push(AppRoutes.OtpPage);
-                          return;
-                        }
-
-                        // ✅ All validations passed
-                        context.push(AppRoutes.OtpPage);
-                      }
-                    },
+                    onPressed: () => submitForm(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
                       shape: RoundedRectangleBorder(
@@ -182,7 +209,6 @@ class SignupPage extends StatelessWidget {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // context.push(AppRoutes.LoginPage);
                             context.push(AppRoutes.LoginPage);
                           },
                       ),

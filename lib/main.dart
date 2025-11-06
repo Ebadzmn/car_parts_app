@@ -1,6 +1,7 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
 import 'package:car_parts_app/core/injector/injector.dart' as di;
+import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
@@ -55,6 +56,9 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => di.sl<BottomNavBloc>()),
             BlocProvider(
               create: (context) => di.sl<CategoryBloc>()..add(LoadCategoryEvent()),
+            ),
+            BlocProvider(
+              create: (context) => di.sl<AuthBloc>(),
             ),
           ],
           child: MaterialApp.router(

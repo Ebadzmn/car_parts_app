@@ -169,17 +169,24 @@ GoRoute(
 ),
 
 GoRoute(
-  path: AppRoutes.OtpPage,
-  pageBuilder: (context, state) => CustomTransitionPage(
-    child: OtpPage(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(
-        opacity: animation,
-        child: child,
-      );
-    },
-  ),
+  path: AppRoutes.OtpPage, 
+  pageBuilder: (context, state) {
+    
+    final email = state.extra as String? ?? '';
+
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: OtpPage( email: email, ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  },
 ),
+
 
 GoRoute(
   path: AppRoutes.AboutScreen,

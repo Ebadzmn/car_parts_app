@@ -1,0 +1,5 @@
+class ApiUrls {
+  static const String baseUrl = 'http://10.10.7.106:5001/api/v1';
+  static const String signUp = '/auth/register';
+  static const String verifyOtp = '/auth//verify-email';
+}

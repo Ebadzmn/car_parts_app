@@ -66,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // Navigate directly to HomePage with fade transition
     if (mounted) {
-      context.push(AppRoutes.MainScreen);
+      context.push(AppRoutes.RegisterPage);
       // Navigator.pushReplacement(
       //   context,
       //   PageRouteBuilder(
