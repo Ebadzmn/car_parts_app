@@ -107,7 +107,7 @@ List<Color> getGradientColors(String condition) {
                                   children: [
                                     // Car name
                                     Text(
-                                      item.carName,
+                                      item.title,
                                       style: GoogleFonts.montserrat(
                                         decoration: TextDecoration.underline,
                                         decorationColor: Colors.grey,
@@ -121,16 +121,16 @@ List<Color> getGradientColors(String condition) {
                             
                                     // Car condition
                                     Text(
-              item.carCondition,
-              style: GoogleFonts.montserrat(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                foreground: Paint()
-            ..shader = LinearGradient(
-              colors: getGradientColors(item.carCondition),
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-            ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
+                                      item.condition,
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        foreground: Paint()
+                                    ..shader = LinearGradient(
+                                      colors: getGradientColors(item.condition),
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.topRight,
+                                    ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
               ),
             ),
                             

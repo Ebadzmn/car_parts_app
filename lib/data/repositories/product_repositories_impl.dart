@@ -1,31 +1,29 @@
 import 'package:car_parts_app/core/error/failure.dart';
-import 'package:car_parts_app/data/data_source/local/car_local_datasource.dart';
+import 'package:car_parts_app/data/data_source/remote/product_remoteDataSource.dart';
+import 'package:car_parts_app/data/model/product/product_model.dart';
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
+
 import 'package:car_parts_app/domain/repositories/product/product_repositories.dart';
 import 'package:dartz/dartz.dart';
 
 class ProductRepositoriesImpl implements ProductRepositories {
-  @override
-  Future<Either<Failure, List<ProductEntities>>> getProduct() async {
-    try {
-      final result = await CarLocalDatasource.getProduct();
-      return Right(result);
-    } catch (e) {
-      return Left(CacheFailure(message: 'Local Error'));
-    }
-  }
+
+  final ProductRemotedatasource productRemotedatasource;
+
+  ProductRepositoriesImpl(this.productRemotedatasource);
 
   @override
-  Future<Either<Failure, List<ProductEntities>>> getProductByCategory({
-    required String category,
-  }) async {
+  Future<Either<Failure, List<ProductEntity>>> getProductByAdvancedFilter(
+    String category,
+    String condition,
+    double lowestPrice,
+    double highestPrice,
+  ) async {
     try {
-      final result = await CarLocalDatasource.getProduct()
-          .where((product) => product.carCategory == category)
-          .toList();
-      return Right(result);
+      final result = await productRemotedatasource.getProductByAdvancedFilter(category, condition, lowestPrice, highestPrice);
+      return result;
     } catch (e) {
-      return Left(CacheFailure(message: 'Local Error'));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 }

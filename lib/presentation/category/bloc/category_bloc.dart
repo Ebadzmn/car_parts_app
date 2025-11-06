@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:car_parts_app/core/error/failure.dart';
+import 'package:car_parts_app/data/model/category/category_model.dart';
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 import 'package:car_parts_app/domain/usecase/category/category_usecase.dart';
 import 'package:dartz/dartz.dart';
@@ -48,11 +49,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     CategoryEvent event,
     Emitter<CategoryState> emit,
   ) async {
-    if (event is LoadCategoryEvent) {
+    if (event is FetchCategoriesEvent) {
       final result = await categoryUsecase();
       result.fold(
         (failure) => emit(CategoryError(message: failure.message)),
-        (products) => emit(CategoryLoaded(products)),
+        (categories) => emit(CategoryLoaded(categories)),
       );
     }
   }

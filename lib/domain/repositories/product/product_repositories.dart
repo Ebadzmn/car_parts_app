@@ -3,8 +3,10 @@ import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ProductRepositories {
-  Future<Either<Failure, List<ProductEntities>>> getProduct();
-  Future<Either<Failure, List<ProductEntities>>> getProductByCategory({
-    required String category,
-  });
+  Future<Either<Failure, List<ProductEntity>>> getProductByAdvancedFilter(
+     String category,
+     String condition,
+     double lowestPrice,
+     double highestPrice,
+  );
 }

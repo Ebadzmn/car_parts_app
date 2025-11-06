@@ -286,7 +286,9 @@ GoRoute(
 GoRoute(
   path: AppRoutes.ProductByCategoryScreen,
   pageBuilder: (context, state) => CustomTransitionPage(
-    child: ProductByCategoryPage(),
+    child: ProductByCategoryPage(
+      category: state.extra as String?,
+    ),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
         opacity: animation,

@@ -103,7 +103,7 @@ class ProductPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20.h),
-        HomeCarCardWidget(title: 'New Arrival',)
+        // HomeCarCardWidget(title: 'New Arrival',)
               ],
             ),
           ),

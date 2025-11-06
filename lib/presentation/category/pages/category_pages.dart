@@ -97,13 +97,14 @@ class CategoryPages extends StatelessWidget {
                           mainAxisSpacing: 16.h,
                           childAspectRatio: 1.5,
                         ),
-                        itemCount: state.products.length,
+                        itemCount: state.categories.length,
                         itemBuilder: (context, index) {
-                          final category = state.products[index];
+                          final category = state.categories[index];
                           return GestureDetector(
                             onTap: () {
                               context.push(
                                 AppRoutes.ProductByCategoryScreen,
+                                extra: category.name,
                               );
                             },
                             child: Container(
@@ -151,7 +152,7 @@ class CategoryPages extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8.h),
                                   Text(
-                                    category.carCategory,
+                                    category.name,
                                     style: GoogleFonts.montserrat(
                                       fontSize: 14.sp,
                                       color: Colors.white,

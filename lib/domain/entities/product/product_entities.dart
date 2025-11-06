@@ -1,39 +1,71 @@
-//
-
 import 'package:equatable/equatable.dart';
 
-class ProductEntities extends Equatable {
-  final String carName; // গাড়ির নাম
-  final String carCondition; // New / Used + Color
-  final String carImage; // Image URL
-  final String carDescription; // Description
-  final String carPrice; // Price
-  final String carCategory; // Category (Sedan, SUV, etc.)
-  final Map<String, dynamic>?
-  specifications; // Optional: brand, model, warranty, etc.
-  final Map<String, dynamic>?
-  sellerInfo; // Optional: seller name, rating, verified/not
+class ProductEntity extends Equatable {
+  final String id;
+  final String title;
+  final String category;
+  final String brand;
+  final String description;
+  final List<String> carModels;
+  final String chassisNumber;
+  final String condition;
+  final String warranty;
+  final double price;
+  final int discount;
+  final String mainImage;
+  final List<String> galleryImages;
+  final String sellerId;
+  final double sellerRating;
+  final double averageRating;
+  final int totalRatings;
+  final bool isBlocked;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  const ProductEntities({
-    required this.carName,
-    required this.carCondition,
-    required this.carImage,
-    required this.carDescription,
-    required this.carPrice,
-    required this.carCategory,
-    this.specifications,
-    this.sellerInfo,
+  const ProductEntity({
+    required this.id,
+    required this.title,
+    required this.category,
+    required this.brand,
+    required this.description,
+    required this.carModels,
+    required this.chassisNumber,
+    required this.condition,
+    required this.warranty,
+    required this.price,
+    required this.discount,
+    required this.mainImage,
+    required this.galleryImages,
+    required this.sellerId,
+    required this.sellerRating,
+    required this.averageRating,
+    required this.totalRatings,
+    required this.isBlocked,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   @override
   List<Object?> get props => [
-    carName,
-    carCondition,
-    carDescription,
-    carImage,
-    carPrice,
-    carCategory,
-    specifications,
-    sellerInfo,
-  ];
+        id,
+        title,
+        category,
+        brand,
+        description,
+        carModels,
+        chassisNumber,
+        condition,
+        warranty,
+        price,
+        discount,
+        mainImage,
+        galleryImages,
+        sellerId,
+        sellerRating,
+        averageRating,
+        totalRatings,
+        isBlocked,
+        createdAt,
+        updatedAt,
+      ];
 }

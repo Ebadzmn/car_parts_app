@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => di.sl<DragBloc>()),
             BlocProvider(create: (context) => di.sl<BottomNavBloc>()),
             BlocProvider(
-              create: (context) => di.sl<CategoryBloc>()..add(LoadCategoryEvent()),
+              create: (context) => di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
             ),
             BlocProvider(
               create: (context) => di.sl<AuthBloc>(),

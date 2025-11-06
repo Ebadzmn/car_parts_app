@@ -17,3 +17,14 @@ class SignUpEvent extends AuthEvent {
   @override
   List<Object> get props => [signupModel];
 }
+
+class VerifyAccountEvent extends AuthEvent {
+  final VerifyAccountModel verifyAccountModel;
+
+  VerifyAccountEvent({required this.verifyAccountModel});
+
+
+
+  @override
+  List<Object> get props => [verifyAccountModel];
+}

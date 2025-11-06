@@ -1,6 +1,8 @@
 import 'package:car_parts_app/core/appUrls/api_urls.dart';
 import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
 import 'package:car_parts_app/data/data_source/remote/auth_remoteDatasource.dart';
+import 'package:car_parts_app/data/data_source/remote/category_remoteDataSource.dart';
+import 'package:car_parts_app/data/data_source/remote/product_remoteDataSource.dart';
 import 'package:car_parts_app/data/repositories/auth/auth_repositories_impl.dart';
 import 'package:car_parts_app/data/repositories/category_repositories_impl.dart';
 import 'package:car_parts_app/data/repositories/onb_repositories_impl.dart';
@@ -20,6 +22,7 @@ import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
+import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamce_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,8 +32,8 @@ Future<void> init() async {
   // Registering the Dio instance with its base options
   sl.registerLazySingleton(() => Dio(BaseOptions(
         baseUrl: ApiUrls.baseUrl,
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
       )));
 
   // Registering the OnboardBloc with its required OnboardUsecase dependency
@@ -46,29 +49,39 @@ Future<void> init() async {
   sl.registerFactory(() => FaqsBloc());
   sl.registerFactory(() => DragBloc());
   sl.registerFactory(() => BottomNavBloc());
-  sl.registerFactory(() => AuthBloc(sl()));
-
+  sl.registerFactory(() => AuthBloc(sl(),sl()));
   sl.registerFactory(() => CategoryBloc(categoryUsecase: sl()));
+  sl.registerFactory(() => ProductAdvamceBloc(sl()));
 
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));
   sl.registerLazySingleton(() => CategoryUsecase(sl()));
   sl.registerLazySingleton(() => SignUpUsecase(authRepositories: sl()));
+  sl.registerLazySingleton(() => VerifyAccountUsecase(authRepositories: sl()));
 
 
 
   sl.registerLazySingleton<ProductRepositories>(
-    () => ProductRepositoriesImpl(),
+    () => ProductRepositoriesImpl( sl()),
   );
   sl.registerLazySingleton<AuthRepositories>(
     () => AuthRepositoriesImpl( sl()),
   );
   sl.registerLazySingleton<CategoryRepository>(
-    () => CategoryRepositoriesImpl(),
+    () => CategoryRepositoriesImpl( sl()),
   );
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemotedatasourceImpl(
        sl(),
+
     ),
+  );
+
+  sl.registerLazySingleton<CategoryRemotedatasource>(
+    () => CategoryRemotedatasourceImpl( sl()),
+  );
+
+  sl.registerLazySingleton<ProductRemotedatasource>(
+    () => ProductRemotedatasourceImpl( sl()),
   );
 }

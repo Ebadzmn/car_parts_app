@@ -22,3 +22,9 @@ final class SignUpSuccess extends AuthState {
 
   SignUpSuccess({required this.response});
 }
+
+final class VerifyAccountSuccess extends AuthState {
+  final Map<String, dynamic> response;
+
+  VerifyAccountSuccess({required this.response});
+}

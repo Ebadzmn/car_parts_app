@@ -10,16 +10,11 @@ abstract class CategoryState extends Equatable {
 final class CategoryInitial extends CategoryState {}
 
 final class CategoryLoaded extends CategoryState {
-  final List<ProductEntities> products;
-
-  const CategoryLoaded(this.products);
-
-  CategoryLoaded copyWith({List<ProductEntities>? products}) {
-    return CategoryLoaded(products ?? this.products);
-  }
+  final List<CategoryModel> categories;
+  const CategoryLoaded(this.categories);
 
   @override
-  List<Object> get props => [products];
+  List<Object> get props => [categories];
 }
 
 final class CategoryLoading extends CategoryState {}

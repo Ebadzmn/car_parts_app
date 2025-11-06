@@ -23,12 +23,12 @@ class Drawerv2 extends StatelessWidget {
               builder: (context, state) {
                 if (state is CategoryLoaded) {
                   return Column(
-                    children: state.products
+                    children: state.categories
                         .map(
                           (e) => CheckboxListTile(
                             value: false,
                             onChanged: (value) {},
-                            title: Text(e.carCategory),
+                            title: Text(e.name),
                           ),
                         )
                         .toList(),
