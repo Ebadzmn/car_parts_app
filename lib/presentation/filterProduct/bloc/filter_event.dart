@@ -6,6 +6,15 @@ abstract class FilterEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class InitializeFilters extends FilterEvent {
+  final List<String> categories;
+  final List<String> conditions;
+  InitializeFilters({required this.categories, required this.conditions});
+
+  @override
+  List<Object?> get props => [categories, conditions];
+}
+
 class ToggleCategory extends FilterEvent {
   final int index;
   const ToggleCategory(this.index);
@@ -14,9 +23,9 @@ class ToggleCategory extends FilterEvent {
   List<Object?> get props => [index];
 }
 
-class ToggleBrand extends FilterEvent {
+class ToggleCondition extends FilterEvent {
   final int index;
-  const ToggleBrand(this.index);
+  const ToggleCondition(this.index);
 
   @override
   List<Object?> get props => [index];
@@ -24,7 +33,7 @@ class ToggleBrand extends FilterEvent {
 
 class ToggleShowAllCategories extends FilterEvent {}
 
-class ToggleShowAllBrands extends FilterEvent {}
+class ToggleShowAllConditions extends FilterEvent {}
 
 class UpdatePriceRange extends FilterEvent {
   final double min;
@@ -34,3 +43,6 @@ class UpdatePriceRange extends FilterEvent {
   @override
   List<Object?> get props => [min, max];
 }
+
+class ResetFilters extends FilterEvent {}
+

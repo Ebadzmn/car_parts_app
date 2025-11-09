@@ -5,6 +5,7 @@ import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
+import 'package:car_parts_app/presentation/filterProduct/bloc/filter_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => di.sl<HomeBloc>()..add(FetchCardEvent()),
             ),
+          
             BlocProvider(
               create: (context) => di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
             ),

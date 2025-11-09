@@ -1,35 +1,42 @@
 import 'package:equatable/equatable.dart';
 
 class FilterState extends Equatable {
+  final List<String> categories;
+  final List<String> conditions;
   final List<bool> selectedCategories;
-  final List<bool> selectedBrands;
+  final List<bool> selectedConditions;
   final bool showAllCategories;
-  final bool showAllBrands;
+  final bool showAllConditions;
   final double minPrice;
   final double maxPrice;
 
   const FilterState({
+    required this.categories,
+    required this.conditions, 
     required this.selectedCategories,
-    required this.selectedBrands,
+    required this.selectedConditions,
     this.showAllCategories = false,
-    this.showAllBrands = false,
+    this.showAllConditions = false,
     this.minPrice = 0,
     this.maxPrice = 1000,
   });
 
   FilterState copyWith({
+    List<String>? categories,
     List<bool>? selectedCategories,
-    List<bool>? selectedBrands,
+    List<bool>? selectedConditions,
     bool? showAllCategories,
-    bool? showAllBrands,
+    bool? showAllConditions,  
     double? minPrice,
     double? maxPrice,
   }) {
-    return FilterState(
+    return FilterState( 
+      categories: categories ?? this.categories,
+      conditions: conditions,
       selectedCategories: selectedCategories ?? this.selectedCategories,
-      selectedBrands: selectedBrands ?? this.selectedBrands,
+      selectedConditions: selectedConditions ?? this.selectedConditions,
       showAllCategories: showAllCategories ?? this.showAllCategories,
-      showAllBrands: showAllBrands ?? this.showAllBrands,
+      showAllConditions: showAllConditions ?? this.showAllConditions,
       minPrice: minPrice ?? this.minPrice,
       maxPrice: maxPrice ?? this.maxPrice,
     );
@@ -37,10 +44,11 @@ class FilterState extends Equatable {
 
   @override
   List<Object> get props => [
+    categories,
     selectedCategories,
-    selectedBrands,
+    selectedConditions,
     showAllCategories,
-    showAllBrands,
+    showAllConditions,      
     minPrice,
     maxPrice,
   ];

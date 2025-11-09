@@ -4,6 +4,8 @@ import 'package:dartz/dartz.dart';
 
 abstract class ProductRepositories {
   Future<Either<Failure, List<ProductEntity>>> getProductByAdvancedFilter(
+     String page,
+     String limit,
      String category,
      String condition,
      double lowestPrice,

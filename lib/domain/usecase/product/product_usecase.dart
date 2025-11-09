@@ -13,6 +13,8 @@ class ProductUsecase {
     pageParams params,
   ) {
     return repositories.getProductByAdvancedFilter(
+      params.page ?? '',
+      params.limit ?? '',
       params.category ?? '',
       params.condition ?? '',
       params.lowestPrice ?? 0.0,
@@ -22,12 +24,16 @@ class ProductUsecase {
 }
 
 class pageParams {
+  final String? page;
+  final String? limit;
   final String? category;
   final String? condition;
   final double? lowestPrice;
   final double? highestPrice;
 
   pageParams(
+     this.page,
+     this.limit,
      this.category,
      this.condition,
      this.lowestPrice,

@@ -14,13 +14,15 @@ class ProductRepositoriesImpl implements ProductRepositories {
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getProductByAdvancedFilter(
+    String page,
+    String limit,
     String category,
     String condition,
     double lowestPrice,
     double highestPrice,
   ) async {
     try {
-      final result = await productRemotedatasource.getProductByAdvancedFilter(category, condition, lowestPrice, highestPrice);
+      final result = await productRemotedatasource.getProductByAdvancedFilter(page, limit, category, condition, lowestPrice, highestPrice);
       return result;
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
