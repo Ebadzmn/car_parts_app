@@ -4,4 +4,5 @@ class ApiUrls {
   static const String verifyOtp = '/auth//verify-email';
   static const String getCategories = '/category';
   static const String productAdvanced = '/product/advanced';
+  static const String productDetails = '/product';
 }

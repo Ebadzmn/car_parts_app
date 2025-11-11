@@ -1,11 +1,13 @@
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
+import 'package:car_parts_app/domain/usecase/product/product_usecase.dart';
 import 'package:car_parts_app/presentation/details/widget/rating_star_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingPopUpWidget extends StatelessWidget {
-  const RatingPopUpWidget({super.key});
+  final ProductDetailsUsecase usecase;
+  const RatingPopUpWidget({super.key, required this.usecase});
 
   @override
   Widget build(BuildContext context) {

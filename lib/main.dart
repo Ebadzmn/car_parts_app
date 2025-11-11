@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
             ),
+             
             BlocProvider(create: (context) => di.sl<FaqsBloc>()),
             BlocProvider(create: (context) => di.sl<DragBloc>()),
             BlocProvider(create: (context) => di.sl<BottomNavBloc>()),

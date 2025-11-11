@@ -64,7 +64,7 @@ class CaroselWidget extends StatelessWidget {
                         Icon(Icons.star, color: Colors.yellow, size: 18.sp),
                         SizedBox(width: 4.w),
                         Text(
-                          "4.5",
+                          state.product?.sellerRating.toString() ?? '0',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14.sp,
@@ -85,7 +85,7 @@ class CaroselWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: carImages.asMap().entries.map((entry) {
                 final index = entry.key;
-                final distance = (state.currentIndex - index).abs();
+                final distance = (state.carouselIndex - index).abs();
 
                 double size;
                 if (distance == 0) {

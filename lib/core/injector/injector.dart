@@ -45,7 +45,9 @@ Future<void> init() async {
   sl.registerLazySingleton<OnboardRepositories>(() => OnbRepositoriesImpl());
 
   sl.registerFactory(() => HomeBloc(productUsecase: sl()));
-  sl.registerFactory(() => DetailsBloc());
+  sl.registerFactory(() => DetailsBloc(
+        productDetailsUsecase: sl(),
+      ));
   sl.registerFactory(() => FaqsBloc());
   sl.registerFactory(() => DragBloc());
   sl.registerFactory(() => BottomNavBloc());
@@ -55,6 +57,8 @@ Future<void> init() async {
 
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));
+  sl.registerLazySingleton(() => ProductDetailsUsecase(sl()));
+  
   sl.registerLazySingleton(() => CategoryUsecase(sl()));
   sl.registerLazySingleton(() => SignUpUsecase(authRepositories: sl()));
   sl.registerLazySingleton(() => VerifyAccountUsecase(authRepositories: sl()));

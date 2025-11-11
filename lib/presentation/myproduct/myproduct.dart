@@ -83,6 +83,7 @@ List<Color> getGradientColors(String condition) {
                             onTap: () {
                               context.push(
                                 AppRoutes.detailsScreen,
+                                extra: item.id,
                               );
                             },
                             child: Container(

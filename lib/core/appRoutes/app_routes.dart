@@ -1,3 +1,5 @@
+import 'package:car_parts_app/data/model/product/product_details_model.dart';
+import 'package:car_parts_app/data/model/product/product_model.dart';
 import 'package:car_parts_app/presentation/about/about_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/forget_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
@@ -10,7 +12,7 @@ import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
-import 'package:car_parts_app/presentation/home/widget/drug_built_widget.dart';
+
 import 'package:car_parts_app/presentation/myproduct/myproduct.dart';
 import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
@@ -64,10 +66,10 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
-     GoRoute(
-      path: AppRoutes.DrugBuiltScreen,
-      builder: (context, state) => const DrugBuiltWidget(),
-    ),
+    //  GoRoute(
+    //   path: AppRoutes.DrugBuiltScreen,
+    //   builder: (context, state) => const DrugBuiltWidget(),
+    // ),
 
      
 
@@ -86,18 +88,39 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const HomePage(),
     ),
 
-    GoRoute(
+
+GoRoute(
   path: AppRoutes.detailsScreen,
-  pageBuilder: (context, state) => CustomTransitionPage(
-    child: CarDetailsPage(carImages: []),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(
-        opacity: animation,
-        child: child,
-      );
-    },
-  ),
+  builder: (context, state) {
+    final extra = state.extra;
+    // if a map with 'product' exists and it's already a ProductModel, use it
+    if (extra is Map && extra['product'] != null) {
+      final product = extra['product'];
+      return CarDetailsPage(product: product! as ProductModel, productId: product.id,); // pass model directly
+    }
+    // otherwise try to extract id (string or map id) as fallback
+    final id = extra is String
+        ? extra
+        : extra is Map
+            ? (extra['productId'] ?? extra['id'] ?? '').toString()
+            : state.pathParameters['id'] ?? '';
+    return CarDetailsPage(productId: id);
+  },
 ),
+
+
+//     GoRoute(
+//   path: AppRoutes.detailsScreen,
+//   pageBuilder: (context, state) => CustomTransitionPage(
+//     child: CarDetailsPage(productId: state.extra as String? ?? ''),
+//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+//       return FadeTransition(
+//         opacity: animation,
+//         child: child,                         
+//       );
+//     },
+//   ),
+// ),
 
  GoRoute(
   path: AppRoutes.userProfileScreen,

@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/error/failure.dart';
 import 'package:car_parts_app/data/model/product/product_model.dart';
+import 'package:car_parts_app/domain/entities/product/product_details_entity.dart';
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 import 'package:car_parts_app/domain/repositories/product/product_repositories.dart';
 import 'package:dartz/dartz.dart';
@@ -22,6 +23,22 @@ class ProductUsecase {
     );
   }
 }
+
+
+
+class ProductDetailsUsecase {
+  final ProductRepositories repositories;
+
+  ProductDetailsUsecase(this.repositories);
+
+  Future<Either<Failure, ProductDetailsEntity>> call(
+    String productId,
+  ) {
+    return repositories.getProductDetails(productId);
+  }
+}
+
+
 
 class pageParams {
   final String? page;
