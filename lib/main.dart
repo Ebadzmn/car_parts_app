@@ -15,18 +15,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
 
   // Set system navigation bar color normal (non-transparent)
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.black,
-    systemNavigationBarIconBrightness: Brightness.light,
-    statusBarColor: Colors.transparent, // optional
-    statusBarIconBrightness: Brightness.light,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.transparent, // optional
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
   runApp(const MyApp());
 }
@@ -44,30 +45,29 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => di.sl<OnboardBloc>()..add(FetchOnBoardEvent()),
+              create: (context) =>
+                  di.sl<OnboardBloc>()..add(FetchOnBoardEvent()),
             ),
             BlocProvider(
               create: (context) => di.sl<HomeBloc>()..add(FetchCardEvent()),
             ),
-          
+
             BlocProvider(
-              create: (context) => di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
+              create: (context) =>
+                  di.sl<DetailsBloc>()..add(CaroselPageChanged(0)),
             ),
-             
+
             BlocProvider(create: (context) => di.sl<FaqsBloc>()),
             BlocProvider(create: (context) => di.sl<DragBloc>()),
             BlocProvider(create: (context) => di.sl<BottomNavBloc>()),
             BlocProvider(
-              create: (context) => di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
+              create: (context) =>
+                  di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
             ),
-            BlocProvider(
-              create: (context) => di.sl<AuthBloc>(),
-            ),
+            BlocProvider(create: (context) => di.sl<AuthBloc>()),
           ],
           child: MaterialApp.router(
-            theme: ThemeData(
-              scaffoldBackgroundColor: const Color(0xFF212121),
-            ),
+            theme: ThemeData(scaffoldBackgroundColor: const Color(0xFF212121)),
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter,
             builder: (context, child) {

@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/appUrls/api_urls.dart';
 import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
+import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
 import 'package:car_parts_app/data/data_source/remote/auth_remoteDatasource.dart';
 import 'package:car_parts_app/data/data_source/remote/category_remoteDataSource.dart';
 import 'package:car_parts_app/data/data_source/remote/product_remoteDataSource.dart';
@@ -23,18 +24,28 @@ import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamce_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // Registering the Dio instance with its base options
-  sl.registerLazySingleton(() => Dio(BaseOptions(
+  sl.registerLazySingleton(
+    () => Dio(
+      BaseOptions(
         baseUrl: ApiUrls.baseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
-      )));
+      ),
+    ),
+  );
+
+  // SharedPreferences (ASYNC)
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
   // Registering the OnboardBloc with its required OnboardUsecase dependency
   sl.registerFactory(() => OnboardBloc(onboardUsecase: sl()));
@@ -45,47 +56,43 @@ Future<void> init() async {
   sl.registerLazySingleton<OnboardRepositories>(() => OnbRepositoriesImpl());
 
   sl.registerFactory(() => HomeBloc(productUsecase: sl()));
-  sl.registerFactory(() => DetailsBloc(
-        productDetailsUsecase: sl(),
-      ));
+  sl.registerFactory(() => DetailsBloc(productDetailsUsecase: sl()));
   sl.registerFactory(() => FaqsBloc());
   sl.registerFactory(() => DragBloc());
   sl.registerFactory(() => BottomNavBloc());
-  sl.registerFactory(() => AuthBloc(sl(),sl()));
+  sl.registerFactory(() => AuthBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CategoryBloc(categoryUsecase: sl()));
   sl.registerFactory(() => ProductAdvamceBloc(sl()));
-
+  sl.registerFactory(() => UserProfileBloc(sl()));
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));
   sl.registerLazySingleton(() => ProductDetailsUsecase(sl()));
-  
+
   sl.registerLazySingleton(() => CategoryUsecase(sl()));
   sl.registerLazySingleton(() => SignUpUsecase(authRepositories: sl()));
   sl.registerLazySingleton(() => VerifyAccountUsecase(authRepositories: sl()));
-
-
+  sl.registerLazySingleton(() => SignInUsecase(authRepositories: sl()));
+  sl.registerLazySingleton(() => GetUserProfileUsecase(authRepositories: sl()));
 
   sl.registerLazySingleton<ProductRepositories>(
-    () => ProductRepositoriesImpl( sl()),
+    () => ProductRepositoriesImpl(sl()),
   );
-  sl.registerLazySingleton<AuthRepositories>(
-    () => AuthRepositoriesImpl( sl()),
-  );
+  sl.registerLazySingleton<AuthRepositories>(() => AuthRepositoriesImpl(sl()));
   sl.registerLazySingleton<CategoryRepository>(
-    () => CategoryRepositoriesImpl( sl()),
+    () => CategoryRepositoriesImpl(sl()),
   );
   sl.registerLazySingleton<AuthRemoteDatasource>(
-    () => AuthRemotedatasourceImpl(
-       sl(),
-
-    ),
+    () => AuthRemotedatasourceImpl(sl(), sl()),
+  );
+  sl.registerLazySingleton<AuthLocalDatasource>(
+    () => AuthLocalDatasourceImpl(prefs: sl()),
   );
 
   sl.registerLazySingleton<CategoryRemotedatasource>(
-    () => CategoryRemotedatasourceImpl( sl()),
+    () => CategoryRemotedatasourceImpl(sl()),
   );
 
   sl.registerLazySingleton<ProductRemotedatasource>(
-    () => ProductRemotedatasourceImpl( sl()),
+    () => ProductRemotedatasourceImpl(sl()),
   );
 }

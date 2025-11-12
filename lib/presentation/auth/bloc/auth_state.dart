@@ -2,7 +2,7 @@ part of 'auth_bloc.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -27,4 +27,13 @@ final class VerifyAccountSuccess extends AuthState {
   final Map<String, dynamic> response;
 
   VerifyAccountSuccess({required this.response});
+}
+
+final class SignInSuccess extends AuthState {
+  final LoginResponseModel response;
+
+  SignInSuccess({required this.response});
+
+  @override
+  List<Object> get props => [response];
 }

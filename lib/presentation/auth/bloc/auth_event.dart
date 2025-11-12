@@ -12,8 +12,6 @@ class SignUpEvent extends AuthEvent {
 
   SignUpEvent({required this.signupModel});
 
-
-
   @override
   List<Object> get props => [signupModel];
 }
@@ -23,8 +21,17 @@ class VerifyAccountEvent extends AuthEvent {
 
   VerifyAccountEvent({required this.verifyAccountModel});
 
-
-
   @override
   List<Object> get props => [verifyAccountModel];
 }
+
+class SignInEvent extends AuthEvent {
+  final SignInModel signInModel;
+
+  SignInEvent({required this.signInModel});
+
+  @override
+  List<Object> get props => [signInModel];
+}
+
+class CheckInStatusEvent extends AuthEvent {}
