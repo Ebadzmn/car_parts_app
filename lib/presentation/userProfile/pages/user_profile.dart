@@ -97,8 +97,8 @@ class UserProfile extends StatelessWidget {
                     final LoginResponseModel resp =
                         authState.response as LoginResponseModel;
                     final maskedToken =
-                        resp.token != null && resp.token!.isNotEmpty
-                        ? '${resp.token!.substring(0, resp.token!.length > 12 ? 12 : resp.token!.length)}...'
+                        resp.accessToken != null && resp.accessToken!.isNotEmpty
+                        ? '${resp.accessToken!.substring(0, resp.accessToken!.length > 12 ? 12 : resp.accessToken!.length)}...'
                         : '—';
 
                     final screenHeight = 1.sh;

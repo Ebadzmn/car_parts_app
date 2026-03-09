@@ -10,39 +10,42 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ProductUsecase productUsecase;
 
   HomeBloc({required this.productUsecase}) : super(HomeInitial()) {
-    // on<FetchCardEvent>(_onFetchCard);
-    // on<FetchProductByCategoryEvent>(_onFetchProductByCategory);
+    on<FetchCardEvent>(_onFetchCard);
+    on<FetchProductByCategoryEvent>(_onFetchProductByCategory);
     on<ClearFilterEvent>(_onClearFilter);
   }
 
-  // Future<void> _onFetchProductByCategory(
-  //   FetchProductByCategoryEvent event,
-  //   Emitter<HomeState> emit,
-  // ) async {
-  //   emit(HomeLoading()); // optional loading state if you have one
-  //   final result = await productUsecase.getProductByCategory(
-  //     category: event.category,
-  //   );
+  Future<void> _onFetchCard(
+    FetchCardEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(const HomeLoading(currentCategory: 'All'));
+    // Empty pageParams fetches all (default limit/page)
+    final result = await productUsecase.call(
+      pageParams(null, null, null, null, null, null),
+    );
 
-  //   result.fold(
-  //     (failure) => emit(ProductError(message: 'Bloc Error')),
-  //     (product) => emit(FetchCard(event.category, data: product)),
-  //   );
-  // }
+    result.fold(
+      (failure) => emit(ProductError(message: failure.message)),
+      (products) => emit(FetchCard('All', data: products)),
+    );
+  }
 
-  /// 🔹 Separated Function for Fetch Logic
-  // Future<void> _onFetchCard(
-  //   FetchCardEvent event,
-  //   Emitter<HomeState> emit,
-  // ) async {
-  //   emit(HomeLoading()); // optional loading state if you have one
-  //   final result = await productUsecase();
+  Future<void> _onFetchProductByCategory(
+    FetchProductByCategoryEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(HomeLoading(currentCategory: event.category));
+    // Filter by the selected category
+    final result = await productUsecase.call(
+      pageParams(null, null, event.category, null, null, null),
+    );
 
-  //   result.fold(
-  //     (failure) => emit(ProductError(message: 'Bloc Error')),
-  //     (product) => emit(FetchCard(null, data: product.products)),
-  //   );
-  // }
+    result.fold(
+      (failure) => emit(ProductError(message: failure.message)),
+      (products) => emit(FetchCard(event.category, data: products)),
+    );
+  }
 
   /// 🔹 Clear Filter Event Handler
   void _onClearFilter(ClearFilterEvent event, Emitter<HomeState> emit) {

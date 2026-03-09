@@ -3,27 +3,45 @@ import 'package:equatable/equatable.dart';
 class LoginResponseModel extends Equatable {
   final bool success;
   final String message;
-  final String? token; // data field (JWT token)
+  final String? accessToken;
+  final String? refreshToken;
 
-  LoginResponseModel({
+  const LoginResponseModel({
     required this.success,
     required this.message,
-    required this.token,
+    this.accessToken,
+    this.refreshToken,
   });
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    final data = json['data'];
+    String? accessToken;
+    String? refreshToken;
+
+    if (data is Map<String, dynamic>) {
+      accessToken = data['accessToken'] as String?;
+      refreshToken = data['refreshToken'] as String?;
+    } else if (data is String) {
+      // Backward compatibility: if data is a plain token string
+      accessToken = data;
+    }
+
     return LoginResponseModel(
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? '',
-      token: json['data'] as String?, // token key = data
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'success': success, 'message': message, 'data': token};
+    return {
+      'success': success,
+      'message': message,
+      'data': {'accessToken': accessToken, 'refreshToken': refreshToken},
+    };
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [success, message, token];
+  List<Object?> get props => [success, message, accessToken, refreshToken];
 }

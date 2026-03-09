@@ -51,6 +51,7 @@ dependencies:
   dotted_border: 
   flutter_animate: 
   image_picker: 
+  pretty_dio_logger: ^1.4.0
   
 
 dev_dependencies:

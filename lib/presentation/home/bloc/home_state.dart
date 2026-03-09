@@ -9,7 +9,14 @@ abstract class HomeState extends Equatable {
 
 final class HomeInitial extends HomeState {}
 
-final class HomeLoading extends HomeState {}
+final class HomeLoading extends HomeState {
+  final String? currentCategory;
+
+  const HomeLoading({this.currentCategory});
+
+  @override
+  List<Object> get props => [currentCategory ?? ''];
+}
 
 final class FetchCard extends HomeState {
   final List<ProductEntity> data;

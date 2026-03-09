@@ -1,5 +1,7 @@
 import 'package:car_parts_app/core/appUrls/api_urls.dart';
 import 'package:car_parts_app/core/coreWidget/bloc/navbar_bloc.dart';
+import 'package:car_parts_app/core/network/api_logger_interceptor.dart';
+import 'package:car_parts_app/core/network/network_caller.dart';
 import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
 import 'package:car_parts_app/data/data_source/remote/auth_remoteDatasource.dart';
 import 'package:car_parts_app/data/data_source/remote/category_remoteDataSource.dart';
@@ -22,6 +24,7 @@ import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
+import 'package:car_parts_app/presentation/home/bloc/new_arrivals_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamce_bloc.dart';
 import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
@@ -32,20 +35,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Registering the Dio instance with its base options
-  sl.registerLazySingleton(
-    () => Dio(
-      BaseOptions(
-        baseUrl: ApiUrls.baseUrl,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-      ),
+  // Registering the Dio instance with its base options + API logger
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: ApiUrls.baseUrl,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
     ),
   );
+  dio.interceptors.add(ApiLoggerInterceptor());
+  sl.registerLazySingleton(() => dio);
 
   // SharedPreferences (ASYNC)
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+
+  // ── Network Caller (universal, reusable) ────────────────────────
+  sl.registerLazySingleton<AuthLocalDatasource>(
+    () => AuthLocalDatasourceImpl(prefs: sl()),
+  );
+
+  sl.registerLazySingleton<NetworkCaller>(
+    () => NetworkCaller(authLocalDatasource: sl<AuthLocalDatasource>()),
+  );
 
   // Registering the OnboardBloc with its required OnboardUsecase dependency
   sl.registerFactory(() => OnboardBloc(onboardUsecase: sl()));
@@ -56,6 +68,7 @@ Future<void> init() async {
   sl.registerLazySingleton<OnboardRepositories>(() => OnbRepositoriesImpl());
 
   sl.registerFactory(() => HomeBloc(productUsecase: sl()));
+  sl.registerFactory(() => NewArrivalsBloc(productUsecase: sl()));
   sl.registerFactory(() => DetailsBloc(productDetailsUsecase: sl()));
   sl.registerFactory(() => FaqsBloc());
   sl.registerFactory(() => DragBloc());
@@ -83,9 +96,6 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemotedatasourceImpl(sl(), sl()),
-  );
-  sl.registerLazySingleton<AuthLocalDatasource>(
-    () => AuthLocalDatasourceImpl(prefs: sl()),
   );
 
   sl.registerLazySingleton<CategoryRemotedatasource>(

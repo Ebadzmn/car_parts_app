@@ -1,5 +1,7 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/app_color.dart';
+import 'package:car_parts_app/core/injector/injector.dart';
+import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,86 @@ import 'package:google_fonts/google_fonts.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
+
+  /// Shows a confirmation dialog and performs logout if confirmed.
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColor.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          side: const BorderSide(color: Colors.grey),
+        ),
+        title: Text(
+          'Logout',
+          style: GoogleFonts.montserrat(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to logout?',
+          style: GoogleFonts.montserrat(
+            fontSize: 14.sp,
+            color: Colors.grey.shade300,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.montserrat(
+                fontSize: 14.sp,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            onPressed: () async {
+              // Close the dialog first
+              Navigator.of(dialogContext).pop();
+
+              // Perform logout
+              await _performLogout(context);
+            },
+            child: Text(
+              'Logout',
+              style: GoogleFonts.montserrat(
+                fontSize: 14.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Clears all stored auth data and navigates to login.
+  Future<void> _performLogout(BuildContext context) async {
+    try {
+      final authLocal = sl<AuthLocalDatasource>();
+      await authLocal.clearToken();
+      await authLocal.clearRefreshToken();
+    } catch (e) {
+      debugPrint('Logout: failed to clear tokens – $e');
+    }
+
+    if (context.mounted) {
+      context.go(AppRoutes.LoginPage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +165,8 @@ class DrawerWidget extends StatelessWidget {
                     SizedBox(height: 20.h),
 
                     GestureDetector(
-                      onTap: () => context.push(AppRoutes.TearmsConditionScreen),
+                      onTap: () =>
+                          context.push(AppRoutes.TearmsConditionScreen),
                       child: ProfileInfoTile(
                         icon: Icons.person_outline,
                         title: 'Terms & Conditions',
@@ -123,29 +206,32 @@ class DrawerWidget extends StatelessWidget {
 
                     SizedBox(height: 70.h),
 
-                    Container(
-                      height: 40.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: Colors.white, width: 2.w),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.logout_outlined, color: Colors.white),
-                          SizedBox(width: 6.w),
-                          Text(
-                            'Logout',
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                    GestureDetector(
+                      onTap: () => _showLogoutDialog(context),
+                      child: Container(
+                        height: 40.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: Colors.white, width: 2.w),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.logout_outlined, color: Colors.white),
+                            SizedBox(width: 6.w),
+                            Text(
+                              'Logout',
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

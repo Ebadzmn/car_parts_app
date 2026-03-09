@@ -12,6 +12,7 @@ import 'package:car_parts_app/presentation/details/pages/car_details_page.dart';
 import 'package:car_parts_app/presentation/faqs/pages/faqs_page.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
+import 'package:car_parts_app/presentation/home/pages/new_arrivals_list_page.dart';
 
 import 'package:car_parts_app/presentation/myproduct/myproduct.dart';
 import 'package:car_parts_app/presentation/notification/pages/notification_pages.dart';
@@ -52,10 +53,11 @@ class AppRoutes {
   static const String AddNewCategoryScreen = '/add-new-category-screen';
   static const String Myproduct = '/myproduct';
   static const String NotificationScreen = '/notification-screen';
+  static const String NewArrivalsListScreen = '/new-arrivals-list-screen';
 }
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.LoginPage,
+  initialLocation: AppRoutes.splashScreen,
   routes: [
     GoRoute(
       path: AppRoutes.splashScreen,
@@ -284,6 +286,16 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.AddNewCategoryScreen,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AddNewCategory(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    ),
+
+    GoRoute(
+      path: AppRoutes.NewArrivalsListScreen,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const NewArrivalsListPage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },

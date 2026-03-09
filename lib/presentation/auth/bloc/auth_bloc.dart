@@ -40,14 +40,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(message: failure.message));
       },
       (loginResponse) async {
-        // save token if available
-        final token = loginResponse.token;
-        if (token != null && token.isNotEmpty) {
+        // Save access token
+        final accessToken = loginResponse.accessToken;
+        if (accessToken != null && accessToken.isNotEmpty) {
           try {
-            await authLocalDatasource.saveToken(token);
+            await authLocalDatasource.saveToken(accessToken);
           } catch (e) {
-            // যদি save করতে সমস্যা হয়, তবুও user কে success দেখানো যাবে কিন্তু log রাখো
-            print('Failed to save token: $e');
+            print('Failed to save access token: $e');
+          }
+        }
+
+        // Save refresh token
+        final refreshToken = loginResponse.refreshToken;
+        if (refreshToken != null && refreshToken.isNotEmpty) {
+          try {
+            await authLocalDatasource.saveRefreshToken(refreshToken);
+          } catch (e) {
+            print('Failed to save refresh token: $e');
           }
         }
 
@@ -87,7 +96,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final token = await authLocalDatasource.getToken();
     if (token != null) {
-      final data = LoginResponseModel(token: token, success: true, message: '');
+      final data = LoginResponseModel(
+        accessToken: token,
+        success: true,
+        message: '',
+      );
       emit(SignInSuccess(response: data));
     } else {
       emit(AuthError(message: 'No token found'));

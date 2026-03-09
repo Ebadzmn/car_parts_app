@@ -25,8 +25,8 @@ class OtpPage extends StatelessWidget {
     if (otp.isEmpty) {
       errorMessage.value = 'Please enter the OTP code';
       return;
-    } else if (otp.length != 4) {
-      errorMessage.value = 'OTP must be 4 digits';
+    } else if (otp.length != 6) {
+      errorMessage.value = 'OTP must be 6 digits';
       return;
     }
 
@@ -74,7 +74,7 @@ class OtpPage extends StatelessWidget {
               PinCodeTextField(
                 appContext: context,
                 controller: _otpController,
-                length: 4,
+                length: 6,
                 keyboardType: TextInputType.number,
                 animationType: AnimationType.fade,
                 enableActiveFill: true,
@@ -93,7 +93,7 @@ class OtpPage extends StatelessWidget {
                 animationDuration: const Duration(milliseconds: 200),
                 onChanged: (value) {
                   // correct length check to 4
-                  if (value.length == 4) {
+                  if (value.length == 6) {
                     errorMessage.value = null;
                   }
                 },
@@ -128,14 +128,14 @@ class OtpPage extends StatelessWidget {
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
                   } else if (state is VerifyAccountSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('${state.response['message']}')),
                     );
-                    context.push(AppRoutes.LoginPage);
+                    context.go(AppRoutes.LoginPage);
                   }
                 },
                 builder: (context, state) {
