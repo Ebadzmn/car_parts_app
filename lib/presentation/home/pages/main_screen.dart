@@ -39,7 +39,7 @@
 //           double screenWidth = MediaQuery.of(context).size.width;
 
 //           return Scaffold(
-          
+
 //             backgroundColor: Colors.black,
 //             body: Stack(
 //               children: [
@@ -196,38 +196,53 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // Custom circular nav icon
-  Widget _buildNavIcon(String iconPath, bool isSelected) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      padding: EdgeInsets.all(10.sp),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50.r),
-        color: isSelected ? Colors.white : Colors.transparent,
-        border: isSelected
-            ? Border.all(color: const Color(0xFFFE9100), width: 2)
-            : null,
-        boxShadow: !isSelected
-            ? [
-                const BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 1,
-                  spreadRadius: 0.5,
-                  offset: Offset(0, 1),
-                ),
-                const BoxShadow(
-                  color: Color(0xFF1A1A1A),
-                  blurRadius: 1,
-                  spreadRadius: 0.5,
-                  offset: Offset(1, 2),
-                ),
-              ]
-            : [],
-      ),
-      child: Image.asset(
-        iconPath,
-        height: 22.h,
-        width: 22.h,
-        color: isSelected ? Colors.black : Colors.white,
+  Widget _buildNavIcon(String iconPath, bool isSelected, int index) {
+    return GestureDetector(
+      onTap: () => _onTap(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        height: 55.h,
+        width: 55.h,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected ? Colors.white : null,
+          boxShadow: isSelected
+              ? []
+              : [
+                  const BoxShadow(
+                    color: Colors.black, // Dark rim base
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(
+                      0.45,
+                    ), // Top-left light edge glow
+                    spreadRadius: -2.0,
+                    blurRadius: 0.2,
+                    offset: const Offset(-1.5, -1.5),
+                  ),
+                  const BoxShadow(
+                    color: Color(0xFF262626), // Inner surface dark grey
+                    spreadRadius: -2.0,
+                    blurRadius: 1,
+                    offset: Offset(
+                      1.5,
+                      1.5,
+                    ), // Shifts surface to expose white on top-left and black on bottom-right
+                  ),
+                ],
+          border: isSelected
+              ? Border.all(color: const Color(0xFFFFA500), width: 2.5.w)
+              : Border.all(color: Colors.transparent, width: 2.5.w),
+        ),
+        child: Center(
+          child: Image.asset(
+            iconPath,
+            height: 26.h,
+            width: 26.h,
+            color: isSelected ? Colors.black : Colors.white,
+          ),
+        ),
       ),
     );
   }
@@ -235,54 +250,52 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      body: _screens[_currentIndex],
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          height: 85.h,
-          margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 15.h), // floating style
-          decoration: BoxDecoration(
-            // color: const Color(0xFF1A1A1A),
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(30.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+      extendBody: true,
+      body: Stack(
+        children: [
+          _screens[_currentIndex],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: Container(
+                height: 85.h,
+                margin: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                  bottom: 20.h,
+                ), // floating margin
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0F0F0F),
+                  borderRadius: BorderRadius.circular(50.r),
+                  border: Border.all(
+                    color: const Color(0xFF2A2A2A),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildNavIcon(AssetsPath.navhome, _currentIndex == 0, 0),
+                    SizedBox(width: 6.w),
+                    _buildNavIcon(AssetsPath.nav2, _currentIndex == 1, 1),
+                    SizedBox(width: 6.w),
+                    _buildNavIcon(AssetsPath.navcat, _currentIndex == 2, 2),
+                    SizedBox(width: 6.w),
+                    _buildNavIcon(AssetsPath.navcart, _currentIndex == 3, 3),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: _onTap,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            selectedItemColor: Colors.orange,
-            unselectedItemColor: Colors.white,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                icon: _buildNavIcon(AssetsPath.navhome, _currentIndex == 0),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: _buildNavIcon(AssetsPath.nav2, _currentIndex == 1),
-                label: 'Products',
-              ),
-              BottomNavigationBarItem(
-                icon: _buildNavIcon(AssetsPath.navcat, _currentIndex == 2),
-                label: 'Category',
-              ),
-              BottomNavigationBarItem(
-                icon: _buildNavIcon(AssetsPath.navcart, _currentIndex == 3),
-                label: 'Account',
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
