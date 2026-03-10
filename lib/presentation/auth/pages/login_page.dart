@@ -66,15 +66,16 @@ class LoginPage extends StatelessWidget {
           // navigate on success (example: home screen)
           // ensure no dialog is left
           _hideDialogIfOpen();
-          context.go(AppRoutes.homeScreen);
+          context.go(AppRoutes.MainScreen);
         }
       },
       child: Scaffold(
         body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
               Image.asset(AssetsPath.logo),
               Padding(
                 padding: EdgeInsets.all(18.sp),
@@ -204,6 +205,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),

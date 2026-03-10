@@ -1,8 +1,8 @@
-// lib/presentation/details/report_popup.dart
+// lib/presentation/details/widget/selectTab_widget.dart (ReportPopup)
 import 'dart:io';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
-import 'package:car_parts_app/domain/usecase/product/product_usecase.dart';
-import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
+import 'package:car_parts_app/core/injector/injector.dart' as di;
+import 'package:car_parts_app/core/network/network_caller.dart';
 import 'package:car_parts_app/presentation/details/bloc/report_bloc.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -12,146 +12,207 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ReportPopup extends StatelessWidget {
-  final ProductDetailsUsecase usecase;
-  // NOTE: kept controller here to satisfy stateless requirement.
-  // In production consider passing controller from parent or make StatefulWidget to dispose controller.
+  final String productId;
+  final String sellerId;
+
   final TextEditingController descController = TextEditingController();
 
-  ReportPopup({Key? key, required this.usecase}) : super(key: key);
+  // Track which tab is selected: 0 = product, 1 = seller
+  final ValueNotifier<int> _tabNotifier = ValueNotifier<int>(0);
+
+  ReportPopup({super.key, required this.productId, this.sellerId = ''});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => DetailsBloc(productDetailsUsecase: usecase)
-            ..add(CaroselPageChanged(0)),
-        ),
-        BlocProvider(
-          create: (_) => ReportBloc(picker: ImagePicker()),
-        ),
-      ],
-      child: Center(
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            height: screenHeight >= 1024 ? 520.h : 460.h,
-            width: 360.w,
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey, width: 1.0),
-              gradient: const LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xFF202020), Color(0xFF373737), Color(0xFF202020)],
-              ),
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BlocBuilder<DetailsBloc, DetailsState>(
-                  builder: (context, state) {
-                    final currentIndex = state.selectedTabIndex;
-                    return Row(
-                      children: [
-                        _buildTab(context, 'Report Product', 0, currentIndex == 0),
-                        SizedBox(width: 10.w),
-                        _buildTab(context, 'Report Seller', 1, currentIndex == 1),
+    return BlocProvider<ReportBloc>(
+      create: (_) => ReportBloc(
+        networkCaller: di.sl<NetworkCaller>(),
+        picker: ImagePicker(),
+      ),
+      child: Builder(
+        builder: (context) {
+          return BlocListener<ReportBloc, ReportState>(
+            listenWhen: (previous, current) =>
+                previous.submitted != current.submitted ||
+                previous.errorMessage != current.errorMessage,
+            listener: (context, state) {
+              if (state.submitted) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Report submitted successfully'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } else if (state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage!),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Center(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  height: screenHeight >= 1024 ? 520.h : 460.h,
+                  width: 360.w,
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1.0),
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color(0xFF202020),
+                        Color(0xFF373737),
+                        Color(0xFF202020),
                       ],
-                    );
-                  },
-                ),
-                SizedBox(height: 10.h),
-                Expanded(
-                  child: BlocBuilder<DetailsBloc, DetailsState>(
-                    builder: (context, dState) {
-                      final currentIndex = dState.selectedTabIndex;
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: currentIndex == 0
-                            ? _buildReportForm(context, 'Product Description',
-                                'Enter product report description...')
-                            : _buildReportForm(context, 'Description',
-                                'Enter seller report description...'),
-                      );
-                    },
+                    ),
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // ── Tabs ──
+                      ValueListenableBuilder<int>(
+                        valueListenable: _tabNotifier,
+                        builder: (context, currentIndex, _) {
+                          return Row(
+                            children: [
+                              _buildTab(
+                                context,
+                                'Report Product',
+                                0,
+                                currentIndex == 0,
+                              ),
+                              SizedBox(width: 10.w),
+                              _buildTab(
+                                context,
+                                'Report Seller',
+                                1,
+                                currentIndex == 1,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      SizedBox(height: 10.h),
+
+                      // ── Form ──
+                      Expanded(
+                        child: ValueListenableBuilder<int>(
+                          valueListenable: _tabNotifier,
+                          builder: (context, currentIndex, _) {
+                            return AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              child: currentIndex == 0
+                                  ? _buildReportForm(
+                                      context,
+                                      'Product Description',
+                                      'Enter product report description...',
+                                    )
+                                  : _buildReportForm(
+                                      context,
+                                      'Description',
+                                      'Enter seller report description...',
+                                    ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+
+                      // ── Submit Button ──
+                      BlocBuilder<ReportBloc, ReportState>(
+                        builder: (context, state) {
+                          return Container(
+                            height: 44.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                              color: Colors.amber,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                              ),
+                              onPressed: state.isSubmitting
+                                  ? null
+                                  : () {
+                                      final desc = descController.text.trim();
+                                      if (desc.length < 3) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Reason must be at least 3 characters',
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                        return;
+                                      }
+
+                                      final isProduct = _tabNotifier.value == 0;
+                                      context.read<ReportBloc>().add(
+                                        SubmitReportEvent(
+                                          type: isProduct
+                                              ? 'product'
+                                              : 'seller',
+                                          targetId: isProduct
+                                              ? productId
+                                              : sellerId,
+                                          description: desc,
+                                        ),
+                                      );
+                                    },
+                              child: state.isSubmitting
+                                  ? SizedBox(
+                                      width: 20.w,
+                                      height: 20.w,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Submit',
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 16.sp,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 12.h),
-                BlocConsumer<ReportBloc, ReportState>(
-                  listenWhen: (previous, current) =>
-                      previous.submitted != current.submitted ||
-                      previous.errorMessage != current.errorMessage,
-                  listener: (context, state) {
-                    if (state.submitted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Report submitted successfully')),
-                      );
-                      Navigator.of(context).pop();
-                    } else if (state.errorMessage != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage!)),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return Container(
-                      height: 44.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        color: Colors.amber,
-                      ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                        ),
-                        onPressed: state.isSubmitting
-                            ? null
-                            : () {
-                                final desc = descController.text.trim();
-                                // UI-level validation (optional, bloc also validates)
-                                if (desc.length < 3) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Description too short')));
-                                  return;
-                                }
-                                if (context.read<ReportBloc>().state.imagePath == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Please attach an image')));
-                                  return;
-                                }
-                                context.read<ReportBloc>().add(SubmitReportEvent(desc));
-                              },
-                        child: state.isSubmitting
-                            ? SizedBox(width: 20.w, height: 20.w, child: const CircularProgressIndicator())
-                            : Text(
-                                'Submit',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 16.sp,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildTab(BuildContext context, String text, int index, bool isSelected) {
+  Widget _buildTab(
+    BuildContext context,
+    String text,
+    int index,
+    bool isSelected,
+  ) {
     return GestureDetector(
-      onTap: () => context.read<DetailsBloc>().add(SelectTabEvent(index)),
+      onTap: () => _tabNotifier.value = index,
       child: Column(
         children: [
           Text(
@@ -188,24 +249,34 @@ class ReportPopup extends StatelessWidget {
           maxLines: 4,
         ),
         SizedBox(height: 8.h),
-        _buildUploadSection(context, 'Attach Picture', Icons.upload_rounded),
+        _buildUploadSection(
+          context,
+          'Attach Picture (optional)',
+          Icons.upload_rounded,
+        ),
       ],
     );
   }
 
-  Widget _buildUploadSection(BuildContext context, String title, IconData icon) {
+  Widget _buildUploadSection(
+    BuildContext context,
+    String title,
+    IconData icon,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
-            style: GoogleFonts.inter(
-                color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w600)),
+        Text(
+          title,
+          style: GoogleFonts.inter(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         SizedBox(height: 8.h),
-        // BlocBuilder with ValueKey ensures proper rebuild when imagePath changes
         BlocBuilder<ReportBloc, ReportState>(
           builder: (context, state) {
-            // debug: remove in production
-            print('[ReportPopup] BlocBuilder imagePath -> ${state.imagePath}');
             return DottedBorder(
               options: RoundedRectDottedBorderOptions(
                 radius: Radius.circular(16.r),
@@ -214,7 +285,6 @@ class ReportPopup extends StatelessWidget {
                 dashPattern: const [10, 4],
               ),
               child: Container(
-                // force subtree replacement when imagePath changes
                 key: ValueKey(state.imagePath ?? 'empty_upload_area'),
                 padding: EdgeInsets.all(8.w),
                 height: 120.h,
@@ -243,7 +313,10 @@ class ReportPopup extends StatelessWidget {
           Container(
             height: 45.h,
             width: 45.h,
-            decoration: const BoxDecoration(color: Color(0xFF2D5F3A), shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: Color(0xFF2D5F3A),
+              shape: BoxShape.circle,
+            ),
             child: Icon(icon, color: Colors.greenAccent, size: 24.sp),
           ),
           SizedBox(height: 8.h),
@@ -253,7 +326,10 @@ class ReportPopup extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'Click here ',
-                  style: GoogleFonts.inter(color: Colors.greenAccent, fontWeight: FontWeight.w600),
+                  style: GoogleFonts.inter(
+                    color: Colors.greenAccent,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 TextSpan(
                   text: 'to upload or take a photo',
@@ -280,27 +356,46 @@ class ReportPopup extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Selected image',
-                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600)),
+              Text(
+                'Selected image',
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
               Row(
                 children: [
                   ElevatedButton(
                     onPressed: () => _showPickOptions(context),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white12, shadowColor: Colors.transparent),
-                    child: Text('Replace', style: GoogleFonts.inter(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white12,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: Text(
+                      'Replace',
+                      style: GoogleFonts.inter(color: Colors.white),
+                    ),
                   ),
                   SizedBox(width: 8.w),
                   ElevatedButton(
-                    onPressed: () => context.read<ReportBloc>().add(const RemoveImageEvent()),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, shadowColor: Colors.transparent),
-                    child: Text('Remove', style: GoogleFonts.inter(color: Colors.white)),
+                    onPressed: () => context.read<ReportBloc>().add(
+                      const RemoveImageEvent(),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: Text(
+                      'Remove',
+                      style: GoogleFonts.inter(color: Colors.white),
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -315,7 +410,10 @@ class ReportPopup extends StatelessWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.white),
-                title: Text('Pick from gallery', style: GoogleFonts.inter(color: Colors.white)),
+                title: Text(
+                  'Pick from gallery',
+                  style: GoogleFonts.inter(color: Colors.white),
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   context.read<ReportBloc>().add(PickImageFromGalleryEvent());
@@ -323,7 +421,10 @@ class ReportPopup extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt, color: Colors.white),
-                title: Text('Take a photo', style: GoogleFonts.inter(color: Colors.white)),
+                title: Text(
+                  'Take a photo',
+                  style: GoogleFonts.inter(color: Colors.white),
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   context.read<ReportBloc>().add(PickImageFromCameraEvent());
@@ -331,7 +432,10 @@ class ReportPopup extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.close, color: Colors.white),
-                title: Text('Cancel', style: GoogleFonts.inter(color: Colors.white)),
+                title: Text(
+                  'Cancel',
+                  style: GoogleFonts.inter(color: Colors.white),
+                ),
                 onTap: () => Navigator.of(context).pop(),
               ),
             ],

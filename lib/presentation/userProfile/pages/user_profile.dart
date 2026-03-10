@@ -53,6 +53,45 @@ class UserProfile extends StatelessWidget {
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
 
+  Widget _buildStatBadge(String text, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: color),
+      ),
+      child: Text(
+        text,
+        style: GoogleFonts.montserrat(
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileInfoItem(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: GoogleFonts.montserrat(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          label,
+          style: GoogleFonts.montserrat(fontSize: 10.sp, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // run token check once after first frame
@@ -78,166 +117,187 @@ class UserProfile extends StatelessWidget {
       child: Scaffold(
         body: SafeArea(
           child: Center(
-            child: MultiBlocProvider(
-              providers: [
-                // provide UserProfileBloc (created from service locator)
-                BlocProvider<UserProfileBloc>(
-                  create: (context) {
-                    final bloc = sl<UserProfileBloc>();
-                    // immediately request profile
-                    bloc.add(const GetUserProfileEvent());
-                    return bloc;
-                  },
-                ),
-              ],
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, authState) {
-                  // show profile only when authenticated
-                  if (authState is SignInSuccess) {
-                    final LoginResponseModel resp =
-                        authState.response as LoginResponseModel;
-                    final maskedToken =
-                        resp.accessToken != null && resp.accessToken!.isNotEmpty
-                        ? '${resp.accessToken!.substring(0, resp.accessToken!.length > 12 ? 12 : resp.accessToken!.length)}...'
-                        : '—';
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                // show profile only when authenticated
+                if (authState is SignInSuccess) {
+                  final LoginResponseModel resp =
+                      authState.response as LoginResponseModel;
+                  final maskedToken =
+                      resp.accessToken != null && resp.accessToken!.isNotEmpty
+                      ? '${resp.accessToken!.substring(0, resp.accessToken!.length > 12 ? 12 : resp.accessToken!.length)}...'
+                      : '—';
 
-                    final screenHeight = 1.sh;
+                  final screenHeight = 1.sh;
 
-                    return Padding(
-                      padding: EdgeInsets.all(20.sp),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      blurRadius: 0,
-                                      spreadRadius: 1,
-                                      offset: Offset(0, 1),
-                                      color: Colors.grey,
-                                    ),
-                                    BoxShadow(
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                      offset: Offset(2, 2),
-                                      color: Color(0xFF373737),
-                                    ),
-                                  ],
-                                ),
-                                child: Center(
-                                  child: IconButton(
-                                    onPressed: () => context.pop(),
-                                    icon: const Icon(
-                                      Icons.arrow_back_ios_new_outlined,
-                                      color: Colors.green,
-                                    ),
+                  return Padding(
+                    padding: EdgeInsets.all(20.sp),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    blurRadius: 0,
+                                    spreadRadius: 1,
+                                    offset: Offset(0, 1),
+                                    color: Colors.grey,
+                                  ),
+                                  BoxShadow(
+                                    blurRadius: 1,
+                                    spreadRadius: 1,
+                                    offset: Offset(2, 2),
+                                    color: Color(0xFF373737),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  onPressed: () => context.pop(),
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_new_outlined,
+                                    color: Colors.green,
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10.w),
-                              Text(
-                                'User Profile',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 12.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Text(
+                              'User Profile',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 12.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 40.h),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 40.h),
 
-                          // --- Profile area: listens to UserProfileBloc ---
-                          BlocBuilder<UserProfileBloc, UserProfileState>(
-                            builder: (context, state) {
-                              // loading state -> show placeholder avatar + loader
-                              if (state is UserLoading) {
-                                return Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 50.r,
-                                      backgroundColor: Colors.grey.shade300,
-                                      child: const CircularProgressIndicator(),
+                        // --- Profile area: listens to UserProfileBloc ---
+                        BlocBuilder<UserProfileBloc, UserProfileState>(
+                          builder: (context, state) {
+                            if (state is UserLoading) {
+                              return Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 50.r,
+                                    backgroundColor: Colors.grey.shade300,
+                                    child: const CircularProgressIndicator(),
+                                  ),
+                                  SizedBox(height: 14.h),
+                                  Text(
+                                    'Loading profile...',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 14.sp,
+                                      color: Colors.white,
                                     ),
-                                    SizedBox(height: 14.h),
-                                    Text(
-                                      'Loading profile...',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 14.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
+                                  ),
+                                ],
+                              );
+                            }
 
-                              // success -> use image from ProfileModel
-                              if (state is UserLoaded) {
-                                final profile = state.profileEntity;
-                                final imageUrl = profile.image;
-                                return Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 50.r,
-                                      backgroundImage:
-                                          (imageUrl != null &&
-                                              imageUrl.isNotEmpty)
-                                          ? NetworkImage(imageUrl)
-                                          : const AssetImage(AssetsPath.newLogo)
-                                                as ImageProvider,
-                                    ),
-                                    SizedBox(height: 14.h),
-                                    Text(
-                                      profile.name.isNotEmpty
-                                          ? profile.name
-                                          : 'Logged in',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 16.sp,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
+                            if (state is UserLoaded) {
+                              final profile = state.profileEntity;
+                              final imageUrl = profile.image;
 
-                              // failure or initial -> placeholder + retry button
-                              if (state is UserError) {
-                                return Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 50.r,
-                                      backgroundImage: const AssetImage(
-                                        AssetsPath.newLogo,
-                                      ),
-                                    ),
-                                    SizedBox(height: 14.h),
-                                    Text(
-                                      'Failed to load profile',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 14.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    ElevatedButton(
-                                      onPressed: () => context
-                                          .read<UserProfileBloc>()
-                                          .add(const GetUserProfileEvent()),
-                                      child: const Text('Retry'),
-                                    ),
-                                  ],
-                                );
-                              }
+                              const months = [
+                                'January',
+                                'February',
+                                'March',
+                                'April',
+                                'May',
+                                'June',
+                                'July',
+                                'August',
+                                'September',
+                                'October',
+                                'November',
+                                'December',
+                              ];
+                              final date = profile.createdAt;
+                              final formattedDate =
+                                  '${date.day} ${months[date.month - 1]} ${date.year}';
 
-                              // default initial UI
+                              return Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 50.r,
+                                    backgroundImage: (imageUrl.isNotEmpty)
+                                        ? NetworkImage(imageUrl)
+                                        : const AssetImage(AssetsPath.newLogo)
+                                              as ImageProvider,
+                                  ),
+                                  SizedBox(height: 14.h),
+                                  Text(
+                                    profile.name.isNotEmpty
+                                        ? profile.name
+                                        : 'Logged in',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 20.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    profile.email.isNotEmpty
+                                        ? profile.email
+                                        : 'No email provided',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 12.sp,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(height: 16.h),
+
+                                  // Stats Row
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _buildStatBadge(
+                                        profile.role.toUpperCase(),
+                                        Colors.orange,
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      _buildStatBadge(
+                                        profile.status.toUpperCase(),
+                                        Colors.green,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 12.h),
+
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildProfileInfoItem(
+                                        '★ ${profile.averageRating.toStringAsFixed(1)}',
+                                        'Rating',
+                                      ),
+                                      _buildProfileInfoItem(
+                                        profile.ratingsCount.toString(),
+                                        'Total Ratings',
+                                      ),
+                                      _buildProfileInfoItem(
+                                        formattedDate,
+                                        'Member Since',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
+
+                            if (state is UserError) {
                               return Column(
                                 children: [
                                   CircleAvatar(
@@ -248,95 +308,122 @@ class UserProfile extends StatelessWidget {
                                   ),
                                   SizedBox(height: 14.h),
                                   Text(
-                                    'Logged in',
+                                    'Failed to load profile\n${state.message}',
+                                    textAlign: TextAlign.center,
                                     style: GoogleFonts.montserrat(
-                                      fontSize: 16.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                      color: Colors.redAccent,
                                     ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  ElevatedButton(
+                                    onPressed: () => context
+                                        .read<UserProfileBloc>()
+                                        .add(const GetUserProfileEvent()),
+                                    child: const Text('Retry'),
                                   ),
                                 ],
                               );
-                            },
-                          ),
+                            }
 
-                          SizedBox(height: 8.h),
-                          Text(
-                            'Token: $maskedToken',
-                            style: GoogleFonts.montserrat(
-                              fontSize: 10.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 24.h),
-                          Container(
-                            height: screenHeight > 1000 ? 260.h : 200.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(12.r),
-                              color: AppColor.secondary,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(12.sp),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Basic Information',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                            return Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 50.r,
+                                  backgroundImage: const AssetImage(
+                                    AssetsPath.newLogo,
                                   ),
-                                  SizedBox(height: 6.h),
-                                  Text(
-                                    'Update Basic Information',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 10.sp,
-                                      color: Colors.grey,
-                                    ),
+                                ),
+                                SizedBox(height: 14.h),
+                                Text(
+                                  'Logged in',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  SizedBox(height: 12.h),
-                                  Text(
-                                    'Contact',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Text(
-                                    'Update contact information',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 10.sp,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.h),
-                                  Text(
-                                    'Change Password',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+                                ),
+                              ],
+                            );
+                          },
+                        ),
 
-                  // otherwise show loader while resolving auth status
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
+                        SizedBox(height: 24.h),
+                        Text(
+                          'Token: $maskedToken',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 10.sp,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 24.h),
+                        Container(
+                          height: screenHeight > 1000 ? 260.h : 200.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12.r),
+                            color: AppColor.secondary,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(12.sp),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Basic Information',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 14.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 6.h),
+                                Text(
+                                  'Update Basic Information',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 10.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 12.h),
+                                Text(
+                                  'Contact',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 14.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 6.h),
+                                Text(
+                                  'Update contact information',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 10.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 12.h),
+                                Text(
+                                  'Change Password',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 14.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                // otherwise show loader while resolving auth status
+                return const Center(child: CircularProgressIndicator());
+              },
             ),
           ),
         ),

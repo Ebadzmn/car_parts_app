@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CaroselWidget extends StatelessWidget {
   const CaroselWidget({super.key, required this.carImages});
 
@@ -24,16 +25,30 @@ class CaroselWidget extends StatelessWidget {
                       .map(
                         (imagePath) => Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1.6.w),
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 1.6.w,
+                            ),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12.r),
-                            child: Image.asset(
-                              imagePath,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
+                            child: imagePath.startsWith('http')
+                                ? Image.network(
+                                    imagePath,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    errorBuilder: (_, __, ___) => Image.asset(
+                                      'assets/images/cardtire.png',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    imagePath,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
                           ),
                         ),
                       )
@@ -53,7 +68,10 @@ class CaroselWidget extends StatelessWidget {
                   top: 15.h,
                   right: 25.w,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 5.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(20.r),

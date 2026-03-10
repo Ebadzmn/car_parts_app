@@ -1,8 +1,8 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
-import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,57 +11,125 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            // ✅ Drawer Open Button
-            Builder(
-              builder: (context) => IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer(); // opens the drawer
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              // ✅ Drawer Open Button (Custom Hamburger)
+              Builder(
+                builder: (context) => InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openDrawer(); // opens the drawer
+                  },
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 2.h,
+                          width: 24.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(2.r),
+                          ),
+                        ),
+                        SizedBox(height: 6.h),
+                        Container(
+                          height: 2.h,
+                          width: 24.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(2.r),
+                          ),
+                        ),
+                        SizedBox(height: 6.h),
+                        Container(
+                          height: 2.h,
+                          width: 24.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(2.r),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(width: 16.w),
+
+              // Profile Avatar and Greeting
+              BlocBuilder<UserProfileBloc, UserProfileState>(
+                builder: (context, state) {
+                  String imageUrl = '';
+                  String userName = 'Hi User';
+
+                  if (state is UserLoaded) {
+                    imageUrl = state.profileEntity.image;
+                    userName = state.profileEntity.name.isNotEmpty
+                        ? 'Hi ${state.profileEntity.name.split(' ').first}'
+                        : 'Hi User';
+                  }
+
+                  return Row(
+                    children: [
+                      Container(
+                        width: 40.w,
+                        height: 40.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: (imageUrl.isNotEmpty)
+                                ? NetworkImage(imageUrl)
+                                : const NetworkImage(
+                                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop',
+                                      )
+                                      as ImageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Text(
+                        userName,
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            fontSize: 16.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
                 },
-                icon: SvgPicture.asset(
-                  AssetsPath.appbarIcon,
-                  height: 24.h,
-                  width: 24.w,
-                ),
               ),
-            ),
-
-            SizedBox(width: 12.w),
-
-            const CircleAvatar(child: Icon(Icons.person)),
-
-            SizedBox(width: 8.w),
-
-            Text(
-              'Hi Nick',
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        // Right side icon
-        IconButton(
-          onPressed: () {
-            context.push(AppRoutes.NotificationScreen);
-          },
-          icon: SvgPicture.asset(
-            AssetsPath.notificationIcon,
-            height: 22.h,
-            width: 22.w,
+            ],
           ),
-        ),
-      ],
+
+          // Right side notification icon
+          Builder(
+            builder: (context) => IconButton(
+              onPressed: () {
+                context.push(AppRoutes.NotificationScreen);
+              },
+              icon: Icon(
+                Icons.notifications_none_rounded,
+                color: Colors.white,
+                size: 28.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

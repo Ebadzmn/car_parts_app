@@ -10,9 +10,6 @@ class HomeButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = 1.sw;
-    final bool isTablet = screenWidth > 600;
-
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, categoryState) {
         // ── Loading ──
@@ -80,7 +77,7 @@ class HomeButtonWidget extends StatelessWidget {
               }
 
               return SizedBox(
-                height: 100.h,
+                height: 85.h,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,29 +92,30 @@ class HomeButtonWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 8.h),
                     SingleChildScrollView(
                       key: const PageStorageKey('home_category_scroll'),
                       scrollDirection: Axis.horizontal,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                        padding: EdgeInsets.symmetric(vertical: 2.h),
                         child: Row(
                           children: categoryNames.map((category) {
                             final isSelected = category == selectedCategory;
 
                             return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 6.w),
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: Container(
+                                height: 32.h,
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w,
-                                  vertical: isTablet ? 8.h : 2.h,
+                                  horizontal: 12.w,
+                                  vertical: 0,
                                 ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(22.r),
                                   border: isSelected
                                       ? Border.all(
                                           color: Colors.white,
-                                          width: 2,
+                                          width: 1.5,
                                         )
                                       : null,
                                   color: isSelected
@@ -128,14 +126,14 @@ class HomeButtonWidget extends StatelessWidget {
                                       : [
                                           const BoxShadow(
                                             blurRadius: 0,
-                                            spreadRadius: 2,
+                                            spreadRadius: 1,
                                             offset: Offset(0, 0),
                                             color: Colors.grey,
                                           ),
                                           const BoxShadow(
                                             blurRadius: 1,
-                                            spreadRadius: 2,
-                                            offset: Offset(2, 2),
+                                            spreadRadius: 1,
+                                            offset: Offset(1, 1),
                                             color: Color(0xFF373737),
                                           ),
                                         ],
@@ -144,6 +142,8 @@ class HomeButtonWidget extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     shadowColor: Colors.transparent,
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: const Size(0, 0),
                                   ),
                                   onPressed: () {
                                     if (category == 'All') {
@@ -156,20 +156,17 @@ class HomeButtonWidget extends StatelessWidget {
                                       );
                                     }
                                   },
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      category,
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: isSelected
-                                              ? Colors.black
-                                              : Colors.white70,
-                                          fontWeight: isSelected
-                                              ? FontWeight.bold
-                                              : FontWeight.w600,
-                                          fontSize: 14.sp,
-                                        ),
+                                  child: Text(
+                                    category,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: isSelected
+                                            ? Colors.black
+                                            : Colors.white70,
+                                        fontWeight: isSelected
+                                            ? FontWeight.bold
+                                            : FontWeight.w600,
+                                        fontSize: 12.sp,
                                       ),
                                     ),
                                   ),

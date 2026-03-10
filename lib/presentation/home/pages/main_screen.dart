@@ -239,8 +239,8 @@ class _MainScreenState extends State<MainScreen> {
       body: _screens[_currentIndex],
       bottomNavigationBar: SafeArea(
         child: Container(
-          height: 70.h,
-          margin: EdgeInsets.symmetric(horizontal: 20.w), // floating style
+          height: 85.h,
+          margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 15.h), // floating style
           decoration: BoxDecoration(
             // color: const Color(0xFF1A1A1A),
             color: Colors.transparent,

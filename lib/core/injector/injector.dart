@@ -27,6 +27,7 @@ import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/new_arrivals_bloc.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamce_bloc.dart';
+import 'package:car_parts_app/presentation/details/bloc/review_submit_bloc.dart';
 import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -77,6 +78,7 @@ Future<void> init() async {
   sl.registerFactory(() => CategoryBloc(categoryUsecase: sl()));
   sl.registerFactory(() => ProductAdvamceBloc(sl()));
   sl.registerFactory(() => UserProfileBloc(sl()));
+  sl.registerFactory(() => ReviewSubmitBloc(networkCaller: sl()));
 
   sl.registerLazySingleton(() => ProductUsecase(sl()));
   sl.registerLazySingleton(() => ProductDetailsUsecase(sl()));

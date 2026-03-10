@@ -10,6 +10,7 @@ import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,6 +66,10 @@ class MyApp extends StatelessWidget {
                   di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
             ),
             BlocProvider(create: (context) => di.sl<AuthBloc>()),
+            BlocProvider(
+              create: (context) =>
+                  di.sl<UserProfileBloc>()..add(const GetUserProfileEvent()),
+            ),
           ],
           child: MaterialApp.router(
             theme: ThemeData(scaffoldBackgroundColor: const Color(0xFF212121)),

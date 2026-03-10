@@ -3,6 +3,8 @@ import 'package:car_parts_app/core/config/app_color.dart';
 import 'package:car_parts_app/core/injector/injector.dart';
 import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_component.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -103,32 +105,62 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: CircleAvatar(child: Icon(Icons.person, size: 32)),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  'Nickesha',
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 24.sp,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Text(
-                  'ebad3e@gmail.com',
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                  ),
+                BlocBuilder<UserProfileBloc, UserProfileState>(
+                  builder: (context, state) {
+                    String imageUrl = '';
+                    String userName = 'Nickesha';
+                    String userEmail = 'ebad3e@gmail.com';
+
+                    if (state is UserLoaded) {
+                      imageUrl = state.profileEntity.image;
+                      userName = state.profileEntity.name.isNotEmpty
+                          ? state.profileEntity.name
+                          : 'Nickesha';
+                      userEmail = state.profileEntity.email.isNotEmpty
+                          ? state.profileEntity.email
+                          : 'ebad3e@gmail.com';
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 100.w,
+                          width: 100.w,
+                          child: CircleAvatar(
+                            backgroundImage: imageUrl.isNotEmpty
+                                ? NetworkImage(imageUrl)
+                                : null,
+                            child: imageUrl.isEmpty
+                                ? Icon(Icons.person, size: 32)
+                                : null,
+                          ),
+                        ),
+                        SizedBox(height: 12.h),
+                        Text(
+                          userName,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 24.sp,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          userEmail,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
 
                 Padding(

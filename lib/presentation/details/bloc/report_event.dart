@@ -18,9 +18,16 @@ class RemoveImageEvent extends ReportEvent {
 }
 
 class SubmitReportEvent extends ReportEvent {
+  final String type; // 'product' or 'seller'
+  final String targetId;
   final String description;
-  const SubmitReportEvent(this.description);
+
+  const SubmitReportEvent({
+    required this.type,
+    required this.targetId,
+    required this.description,
+  });
 
   @override
-  List<Object?> get props => [description];
+  List<Object?> get props => [type, targetId, description];
 }

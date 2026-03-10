@@ -27,7 +27,7 @@
 // }
 
 // class ProductDetailsModel extends ProductDetailsEntity {
-//   const ProductDetailsModel({ 
+//   const ProductDetailsModel({
 //     required String id,
 //     required String title,
 //     required String category,
@@ -115,16 +115,28 @@ class SellerModel extends SellerEntity {
     required String id,
     required String name,
     required String email,
-  }) : super(id: id, name: name, email: email);
+    String whatsappNumber = '',
+    String address = '',
+  }) : super(
+         id: id,
+         name: name,
+         email: email,
+         whatsappNumber: whatsappNumber,
+         address: address,
+       );
 
   /// Accepts dynamic because backend might return null or Map or sometimes an id string.
   factory SellerModel.fromJson(dynamic json) {
-    final Map<String, dynamic> map = (json is Map) ? Map<String, dynamic>.from(json) : <String, dynamic>{};
+    final Map<String, dynamic> map = (json is Map)
+        ? Map<String, dynamic>.from(json)
+        : <String, dynamic>{};
 
     return SellerModel(
       id: (map['_id'] ?? map['id'] ?? '').toString(),
       name: (map['name'] ?? '').toString(),
       email: (map['email'] ?? '').toString(),
+      whatsappNumber: (map['whatsappNumber'] ?? '').toString(),
+      address: (map['address'] ?? '').toString(),
     );
   }
 
@@ -133,6 +145,8 @@ class SellerModel extends SellerEntity {
       '_id': id,
       'name': name,
       'email': email,
+      'whatsappNumber': whatsappNumber,
+      'address': address,
     };
   }
 }
@@ -157,24 +171,24 @@ class ProductDetailsModel extends ProductDetailsEntity {
     required double sellerRating,
     required int totalRatings,
   }) : super(
-          id: id,
-          title: title,
-          category: category,
-          brand: brand,
-          description: description,
-          carModels: carModels,
-          chassisNumber: chassisNumber,
-          condition: condition,
-          warranty: warranty,
-          price: price,
-          discount: discount,
-          mainImage: mainImage,
-          galleryImages: galleryImages,
-          seller: seller,
-          averageRating: averageRating,
-          sellerRating: sellerRating,
-          totalRatings: totalRatings,
-        );
+         id: id,
+         title: title,
+         category: category,
+         brand: brand,
+         description: description,
+         carModels: carModels,
+         chassisNumber: chassisNumber,
+         condition: condition,
+         warranty: warranty,
+         price: price,
+         discount: discount,
+         mainImage: mainImage,
+         galleryImages: galleryImages,
+         seller: seller,
+         averageRating: averageRating,
+         sellerRating: sellerRating,
+         totalRatings: totalRatings,
+       );
 
   factory ProductDetailsModel.fromJson(Map<String, dynamic> json) {
     // json is expected to be the inner "data" object
@@ -198,7 +212,11 @@ class ProductDetailsModel extends ProductDetailsEntity {
     }
 
     List<String> parseStringList(dynamic v) {
-      if (v is List) return v.map((e) => e?.toString() ?? '').where((s) => s.isNotEmpty).toList();
+      if (v is List)
+        return v
+            .map((e) => e?.toString() ?? '')
+            .where((s) => s.isNotEmpty)
+            .toList();
       return <String>[];
     }
 

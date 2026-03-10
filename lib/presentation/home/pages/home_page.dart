@@ -27,27 +27,29 @@ class HomePage extends StatelessWidget {
         body: Stack(
           children: [
             // 🔹 Main Scrollable Content
-            SingleChildScrollView(
-              padding: EdgeInsets.all(10.sp),
-              child: Column(
-                children: [
-                  SizedBox(height: 24.h),
-                  const AppBarWidget(),
-                  SizedBox(height: 24.h),
-                  const SearchWidget(),
-                  SizedBox(height: 24.h),
-                  HomeCardWidget(),
-                  SizedBox(height: 24.h),
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(10.sp),
+                child: Column(
+                  children: [
+                    SizedBox(height: 2.h),
+                    const AppBarWidget(),
+                    SizedBox(height: 24.h),
+                    const SearchWidget(),
+                    SizedBox(height: 24.h),
+                    HomeCardWidget(),
+                    SizedBox(height: 24.h),
 
-                  HomeButtonWidget(),
-                  SizedBox(height: 24.h),
-                  HomeCarCardWidget(title: 'All'),
+                    HomeButtonWidget(),
+                    SizedBox(height: 24.h),
+                    HomeCarCardWidget(title: 'All'),
 
-                  SizedBox(height: 12.h),
-                  BecomeSellerCardWidget(),
-                  SizedBox(height: 20.h),
-                  const NewArrivalsWidget(title: 'NEW ARRIVALS'),
-                ],
+                    SizedBox(height: 12.h),
+                    BecomeSellerCardWidget(),
+                    SizedBox(height: 20.h),
+                    const NewArrivalsWidget(title: 'NEW ARRIVALS'),
+                  ],
+                ),
               ),
             ),
           ],

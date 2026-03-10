@@ -8,4 +8,6 @@ class ApiUrls {
   static const String productDetails = '/product';
   static const String userProfile = '/user/profile';
   static const String refreshToken = '/auth/refresh-token';
+  static const String submitReview = '/review';
+  static const String submitReport = '/report';
 }

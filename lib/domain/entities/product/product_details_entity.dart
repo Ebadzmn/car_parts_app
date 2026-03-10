@@ -5,15 +5,19 @@ class SellerEntity extends Equatable {
   final String id;
   final String name;
   final String email;
+  final String whatsappNumber;
+  final String address;
 
   const SellerEntity({
     required this.id,
     required this.name,
     required this.email,
+    this.whatsappNumber = '',
+    this.address = '',
   });
 
   @override
-  List<Object?> get props => [id, name, email];
+  List<Object?> get props => [id, name, email, whatsappNumber, address];
 }
 
 class ProductDetailsEntity extends Equatable {
@@ -57,22 +61,22 @@ class ProductDetailsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        category,
-        brand,
-        description,
-        carModels,
-        chassisNumber,
-        condition,
-        warranty,
-        price,
-        discount,
-        mainImage,
-        galleryImages,
-        seller,
-        averageRating,
-        sellerRating,
-        totalRatings,
-      ];
+    id,
+    title,
+    category,
+    brand,
+    description,
+    carModels,
+    chassisNumber,
+    condition,
+    warranty,
+    price,
+    discount,
+    mainImage,
+    galleryImages,
+    seller,
+    averageRating,
+    sellerRating,
+    totalRatings,
+  ];
 }

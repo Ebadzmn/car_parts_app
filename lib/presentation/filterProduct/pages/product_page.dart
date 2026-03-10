@@ -42,14 +42,14 @@
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       key: _scaffoldKey, // Assign key to Scaffold
-      
+
 //       drawer: FilterDrawer(categories: categories, brands: brands),
 //       body: SingleChildScrollView(
 //         child: SafeArea(
 //           child: Padding(
 //             padding: EdgeInsets.all(20.sp),
 //             child: Column(
-              
+
 //               children: [
 //                 // ElevatedButton(
 //                 //   onPressed: () {
@@ -58,7 +58,7 @@
 //                 //   },
 //                 //   child: const Text('Open Filter Drawer'),
 //                 // ),
-                    
+
 //                 Container(
 //                   alignment: Alignment.centerLeft,
 //                   child: Text('Product' , textAlign: TextAlign.left, style: GoogleFonts.montserrat(fontSize: 24 , fontWeight: FontWeight.w600 , color: Colors.white , fontStyle: FontStyle.italic),)),
@@ -75,9 +75,9 @@
 //           child: SearchWidget(),
 //         ),
 //             ),
-        
+
 //             SizedBox(width: 10.w),
-        
+
 //             // Filter Button
 //             Flexible(
 //         flex: 2,
@@ -128,7 +128,9 @@ import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 
 class ProductPage extends StatelessWidget {
   ProductPage({super.key});
@@ -148,7 +150,8 @@ class ProductPage extends StatelessWidget {
 
   static Timer? _lastAction;
 
-  static const double _scrollThreshold = 200.0; // px from bottom to trigger load more
+  static const double _scrollThreshold =
+      200.0; // px from bottom to trigger load more
 
   @override
   Widget build(BuildContext context) {
@@ -157,9 +160,7 @@ class ProductPage extends StatelessWidget {
         BlocProvider<CategoryBloc>(
           create: (_) => di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
         ),
-        BlocProvider<FilterBloc>(
-          create: (_) => FilterBloc(),
-        ),
+        BlocProvider<FilterBloc>(create: (_) => FilterBloc()),
         BlocProvider<ProductAdvamceBloc>(
           create: (_) => di.sl<ProductAdvamceBloc>(),
         ),
@@ -170,14 +171,15 @@ class ProductPage extends StatelessWidget {
           BlocListener<CategoryBloc, CategoryState>(
             listener: (context, catState) {
               if (catState is CategoryLoaded) {
-                final categories =
-                    catState.categories.map((e) => e.name).toList();
+                final categories = catState.categories
+                    .map((e) => e.name)
+                    .toList();
                 context.read<FilterBloc>().add(
-                      InitializeFilters(
-                        categories: categories,
-                        conditions: const ['New', 'Used', 'Refurbished'],
-                      ),
-                    );
+                  InitializeFilters(
+                    categories: categories,
+                    conditions: const ['New', 'Used', 'Refurbished'],
+                  ),
+                );
               }
             },
           ),
@@ -190,6 +192,7 @@ class ProductPage extends StatelessWidget {
                 prev.minPrice != curr.minPrice ||
                 prev.maxPrice != curr.maxPrice,
             listener: (context, state) async {
+              final productAdvanceBloc = context.read<ProductAdvamceBloc>();
               await _debounced(() async {
                 final selectedCategories = <String>[];
                 for (int i = 0; i < state.categories.length; i++) {
@@ -214,16 +217,18 @@ class ProductPage extends StatelessWidget {
                     ? selectedConditions.join(',')
                     : '';
 
-                context.read<ProductAdvamceBloc>().add(
-                      getProductByAdvancedFilterEvent(
-                        '1',
-                        '10',
-                        categoryString,
-                        conditionString,
-                        state.minPrice,
-                        state.maxPrice,
-                      ),
-                    );
+                if (!productAdvanceBloc.isClosed) {
+                  productAdvanceBloc.add(
+                    getProductByAdvancedFilterEvent(
+                      '1',
+                      '10',
+                      categoryString,
+                      conditionString,
+                      state.minPrice,
+                      state.maxPrice,
+                    ),
+                  );
+                }
               });
             },
           ),
@@ -253,10 +258,7 @@ class ProductPage extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 10,
-                        child: SizedBox(
-                          height: 40.h,
-                          child: SearchWidget(),
-                        ),
+                        child: SizedBox(height: 40.h, child: SearchWidget()),
                       ),
                       SizedBox(width: 10.w),
                       Flexible(
@@ -313,14 +315,15 @@ class ProductPage extends StatelessWidget {
                               if (scrollInfo.metrics.pixels >=
                                   scrollInfo.metrics.maxScrollExtent -
                                       _scrollThreshold) {
-                                final blocState =
-                                    context.read<ProductAdvamceBloc>().state;
+                                final blocState = context
+                                    .read<ProductAdvamceBloc>()
+                                    .state;
                                 if (blocState is ProductAdvamceSuccess &&
                                     !blocState.isLoadingMore &&
                                     !blocState.hasReachedMax) {
-                                  context
-                                      .read<ProductAdvamceBloc>()
-                                      .add(LoadMoreProductsEvent());
+                                  context.read<ProductAdvamceBloc>().add(
+                                    LoadMoreProductsEvent(),
+                                  );
                                 }
                               }
                               return false;
@@ -329,12 +332,13 @@ class ProductPage extends StatelessWidget {
                               padding: EdgeInsets.only(top: 10.h),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16.h,
-                                crossAxisSpacing: 16.w,
-                                childAspectRatio: 0.68,
-                              ),
-                              itemCount: products.length +
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 16.h,
+                                    crossAxisSpacing: 16.w,
+                                    childAspectRatio: 0.68,
+                                  ),
+                              itemCount:
+                                  products.length +
                                   (state.isLoadingMore ? 1 : 0),
                               itemBuilder: (context, index) {
                                 // If last item and loading more -> show loader
@@ -348,124 +352,160 @@ class ProductPage extends StatelessWidget {
                                 }
 
                                 final item = products[index];
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1.2),
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Color(0xFF2E2C2A),
-                                        Color(0xFF131313),
-                                        Color(0xFF1D1D20),
-                                      ],
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.push(
+                                      AppRoutes.detailsScreen,
+                                      extra: {'productId': item.id},
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xFF2E2C2A),
+                                          Color(0xFF131313),
+                                          Color(0xFF1D1D20),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.sp),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          item.title ?? '',
-                                          style: GoogleFonts.montserrat(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            decorationColor: Colors.grey,
-                                            color: Colors.grey,
-                                            fontSize: 11.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          item.condition ?? '',
-                                          style: GoogleFonts.montserrat(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.bold,
-                                            foreground: Paint()
-                                              ..shader = LinearGradient(
-                                                colors: getGradientColors(
-                                                    item.condition ?? ''),
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.topRight,
-                                              ).createShader(
-                                                  Rect.fromLTWH(0, 0, 200, 20)),
-                                          ),
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        Expanded(
-                                          child: Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16.r),
-                                              color: Colors.black,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10.sp),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item.title ?? '',
+                                            style: GoogleFonts.montserrat(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor: Colors.grey,
+                                              color: Colors.grey,
+                                              fontSize: 11.sp,
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                            child: (item.mainImage != null &&
-                                                    item.mainImage!.isNotEmpty)
-                                                ? Image.network(
-                                                    item.mainImage!,
-                                                    fit: BoxFit.contain,
-                                                    errorBuilder: (context,
-                                                            error, stack) =>
-                                                        Image.asset(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            item.condition ?? '',
+                                            style: GoogleFonts.montserrat(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.bold,
+                                              foreground: Paint()
+                                                ..shader =
+                                                    LinearGradient(
+                                                      colors: getGradientColors(
+                                                        item.condition ?? '',
+                                                      ),
+                                                      begin: Alignment.topLeft,
+                                                      end: Alignment.topRight,
+                                                    ).createShader(
+                                                      Rect.fromLTWH(
+                                                        0,
+                                                        0,
+                                                        200,
+                                                        20,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          Expanded(
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16.r),
+                                                color: Colors.black,
+                                              ),
+                                              child:
+                                                  (item.mainImage != null &&
+                                                      item
+                                                          .mainImage!
+                                                          .isNotEmpty)
+                                                  ? Image.network(
+                                                      item.mainImage!,
+                                                      fit: BoxFit.contain,
+                                                      errorBuilder:
+                                                          (
+                                                            context,
+                                                            error,
+                                                            stack,
+                                                          ) => Image.asset(
+                                                            AssetsPath.cardtire,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                    )
+                                                  : Image.asset(
                                                       AssetsPath.cardtire,
                                                       fit: BoxFit.contain,
                                                     ),
-                                                  )
-                                                : Image.asset(
-                                                    AssetsPath.cardtire,
-                                                    fit: BoxFit.contain,
-                                                  ),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'PRICE',
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 10.sp,
-                                                    color: Colors.white,
+                                          SizedBox(height: 8.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'PRICE',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                          fontSize: 10.sp,
+                                                          color: Colors.white,
+                                                        ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  '\$${item.price?.toStringAsFixed(2) ?? '0.00'}',
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.w600,
-                                                    foreground: Paint()
-                                                      ..shader = const LinearGradient(
-                                                        colors: [
-                                                          Color(0xFF5BB349),
-                                                        Color(0xFFFFFFFF),
-                                                        ],
-                                                      ).createShader(
-                                                          Rect.fromLTWH(
-                                                              0, 0, 200, 20)),
+                                                  Text(
+                                                    '\$${item.price?.toStringAsFixed(2) ?? '0.00'}',
+                                                    style: GoogleFonts.montserrat(
+                                                      fontSize: 13.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      foreground: Paint()
+                                                        ..shader =
+                                                            const LinearGradient(
+                                                              colors: [
+                                                                Color(
+                                                                  0xFF5BB349,
+                                                                ),
+                                                                Color(
+                                                                  0xFFFFFFFF,
+                                                                ),
+                                                              ],
+                                                            ).createShader(
+                                                              Rect.fromLTWH(
+                                                                0,
+                                                                0,
+                                                                200,
+                                                                20,
+                                                              ),
+                                                            ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            Image.asset(
-                                              AssetsPath.cardbtn,
-                                              width: 30.w,
-                                              height: 30.h,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                                ],
+                                              ),
+                                              Image.asset(
+                                                AssetsPath.cardbtn,
+                                                width: 30.w,
+                                                height: 30.h,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

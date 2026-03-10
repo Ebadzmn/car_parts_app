@@ -108,7 +108,12 @@ class AuthRemotedatasourceImpl extends AuthRemoteDatasource {
   @override
   Future<ProfileModel> getUserProfile() async {
     final token = await authLocalDatasource.getToken();
-    //authenticate user
+
+    // Check if token exists before making request
+    if (token == null || token.isEmpty) {
+      throw Exception('Unauthenticated: Access token is missing');
+    }
+
     try {
       final response = await dio.get(
         ApiUrls.userProfile,

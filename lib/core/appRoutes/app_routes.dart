@@ -1,5 +1,7 @@
 import 'package:car_parts_app/data/model/product/product_details_model.dart';
 import 'package:car_parts_app/data/model/product/product_model.dart';
+import 'package:car_parts_app/core/injector/injector.dart' as di;
+import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/about/about_page.dart';
 import 'package:car_parts_app/presentation/auth/pages/forget_password.dart';
 import 'package:car_parts_app/presentation/auth/pages/login_page.dart';
@@ -25,6 +27,7 @@ import 'package:car_parts_app/presentation/tearm_condition/page/tearms_condition
 import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoutes {
@@ -90,10 +93,13 @@ final GoRouter appRouter = GoRouter(
         // if a map with 'product' exists and it's already a ProductModel, use it
         if (extra is Map && extra['product'] != null) {
           final product = extra['product'];
-          return CarDetailsPage(
-            product: product! as ProductModel,
-            productId: product.id,
-          ); // pass model directly
+          return BlocProvider<DetailsBloc>(
+            create: (_) => di.sl<DetailsBloc>(),
+            child: CarDetailsPage(
+              product: product! as ProductModel,
+              productId: product.id,
+            ),
+          );
         }
         // otherwise try to extract id (string or map id) as fallback
         final id = extra is String
@@ -101,7 +107,10 @@ final GoRouter appRouter = GoRouter(
             : extra is Map
             ? (extra['productId'] ?? extra['id'] ?? '').toString()
             : state.pathParameters['id'] ?? '';
-        return CarDetailsPage(productId: id);
+        return BlocProvider<DetailsBloc>(
+          create: (_) => di.sl<DetailsBloc>(),
+          child: CarDetailsPage(productId: id),
+        );
       },
     ),
 
