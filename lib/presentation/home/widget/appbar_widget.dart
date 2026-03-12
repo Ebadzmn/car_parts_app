@@ -1,4 +1,5 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
+import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class AppBarWidget extends StatelessWidget {
               Builder(
                 builder: (context) => InkWell(
                   onTap: () {
-                    Scaffold.of(context).openDrawer(); // opens the drawer
+                    MainScreen.scaffoldKey.currentState?.openDrawer();
                   },
                   borderRadius: BorderRadius.circular(8.r),
                   child: Padding(

@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
+import 'package:car_parts_app/core/coreWidget/address_autocomplete_field.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:car_parts_app/data/model/auth/sign_up_model.dart';
 import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
@@ -19,11 +20,27 @@ class SignupPage extends StatelessWidget {
   final emailController = TextEditingController();
   final contactController = TextEditingController();
   final passwordController = TextEditingController();
+  final addressController = TextEditingController();
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
+
+  // Address-related state
+  final ValueNotifier<String> selectedAddress = ValueNotifier('');
+  final ValueNotifier<double> selectedLat = ValueNotifier(0.0);
+  final ValueNotifier<double> selectedLng = ValueNotifier(0.0);
+  final ValueNotifier<bool> isAddressSelected = ValueNotifier(false);
 
   // ✅ submitForm takes context as parameter
   void submitForm(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
+
+    if (!isAddressSelected.value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select an address from the suggestions'),
+        ),
+      );
+      return;
+    }
 
     if (!isChecked.value) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -37,6 +54,9 @@ class SignupPage extends StatelessWidget {
       email: emailController.text.trim(),
       contact: contactController.text.trim(),
       password: passwordController.text,
+      address: selectedAddress.value,
+      lat: selectedLat.value,
+      lng: selectedLng.value,
     );
 
     // ✅ Use correct BuildContext from button (not null)
@@ -72,7 +92,7 @@ class SignupPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
-              context.push(AppRoutes.OtpPage ,extra: email);
+              context.push(AppRoutes.OtpPage, extra: email);
             } else if (state is AuthError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
@@ -121,6 +141,23 @@ class SignupPage extends StatelessWidget {
                   controller: contactController,
                   label: 'Contact Number (Optional)',
                   hintText: 'Please enter your contact number',
+                ),
+
+                // Address with Autocomplete
+                AddressAutocompleteField(
+                  controller: addressController,
+                  onPlaceSelected: (address, lat, lng) {
+                    selectedAddress.value = address;
+                    selectedLat.value = lat;
+                    selectedLng.value = lng;
+                    isAddressSelected.value = true;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Address is required';
+                    }
+                    return null;
+                  },
                 ),
 
                 // Password

@@ -171,9 +171,12 @@ import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/filterProduct/pages/product_page.dart';
 import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
 import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
+import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -250,7 +253,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: MainScreen.scaffoldKey,
       extendBody: true,
+      drawer: DrawerWidget(),
       body: Stack(
         children: [
           _screens[_currentIndex],

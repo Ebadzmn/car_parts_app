@@ -2,7 +2,7 @@ import 'package:car_parts_app/core/injector/injector.dart';
 import 'package:car_parts_app/presentation/home/bloc/new_arrivals_bloc.dart';
 import 'package:car_parts_app/presentation/home/widget/appbar_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/becomev2.dart';
-import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
+
 import 'package:car_parts_app/presentation/home/widget/home_button_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_car_card_widget.dart';
 import 'package:car_parts_app/presentation/home/widget/home_card_widget.dart';
@@ -23,7 +23,6 @@ class HomePage extends StatelessWidget {
           sl<NewArrivalsBloc>()
             ..add(const FetchNewArrivalsRequested(limit: '6')),
       child: Scaffold(
-        drawer: DrawerWidget(),
         body: Stack(
           children: [
             // 🔹 Main Scrollable Content
