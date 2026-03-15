@@ -4,6 +4,7 @@ import 'package:car_parts_app/presentation/details/widget/carosel_widget.dart';
 import 'package:car_parts_app/presentation/details/widget/rating_pop_up_widget.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -318,6 +319,41 @@ class CarDetailsPage extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+
+                    SizedBox(height: 16.h),
+
+                    // ── Show Reviews Button ──
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.push(AppRoutes.reviewScreen, extra: productId);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1D1D20),
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            side: BorderSide(color: Colors.grey.withOpacity(0.5)),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.star_half, color: Colors.amber),
+                            SizedBox(width: 10.w),
+                            Text(
+                              'Show Reviews',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
 
                     _buildDivider(),

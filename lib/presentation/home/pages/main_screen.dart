@@ -172,18 +172,15 @@ import 'package:car_parts_app/presentation/filterProduct/pages/product_page.dart
 import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
 import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_widget.dart';
+import 'package:car_parts_app/presentation/home/controllers/main_screen_controller.dart';
+import 'package:get/get.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainScreen extends StatelessWidget {
+  MainScreen({super.key});
 
   static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
+  final MainScreenController controller = Get.put(MainScreenController());
 
   final List<Widget> _screens = [
     const HomePage(),
@@ -192,16 +189,10 @@ class _MainScreenState extends State<MainScreen> {
     const SellerAccount(),
   ];
 
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   // Custom circular nav icon
   Widget _buildNavIcon(String iconPath, bool isSelected, int index) {
     return GestureDetector(
-      onTap: () => _onTap(index),
+      onTap: () => controller.changeTabIndex(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         height: 55.h,
@@ -256,9 +247,9 @@ class _MainScreenState extends State<MainScreen> {
       key: MainScreen.scaffoldKey,
       extendBody: true,
       drawer: DrawerWidget(),
-      body: Stack(
+      body: Obx(() => Stack(
         children: [
-          _screens[_currentIndex],
+          _screens[controller.currentIndex.value],
           Align(
             alignment: Alignment.bottomCenter,
             child: SafeArea(
@@ -288,20 +279,20 @@ class _MainScreenState extends State<MainScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavIcon(AssetsPath.navhome, _currentIndex == 0, 0),
+                    _buildNavIcon(AssetsPath.navhome, controller.currentIndex.value == 0, 0),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.nav2, _currentIndex == 1, 1),
+                    _buildNavIcon(AssetsPath.nav2, controller.currentIndex.value == 1, 1),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.navcat, _currentIndex == 2, 2),
+                    _buildNavIcon(AssetsPath.navcat, controller.currentIndex.value == 2, 2),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.navcart, _currentIndex == 3, 3),
+                    _buildNavIcon(AssetsPath.navcart, controller.currentIndex.value == 3, 3),
                   ],
                 ),
               ),
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

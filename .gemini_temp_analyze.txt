@@ -1,0 +1,204 @@
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.7 (4.0.9 available)
+  bloc 9.0.1 (9.2.0 available)
+  carousel_slider 5.1.1 (5.1.2 available)
+  characters 1.4.0 (1.4.1 available)
+  cross_file 0.3.5 (0.3.5+2 available)
+  crypto 3.0.6 (3.0.7 available)
+  dio 5.9.0 (5.9.2 available)
+  dio_web_adapter 2.1.1 (2.1.2 available)
+  equatable 2.0.7 (2.0.8 available)
+  ffi 2.1.4 (2.2.0 available)
+  file_selector_linux 0.9.3+2 (0.9.4 available)
+  file_selector_macos 0.9.4+5 (0.9.5 available)
+  file_selector_windows 0.9.3+4 (0.9.3+5 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.32 (2.0.33 available)
+  flutter_svg 2.2.1 (2.2.4 available)
+  geolocator 13.0.4 (14.0.2 available)
+  geolocator_android 4.6.2 (5.0.2 available)
+  get_it 8.2.0 (9.2.1 available)
+  go_router 16.2.4 (17.1.0 available)
+  google_fonts 6.3.2 (8.0.2 available)
+  http 1.5.0 (1.6.0 available)
+  image 4.5.4 (4.8.0 available)
+  image_picker 1.2.0 (1.2.1 available)
+  image_picker_android 0.8.13+7 (0.8.13+14 available)
+  image_picker_for_web 3.1.0 (3.1.1 available)
+  image_picker_ios 0.8.13+1 (0.8.13+6 available)
+  json_annotation 4.9.0 (4.11.0 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.19 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.17.0 (1.18.1 available)
+  path_provider_android 2.2.19 (2.2.22 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  petitparser 7.0.1 (7.0.2 available)
+  pin_code_fields 8.0.1 (9.1.0 available)
+  posix 6.0.3 (6.5.0 available)
+  shared_preferences 2.5.3 (2.5.4 available)
+  shared_preferences_android 2.4.15 (2.4.21 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  source_span 1.10.1 (1.10.2 available)
+  test_api 0.7.7 (0.7.10 available)
+  vector_graphics 1.1.19 (1.1.20 available)
+  vector_graphics_compiler 1.1.19 (1.2.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing car_parts_app...                                      
+
+warning • Unused import: 'package:car_parts_app/data/model/product/product_details_model.dart' • lib/core/appRoutes/app_routes.dart:1:8 • unused_import
+   info • The constant name 'LoginPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:41:23 • constant_identifier_names
+   info • The constant name 'RegisterPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:42:23 • constant_identifier_names
+   info • The constant name 'OtpPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:43:23 • constant_identifier_names
+   info • The constant name 'OnboardPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:44:23 • constant_identifier_names
+   info • The constant name 'set_new_password' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:45:23 • constant_identifier_names
+   info • The constant name 'MainScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:48:23 • constant_identifier_names
+   info • The constant name 'ProductByCategoryScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:49:23 • constant_identifier_names
+   info • The constant name 'DrugBuiltScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:50:23 • constant_identifier_names
+   info • The constant name 'SellarScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:51:23 • constant_identifier_names
+   info • The constant name 'TestPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:52:23 • constant_identifier_names
+   info • The constant name 'FaqsPage' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:53:23 • constant_identifier_names
+   info • The constant name 'TearmsConditionScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:54:23 • constant_identifier_names
+   info • The constant name 'PrivacyPolicyScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:55:23 • constant_identifier_names
+   info • The constant name 'AboutScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:56:23 • constant_identifier_names
+   info • The constant name 'AddNewCategoryScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:57:23 • constant_identifier_names
+   info • The constant name 'Myproduct' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:58:23 • constant_identifier_names
+   info • The constant name 'NotificationScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:59:23 • constant_identifier_names
+   info • The constant name 'NewArrivalsListScreen' isn't a lowerCamelCase identifier • lib/core/appRoutes/app_routes.dart:60:23 • constant_identifier_names
+   info • The file name 'appBar_widget.dart' isn't a lower_case_with_underscores identifier • lib/core/coreWidget/appBar_widget.dart:1:1 • file_names
+   info • The type name 'Appbar_widget' isn't an UpperCamelCase identifier • lib/core/coreWidget/appBar_widget.dart:6:7 • camel_case_types
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/core/error/failure.dart:6:3 • prefer_const_constructors_in_immutables
+   info • The file name 'auth_remoteDatasource.dart' isn't a lower_case_with_underscores identifier • lib/data/data_source/remote/auth_remoteDatasource.dart:1:1 • file_names
+warning • Unused import: 'package:car_parts_app/domain/entities/user/userProfile.dart' • lib/data/data_source/remote/auth_remoteDatasource.dart:8:8 • unused_import
+warning • Unused import: 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart' • lib/data/data_source/remote/auth_remoteDatasource.dart:9:8 • unused_import
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/auth_remoteDatasource.dart:39:9 • avoid_print
+   info • 'DioError' is deprecated and shouldn't be used. Use DioException instead. This will be removed in 6.0.0 • lib/data/data_source/remote/auth_remoteDatasource.dart:46:10 • deprecated_member_use
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/auth_remoteDatasource.dart:67:9 • avoid_print
+   info • 'DioError' is deprecated and shouldn't be used. Use DioException instead. This will be removed in 6.0.0 • lib/data/data_source/remote/auth_remoteDatasource.dart:74:10 • deprecated_member_use
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/auth_remoteDatasource.dart:93:9 • avoid_print
+   info • 'DioError' is deprecated and shouldn't be used. Use DioException instead. This will be removed in 6.0.0 • lib/data/data_source/remote/auth_remoteDatasource.dart:100:10 • deprecated_member_use
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/auth_remoteDatasource.dart:124:9 • avoid_print
+   info • The file name 'category_remoteDataSource.dart' isn't a lower_case_with_underscores identifier • lib/data/data_source/remote/category_remoteDataSource.dart:1:1 • file_names
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/category_remoteDataSource.dart:24:9 • avoid_print
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/places_service.dart:36:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/data/data_source/remote/places_service.dart:68:7 • avoid_print
+   info • The file name 'product_remoteDataSource.dart' isn't a lower_case_with_underscores identifier • lib/data/data_source/remote/product_remoteDataSource.dart:1:1 • file_names
+   info • The file name 'signIn_response_model.dart' isn't a lower_case_with_underscores identifier • lib/data/model/auth/signIn_response_model.dart:1:1 • file_names
+   info • The file name 'sign_In_model.dart' isn't a lower_case_with_underscores identifier • lib/data/model/auth/sign_In_model.dart:1:1 • file_names
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/data/model/auth/sign_In_model.dart:9:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/data/model/auth/sign_up_model.dart:12:3 • prefer_const_constructors_in_immutables
+   info • Parameters ''id', 'name', 'email', 'whatsappNumber', and 'address'' could be super parameters • lib/data/model/product/product_details_model.dart:114:9 • use_super_parameters
+   info • Parameters ''id', 'title', 'category', 'brand', 'description', 'carModels', 'chassisNumber', 'condition', 'warranty', 'price', 'discount', 'mainImage', 'galleryImages', 'averageRating', 'sellerRating', and 'totalRatings'' could be super parameters • lib/data/model/product/product_details_model.dart:155:9 • use_super_parameters
+   info • Statements in an if should be enclosed in a block • lib/data/model/product/product_details_model.dart:216:9 • curly_braces_in_flow_control_structures
+   info • The file name 'userProfile_model.dart' isn't a lower_case_with_underscores identifier • lib/data/model/user/userProfile_model.dart:1:1 • file_names
+warning • Unused import: 'package:car_parts_app/domain/entities/product/product_entities.dart' • lib/data/repositories/category_repositories_impl.dart:5:8 • unused_import
+   info • Uses 'await' on an instance of 'List<OnbEntities>', which is not a subtype of 'Future' • lib/data/repositories/onb_repositories_impl.dart:11:22 • await_only_futures
+warning • Unused import: 'package:car_parts_app/domain/entities/product/product_entities.dart' • lib/data/repositories/product_repositories_impl.dart:5:8 • unused_import
+   info • The variable name 'CategoryName' isn't a lowerCamelCase identifier • lib/domain/entities/test/test_entities.dart:6:16 • non_constant_identifier_names
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/domain/entities/test/test_entities.dart:8:3 • prefer_const_constructors_in_immutables
+   info • The variable name 'CategoryName' isn't a lowerCamelCase identifier • lib/domain/entities/test/test_entities.dart:11:19 • non_constant_identifier_names
+   info • The file name 'userProfile.dart' isn't a lower_case_with_underscores identifier • lib/domain/entities/user/userProfile.dart:1:1 • file_names
+warning • Unused import: 'package:car_parts_app/presentation/auth/pages/forget_password.dart' • lib/domain/repositories/auth/auth_repositories.dart:7:8 • unused_import
+warning • Unused import: 'package:car_parts_app/data/model/product/product_model.dart' • lib/domain/usecase/product/product_usecase.dart:2:8 • unused_import
+   info • The type name 'pageParams' isn't an UpperCamelCase identifier • lib/domain/usecase/product/product_usecase.dart:45:7 • camel_case_types
+warning • Unused import: 'package:car_parts_app/presentation/filterProduct/bloc/filter_bloc.dart' • lib/main.dart:8:8 • unused_import
+warning • Unused import: 'package:car_parts_app/presentation/home/pages/main_screen.dart' • lib/main.dart:11:8 • unused_import
+   info • Constructors for public widgets should have a named 'key' parameter • lib/presentation/about/testing.dart:3:7 • use_key_in_widget_constructors
+   info • Don't invoke 'print' in production code • lib/presentation/auth/bloc/auth_bloc.dart:49:13 • avoid_print
+   info • Don't invoke 'print' in production code • lib/presentation/auth/bloc/auth_bloc.dart:59:13 • avoid_print
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_event.dart:13:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_event.dart:22:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_event.dart:31:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_state.dart:17:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_state.dart:23:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_state.dart:29:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/bloc/auth_state.dart:35:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/auth/pages/login_page.dart:14:3 • prefer_const_constructors_in_immutables
+   info • The local variable '_formKey' starts with an underscore • lib/presentation/auth/pages/login_page.dart:18:11 • no_leading_underscores_for_local_identifiers
+   info • The local variable '_signIn' starts with an underscore • lib/presentation/auth/pages/login_page.dart:23:10 • no_leading_underscores_for_local_identifiers
+   info • The local variable '_showLoadingDialog' starts with an underscore • lib/presentation/auth/pages/login_page.dart:38:18 • no_leading_underscores_for_local_identifiers
+   info • The local variable '_hideDialogIfOpen' starts with an underscore • lib/presentation/auth/pages/login_page.dart:47:10 • no_leading_underscores_for_local_identifiers
+warning • Unused import: 'package:car_parts_app/core/error/failure.dart' • lib/presentation/category/bloc/category_bloc.dart:2:8 • unused_import
+warning • Unused import: 'package:car_parts_app/domain/entities/product/product_entities.dart' • lib/presentation/category/bloc/category_bloc.dart:4:8 • unused_import
+warning • Unused import: 'package:dartz/dartz.dart' • lib/presentation/category/bloc/category_bloc.dart:6:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/category/pages/category_pages.dart:68:57 • deprecated_member_use
+warning • Unused import: 'package:car_parts_app/domain/entities/product/product_entities.dart' • lib/presentation/details/bloc/details_bloc.dart:3:8 • unused_import
+warning • Unnecessary type check; the result is always 'true' • lib/presentation/details/bloc/details_bloc.dart:45:26 • unnecessary_type_check
+warning • The receiver can't be null, so the null-aware operator '?.' is unnecessary • lib/presentation/details/bloc/details_bloc.dart:45:64 • invalid_null_aware_operator
+warning • Unnecessary cast • lib/presentation/details/bloc/details_state.dart:34:16 • unnecessary_cast
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/details/pages/car_details_page.dart:28:13 • use_build_context_synchronously
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/pages/car_details_page.dart:135:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/pages/car_details_page.dart:165:58 • deprecated_member_use
+warning • The receiver can't be 'null' because of short-circuiting, so the null-aware operator '?.' can't be used • lib/presentation/details/pages/car_details_page.dart:211:47 • invalid_null_aware_operator
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/pages/car_details_page.dart:297:65 • deprecated_member_use
+   info • Unnecessary use of string interpolation • lib/presentation/details/pages/car_details_page.dart:456:31 • unnecessary_string_interpolations
+warning • The receiver can't be 'null' because of short-circuiting, so the null-aware operator '?.' can't be used • lib/presentation/details/pages/car_details_page.dart:456:55 • invalid_null_aware_operator
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/pages/car_details_page.dart:564:35 • deprecated_member_use
+warning • The declaration '_buildStars' isn't referenced • lib/presentation/details/pages/car_details_page.dart:619:16 • unused_element
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/pages/car_details_page.dart:642:28 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/widget/carosel_widget.dart:76:43 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/details/widget/carosel_widget.dart:128:39 • deprecated_member_use
+   info • Invalid use of a private type in a public API • lib/presentation/details/widget/rating_star_widget.dart:16:3 • library_private_types_in_public_api
+   info • The file name 'selectTab_widget.dart' isn't a lower_case_with_underscores identifier • lib/presentation/details/widget/selectTab_widget.dart:1:1 • file_names
+   info • The type name 'toggleFaqExpansion' isn't an UpperCamelCase identifier • lib/presentation/faqs/bloc/faqs_event.dart:10:7 • camel_case_types
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/faqs/pages/faqs_page.dart:4:8 • unnecessary_import
+warning • The value of the local variable 'max' isn't used • lib/presentation/filterProduct/bloc/filter_bloc.dart:95:13 • unused_local_variable
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/filterProduct/bloc/filter_event.dart:12:3 • prefer_const_constructors_in_immutables
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/filterProduct/pages/drawerv2.dart:2:8 • unnecessary_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/filterProduct/pages/filter_page.dart:432:49 • deprecated_member_use
+   info • 'desiredAccuracy' is deprecated and shouldn't be used. use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings • lib/presentation/filterProduct/pages/product_page.dart:219:9 • deprecated_member_use
+warning • Dead code • lib/presentation/filterProduct/pages/product_page.dart:470:54 • dead_code
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/filterProduct/pages/product_page.dart:470:57 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/filterProduct/pages/product_page.dart:483:61 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/filterProduct/pages/product_page.dart:490:69 • dead_null_aware_expression
+warning • The operand can't be 'null', so the condition is always 'true' • lib/presentation/filterProduct/pages/product_page.dart:513:68 • unnecessary_null_comparison
+warning • The '!' will have no effect because the receiver can't be null • lib/presentation/filterProduct/pages/product_page.dart:514:67 • unnecessary_non_null_assertion
+warning • The '!' will have no effect because the receiver can't be null • lib/presentation/filterProduct/pages/product_page.dart:516:67 • unnecessary_non_null_assertion
+warning • The receiver can't be null, so the null-aware operator '?.' is unnecessary • lib/presentation/filterProduct/pages/product_page.dart:552:66 • invalid_null_aware_operator
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/home/bloc/home_state.dart:25:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/home/bloc/home_state.dart:38:3 • prefer_const_constructors_in_immutables
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/home/pages/main_screen.dart:220:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/home/pages/main_screen.dart:282:43 • deprecated_member_use
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/home/widget/become_a_seller.dart:103:33 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/home/widget/becomev2.dart:104:29 • use_build_context_synchronously
+warning • The value of the local variable 'screenWidth' isn't used • lib/presentation/home/widget/drug_widget.dart:15:11 • unused_local_variable
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/home/widget/drug_widget.dart:25:15 • use_build_context_synchronously
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/home/widget/drug_widget.dart:108:57 • deprecated_member_use
+   info • The variable name 'drug_button' isn't a lowerCamelCase identifier • lib/presentation/home/widget/home_card_widget.dart:282:26 • non_constant_identifier_names
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/home/widget/home_card_widget.dart:293:17 • use_build_context_synchronously
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/home/widget/home_card_widget.dart:374:57 • deprecated_member_use
+warning • The value of the local variable 'screenWidth' isn't used • lib/presentation/notification/pages/notification_pages.dart:13:11 • unused_local_variable
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/onboard/bloc/onboard_event.dart:15:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/onboard/bloc/onboard_state.dart:18:3 • prefer_const_constructors_in_immutables
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/onboard/bloc/onboard_state.dart:31:3 • prefer_const_constructors_in_immutables
+warning • Unused import: 'package:car_parts_app/core/config/assets_path.dart' • lib/presentation/onboard/pages/onboard_page.dart:1:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/onboard/pages/onboard_page.dart:53:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/onboard/pages/onboard_page.dart:56:42 • deprecated_member_use
+warning • The value of the local variable 'currentPage' isn't used • lib/presentation/onboard/pages/onboardv2.dart:29:19 • unused_local_variable
+warning • Dead code • lib/presentation/onboard/pages/onboardv2.dart:48:36 • dead_code
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/onboard/pages/onboardv2.dart:48:39 • dead_null_aware_expression
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/onboard/pages/onboardv2.dart:65:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/onboard/pages/onboardv2.dart:66:44 • deprecated_member_use
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/onboard/pages/onboardv2.dart:123:43 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/onboard/pages/onboardv2.dart:136:42 • dead_null_aware_expression
+   info • The type name 'getProductByAdvancedFilterEvent' isn't an UpperCamelCase identifier • lib/presentation/productByCategory/bloc/product_advamce_event.dart:10:7 • camel_case_types
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/presentation/productByCategory/bloc/product_advamce_event.dart:20:3 • prefer_const_constructors_in_immutables
+warning • Dead code • lib/presentation/productByCategory/pages/product_by_category_page.dart:789:62 • dead_code
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/productByCategory/pages/product_by_category_page.dart:789:65 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/productByCategory/pages/product_by_category_page.dart:801:69 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/presentation/productByCategory/pages/product_by_category_page.dart:807:101 • dead_null_aware_expression
+warning • The receiver can't be null, so the null-aware operator '?.' is unnecessary • lib/presentation/productByCategory/pages/product_by_category_page.dart:842:69 • invalid_null_aware_operator
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/reviews/pages/product_reviews_page.dart:127:63 • deprecated_member_use
+warning • Unused import: 'package:car_parts_app/presentation/home/pages/home_page.dart' • lib/presentation/splash/page/splash_screen.dart:6:8 • unused_import
+warning • Unused import: 'package:flutter_animate/flutter_animate.dart' • lib/presentation/splash/page/splash_screen.dart:8:8 • unused_import
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/splash/page/splash_screen.dart:76:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/splash/page/splash_screen.dart:78:9 • use_build_context_synchronously
+warning • Unused import: 'dart:io' • lib/presentation/uploadProduct/pages/step_forms.dart:1:8 • unused_import
+warning • Unused import: 'package:car_parts_app/data/model/user/userProfile_model.dart' • lib/presentation/userProfile/bloc/user_profile_bloc.dart:2:8 • unused_import
+   info • Don't use 'BuildContext's across async gaps • lib/presentation/userProfile/pages/user_profile.dart:31:20 • use_build_context_synchronously
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/userProfile/pages/user_profile.dart:60:22 • deprecated_member_use
+warning • Unnecessary cast • lib/presentation/userProfile/pages/user_profile.dart:125:23 • unnecessary_cast
+

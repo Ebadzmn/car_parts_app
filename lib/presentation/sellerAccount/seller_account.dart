@@ -55,11 +55,11 @@ class SellerAccount extends StatelessWidget {
                   height: cardHeight,
                   width: width,
                   image: AssetsPath.addnewcat,
-                  title: 'Add New Category',
+                  title: 'Category Request',
                   subtitle: 'Create and organize product categories',
                   isTablet: isTablet,
                   onTap: () {
-                  context.push(AppRoutes.AddNewCategoryScreen);
+                    context.push(AppRoutes.AddNewCategoryScreen);
                   },
                 ),
 

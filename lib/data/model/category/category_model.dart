@@ -5,6 +5,7 @@ class CategoryModel extends Equatable {
   final String name;
   final String slug;
   final String description;
+  final String icon;
   final DateTime createdAt;
   final DateTime updatedAt;
   final int version;
@@ -14,6 +15,7 @@ class CategoryModel extends Equatable {
     required this.name,
     required this.slug,
     required this.description,
+    required this.icon,
     required this.createdAt,
     required this.updatedAt,
     required this.version,
@@ -26,6 +28,7 @@ class CategoryModel extends Equatable {
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
       description: json['description'] ?? '',
+      icon: json['icon'] ?? '',
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
       version: json['__v'] ?? 0,
@@ -39,6 +42,7 @@ class CategoryModel extends Equatable {
       'name': name,
       'slug': slug,
       'description': description,
+      'icon': icon,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       '__v': version,
@@ -47,5 +51,5 @@ class CategoryModel extends Equatable {
 
   /// For Equatable: value comparison
   @override
-  List<Object?> get props => [id, name, slug, description, createdAt, updatedAt, version];
+  List<Object?> get props => [id, name, slug, description, icon, createdAt, updatedAt, version];
 }

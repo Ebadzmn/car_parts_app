@@ -4,10 +4,13 @@ class ApiUrls {
   static const String verifyOtp = '/auth/verify-email';
   static const String signIn = '/auth/login';
   static const String getCategories = '/category';
-  static const String productAdvanced = '/product/advanced';
+  static const String productAdvanced = '/product';
   static const String productDetails = '/product';
   static const String userProfile = '/user/profile';
   static const String refreshToken = '/auth/refresh-token';
   static const String submitReview = '/review';
   static const String submitReport = '/report';
+  static const String myProducts = '/product/my-products';
+  static const String categoryRequest = '/category-request';
+  static const String productReviews = '/review/product';
 }

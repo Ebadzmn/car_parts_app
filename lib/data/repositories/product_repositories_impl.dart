@@ -21,9 +21,20 @@ class ProductRepositoriesImpl implements ProductRepositories {
     String condition,
     double lowestPrice,
     double highestPrice,
+    double lat,
+    double lng,
   ) async {
     try {
-      final result = await productRemotedatasource.getProductByAdvancedFilter(page, limit, category, condition, lowestPrice, highestPrice);
+      final result = await productRemotedatasource.getProductByAdvancedFilter(
+        page,
+        limit,
+        category,
+        condition,
+        lowestPrice,
+        highestPrice,
+        lat,
+        lng,
+      );
       return result.map((products) => products.map((product) => product as ProductModel).toList());
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

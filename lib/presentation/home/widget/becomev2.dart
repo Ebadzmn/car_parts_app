@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'package:car_parts_app/presentation/home/controllers/main_screen_controller.dart';
 
 class BecomeSellerCardWidget extends StatelessWidget {
   const BecomeSellerCardWidget({super.key});
@@ -100,9 +101,10 @@ class BecomeSellerCardWidget extends StatelessWidget {
                       listenWhen: (prev, curr) => curr.shouldNavigate,
                       listener: (context, state) {
                         if (state.shouldNavigate) {
-                          context.push(AppRoutes.SellarScreen).then((_) {
-                            context.read<DragBloc>().add(const DragUpdateEvent(0));
-                          });
+                          if (Get.isRegistered<MainScreenController>()) {
+                            Get.find<MainScreenController>().changeTabIndex(3);
+                          }
+                          context.read<DragBloc>().add(const DragUpdateEvent(0));
                         }
                       },
                       child: Container(

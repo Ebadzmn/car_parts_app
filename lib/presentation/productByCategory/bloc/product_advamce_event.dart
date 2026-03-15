@@ -14,11 +14,31 @@ class getProductByAdvancedFilterEvent  extends ProductAdvamceEvent {
   final String condition;
   final double lowestPrice;
   final double highestPrice;
+  final double lat;
+  final double lng;
 
-  getProductByAdvancedFilterEvent(this.page, this.limit, this.category, this.condition, this.lowestPrice, this.highestPrice);
+  getProductByAdvancedFilterEvent(
+    this.page,
+    this.limit,
+    this.category,
+    this.condition,
+    this.lowestPrice,
+    this.highestPrice,
+    this.lat,
+    this.lng,
+  );
 
   @override
-  List<Object> get props => [page ?? '', limit ?? '', category, condition, lowestPrice, highestPrice];
+  List<Object> get props => [
+        page ?? '',
+        limit ?? '',
+        category,
+        condition,
+        lowestPrice,
+        highestPrice,
+        lat,
+        lng,
+      ];
 }
 
 class LoadMoreProductsEvent extends ProductAdvamceEvent {}

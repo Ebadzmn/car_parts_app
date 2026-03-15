@@ -55,6 +55,8 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
   final String condition;
   final double lowestPrice;
   final double highestPrice;
+  final double lat;
+  final double lng;
 
   const ProductAdvamceSuccess({
     required this.products,
@@ -66,6 +68,8 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
     required this.condition,
     required this.lowestPrice,
     required this.highestPrice,
+    required this.lat,
+    required this.lng,
   });
 
   ProductAdvamceSuccess copyWith({
@@ -78,6 +82,8 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
     String? condition,
     double? lowestPrice,
     double? highestPrice,
+    double? lat,
+    double? lng,
   }) {
     return ProductAdvamceSuccess(
       products: products ?? this.products,
@@ -89,6 +95,8 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
       condition: condition ?? this.condition,
       lowestPrice: lowestPrice ?? this.lowestPrice,
       highestPrice: highestPrice ?? this.highestPrice,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
     );
   }
 
@@ -103,8 +111,9 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
         condition,
         lowestPrice,
         highestPrice,
+        lat,
+        lng,
       ];
 }
-
 
 

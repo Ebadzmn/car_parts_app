@@ -1,6 +1,5 @@
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 
-
 class ProductModel extends ProductEntity {
   const ProductModel({
     required super.id,
@@ -26,27 +25,62 @@ class ProductModel extends ProductEntity {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    double parseDouble(dynamic v) {
+      if (v == null) return 0.0;
+      if (v is double) return v;
+      if (v is int) return v.toDouble();
+      return double.tryParse(v.toString()) ?? 0.0;
+    }
+
+    int parseInt(dynamic v) {
+      if (v == null) return 0;
+      if (v is int) return v;
+      if (v is double) return v.toInt();
+      return int.tryParse(v.toString()) ?? 0;
+    }
+
+    List<String> parseStringList(dynamic v) {
+      if (v is List) {
+        return v
+            .map((e) => e.toString())
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+      return <String>[];
+    }
+
+    String parseSellerId(dynamic raw) {
+      if (raw is Map<String, dynamic>) {
+        return (raw['_id'] ?? raw['id'] ?? '').toString();
+      }
+      return raw?.toString() ?? '';
+    }
+
     return ProductModel(
-      id: json['_id'] ?? '',
-      title: json['title'] ?? '',
-      category: json['category'] ?? '',
-      brand: json['brand'] ?? '',
-      description: json['description'] ?? '',
-      carModels: List<String>.from(json['carModels'] ?? []),
-      chassisNumber: json['chassisNumber'] ?? '',
-      condition: json['condition'] ?? '',
-      warranty: json['warranty'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
-      discount: json['discount'] ?? 0,
-      mainImage: json['mainImage'] ?? '',
-      galleryImages: List<String>.from(json['galleryImages'] ?? []),
-      sellerId: json['sellerId'] ?? '',
-      sellerRating: (json['sellerRating'] ?? 0).toDouble(),
-      averageRating: (json['averageRating'] ?? 0).toDouble(),
-      totalRatings: json['totalRatings'] ?? 0,
-      isBlocked: json['isBlocked'] ?? false,
-      createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
-      updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
+      id: (json['_id'] ?? '').toString(),
+      title: (json['title'] ?? '').toString(),
+      category: (json['category'] ?? '').toString(),
+      brand: (json['brand'] ?? '').toString(),
+      description: (json['description'] ?? '').toString(),
+      carModels: parseStringList(json['carModels']),
+      chassisNumber: (json['chassisNumber'] ?? '').toString(),
+      condition: (json['condition'] ?? '').toString(),
+      warranty: (json['warranty'] ?? '').toString(),
+      price: parseDouble(json['price']),
+      discount: parseInt(json['discount']),
+      mainImage: json['mainImage']?.toString() ?? '',
+      galleryImages: parseStringList(json['galleryImages']),
+      sellerId: parseSellerId(json['sellerId']),
+      sellerRating: parseDouble(json['sellerRating']),
+      averageRating: parseDouble(json['averageRating']),
+      totalRatings: parseInt(json['totalRatings']),
+      isBlocked: json['isBlocked'] as bool? ?? false,
+      createdAt:
+          DateTime.tryParse(json['createdAt']?.toString() ?? '') ??
+              DateTime.now(),
+      updatedAt:
+          DateTime.tryParse(json['updatedAt']?.toString() ?? '') ??
+              DateTime.now(),
     );
   }
 
@@ -75,7 +109,6 @@ class ProductModel extends ProductEntity {
     };
   }
 
-    // ✅ add this method to convert Model -> Entity
   ProductEntity toEntity() {
     return ProductEntity(
       id: id,

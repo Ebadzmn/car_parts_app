@@ -137,7 +137,7 @@ class NetworkCaller {
   Future<ApiResponse<dynamic>> uploadMultipart(
     String url, {
     required List<MapEntry<String, File>> files,
-    Map<String, String>? fields,
+    Map<String, dynamic>? fields,
     Map<String, String>? headers,
   }) async {
     return _execute(() async {
@@ -148,16 +148,21 @@ class NetworkCaller {
         formMap.addAll(fields);
       }
 
-      // Attach files
+      final formData = FormData.fromMap(formMap);
+
+      // Attach files directly to FormData to allow duplicate keys (arrays)
       for (final entry in files) {
         final file = entry.value;
-        formMap[entry.key] = await MultipartFile.fromFile(
-          file.path,
-          filename: file.path.split(Platform.pathSeparator).last,
+        formData.files.add(
+          MapEntry(
+            entry.key,
+            await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.split(Platform.pathSeparator).last,
+            ),
+          ),
         );
       }
-
-      final formData = FormData.fromMap(formMap);
 
       return _dio.post(
         url,

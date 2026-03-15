@@ -105,7 +105,7 @@ class SignupPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 34.h),
-                Image.asset(AssetsPath.logo),
+                Image.asset(AssetsPath.newLogo, width: 150.w, height: 150.h),
 
                 // Full Name
                 CustomTextField(

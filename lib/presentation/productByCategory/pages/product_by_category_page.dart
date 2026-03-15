@@ -645,10 +645,12 @@ class ProductByCategoryPage extends StatelessWidget {
         ..add(getProductByAdvancedFilterEvent(
           page ?? '1',
           limit ?? '10',
-          category ?? '',
+          (category == 'All') ? '' : (category ?? ''),
           condition ?? '',
           lowestPrice ?? 0.0,
           highestPrice ?? double.infinity,
+          0.0,
+          0.0,
         )),
       child: Scaffold(
         body: SafeArea(

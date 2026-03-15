@@ -20,6 +20,8 @@ class ProductUsecase {
       params.condition ?? '',
       params.lowestPrice ?? 0.0,
       params.highestPrice ?? 0.0,
+      params.lat ?? 0.0,
+      params.lng ?? 0.0,
     );
   }
 }
@@ -47,6 +49,8 @@ class pageParams {
   final String? condition;
   final double? lowestPrice;
   final double? highestPrice;
+   final double? lat;
+   final double? lng;
 
   pageParams(
      this.page,
@@ -55,5 +59,7 @@ class pageParams {
      this.condition,
      this.lowestPrice,
      this.highestPrice,
+     this.lat,
+     this.lng,
   );
 }

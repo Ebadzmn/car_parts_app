@@ -76,7 +76,7 @@ class LoginPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Image.asset(AssetsPath.logo),
+              Image.asset(AssetsPath.newLogo, width: 150.w, height: 150.h),
               Padding(
                 padding: EdgeInsets.all(18.sp),
                 child: Form(

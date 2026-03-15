@@ -1,218 +1,164 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
-import 'package:car_parts_app/core/config/assets_path.dart';
+
 import 'package:car_parts_app/core/coreWidget/appBar_widget.dart';
-import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
+import 'package:car_parts_app/presentation/myproduct/controllers/my_products_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:car_parts_app/core/coreWidget/reusable_product_card_widget.dart';
 
-class MyProductPage extends StatelessWidget {
+class MyProductPage extends StatefulWidget {
   const MyProductPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-
-    // Helper function
-List<Color> getGradientColors(String condition) {
-  switch (condition) {
-    case "New":
-      return [Colors.green, Colors.white];
-    case "Used":
-     return [Colors.red, Colors.white];
-    case "Refurb":
-     return [Color(0xFFE7BE00), Colors.white];
-    default:
-      return [Color(0xFFE7BE00), Colors.white]; // fallback
-  }
+  State<MyProductPage> createState() => _MyProductPageState();
 }
-    final screenHeight = 1.sh;
+
+class _MyProductPageState extends State<MyProductPage> {
+  late final MyProductsController _controller;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.put(MyProductsController());
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      _controller.fetchMoreMyProducts();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    Get.delete<MyProductsController>();
+    super.dispose();
+  }
+
+  Widget _buildShimmerGrid(double screenWidth, int crossAxisCount, double childAspectRatio) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 20.h),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 10.w,
+        mainAxisSpacing: 10.h,
+        childAspectRatio: childAspectRatio,
+      ),
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[800]!,
+          highlightColor: Colors.grey[600]!,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final screenWidth = 1.sw;
 
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w , vertical: 0.h),
-          child: Center(
-            child: Column(
-              
-              children: [
-        
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Appbar_widget(title: 'My Products',),
-                
-                ),
-            
-                  
-             
-               
-                // ======= BlocBuilder =======
-                BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) {
-                    if (state is HomeLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is ProductError) {
-                      return const Center(child: Text('Error loading products'));
-                    } else if (state is FetchCard) {
-                      // ✅ Responsive grid based on screen width
-                      int crossAxisCount = screenWidth < 600
-                          ? 2
-                          : screenWidth < 900
-                          ? 3
-                          : 3;
-            
-                      double childAspectRatio = screenWidth < 600 ? 2 / 2.9 : 2.2 / 3.2;
-            
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics:  NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 0.w , vertical: 20.h),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: 10.w,
-                          mainAxisSpacing: 10.h,
-                          childAspectRatio: childAspectRatio,
-                        ),
-                        itemCount: state.data.length,
-                        itemBuilder: (context, index) {
-                          final item = state.data[index];
-            
-                          return GestureDetector(
-                            onTap: () {
-                              context.push(
-                                AppRoutes.detailsScreen,
-                                extra: item.id,
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey, width: 1.2),
-                                borderRadius: BorderRadius.circular(20.r),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Color(0xFF2E2C2A),
-                                    Color(0xFF131313),
-                                    Color(0xFF1D1D20),
-                                  ],
-                                  stops: [0.0, 0.5, 1.0],
-                                ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(10.sp),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Car name
-                                    Text(
-                                      item.title,
-                                      style: GoogleFonts.montserrat(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: Colors.grey,
-                                        color: Colors.grey,
-                                        fontSize: 11.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                            
-                                    // Car condition
-                                    Text(
-                                      item.condition,
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        foreground: Paint()
-                                    ..shader = LinearGradient(
-                                      colors: getGradientColors(item.condition),
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.topRight,
-                                    ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0.h),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Appbar_widget(title: 'My Products'),
               ),
-            ),
-                            
-                                    SizedBox(height: 8.h),
-                            
-                                    // Car image — responsive width & height
-                                    Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(16.r),
-                                          color: Colors.black,
-                                        ),
-                                        child: Image.asset(
-                                          AssetsPath.cardtire,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                            
-                                    SizedBox(height: 8.h),
-                            
-                                    // Price section
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'PRICE',
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 10.sp,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            Text(
-                                              '32.60',
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.w600,
-                                                foreground: Paint()
-                                                  ..shader =
-                                                      const LinearGradient(
-                                                        colors: [
-                                                          Color(0xFF5BB349),
-                                                          Colors.white,
-                                                        ],
-                                                        begin: Alignment.topLeft,
-                                                        end: Alignment.topRight,
-                                                      ).createShader(
-                                                        Rect.fromLTWH(0, 0, 200, 20),
-                                                      ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Image.asset(
-                                          AssetsPath.cardbtn,
-                                          width: 30.w,
-                                          height: 30.h,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ],
-            ),
+              Expanded(
+                child: Obx(() {
+                  // Grid setup
+                  int crossAxisCount = screenWidth < 600 ? 2 : 3;
+                  double childAspectRatio = screenWidth < 600 ? 2 / 3.4 : 2.2 / 3.4;
+
+                  if (_controller.isLoading.value) {
+                    return _buildShimmerGrid(screenWidth, crossAxisCount, childAspectRatio);
+                  }
+
+                  if (_controller.isEmpty.value) {
+                    return Center(
+                      child: Text(
+                        'No products uploaded yet',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 14.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (_controller.hasError.value && _controller.products.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Error loading products',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 14.sp,
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: GridView.builder(
+                          controller: _scrollController,
+                          padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 20.h),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: 10.w,
+                            mainAxisSpacing: 10.h,
+                            childAspectRatio: childAspectRatio,
+                          ),
+                          itemCount: _controller.products.length,
+                          itemBuilder: (context, index) {
+                            final item = _controller.products[index];
+
+                            return ReusableProductCardWidget(
+                              item: item,
+                              onTap: () {
+                                context.push(
+                                  AppRoutes.detailsScreen,
+                                  extra: {'productId': item.id, 'product': item},
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      if (_controller.isMoreLoading.value)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: const CircularProgressIndicator(color: Colors.green),
+                        ),
+                    ],
+                  );
+                }),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
-

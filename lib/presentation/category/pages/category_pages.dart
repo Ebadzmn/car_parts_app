@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CategoryPages extends StatelessWidget {
@@ -53,36 +54,40 @@ class CategoryPages extends StatelessWidget {
                               ),
                           itemCount: 6,
                           itemBuilder: (context, index) {
-                            return Container(
-                              height: 120.h,
-                              width: 160.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                border: Border.all(
-                                  color: Colors.yellow,
-                                  width: 1.w,
-                                ),
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 60.h,
-                                    width: 60.w,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
+                            return LayoutBuilder(
+                              builder: (context, constraints) {
+                                final iconSize = constraints.maxWidth * 0.35;
+                                final barWidth = constraints.maxWidth * 0.6;
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(
+                                      color: Colors.yellow,
+                                      width: 1.w,
                                     ),
+                                    color: Colors.black.withOpacity(0.2),
                                   ),
-                                  SizedBox(height: 8.h),
-                                  Container(
-                                    height: 14.h,
-                                    width: 80.w,
-                                    color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: iconSize,
+                                        width: iconSize,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Container(
+                                        height: 14.h,
+                                        width: barWidth,
+                                        color: Colors.white,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             );
                           },
                         ),
@@ -107,36 +112,37 @@ class CategoryPages extends StatelessWidget {
                                 extra: category.name,
                               );
                             },
-                            child: Container(
-                              height: 120.h,
-                              width: 160.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                border: Border.all(
-                                  color: Colors.yellow,
-                                  width: 1.w,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 2.r,
-                                    spreadRadius: 0.r,
-                                    offset: Offset(0, 1.h),
-                                    color: Colors.grey,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                final iconSize = constraints.maxWidth * 0.35;
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(
+                                      color: Colors.yellow,
+                                      width: 1.w,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 2.r,
+                                        spreadRadius: 0.r,
+                                        offset: Offset(0, 1.h),
+                                        color: Colors.grey,
+                                      ),
+                                      BoxShadow(
+                                        blurRadius: 0.r,
+                                        spreadRadius: 0,
+                                        offset: Offset(2.w, 2.h),
+                                        color: const Color(0xFF5F615E),
+                                      ),
+                                    ],
                                   ),
-                                  BoxShadow(
-                                    blurRadius: 0.r,
-                                    spreadRadius: 0,
-                                    offset: Offset(2.w, 2.h),
-                                    color: const Color(0xFF5F615E),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
                                   Container(
-                                    height: 60.h,
-                                    width: 60.w,
+                                    height: iconSize,
+                                    width: iconSize,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -145,22 +151,27 @@ class CategoryPages extends StatelessWidget {
                                       ),
                                     ),
                                     child: Icon(
-                                      Icons.category_outlined,
-                                      size: 32.sp,
+                                      _resolveCategoryIcon(category.icon),
+                                      size: iconSize * 0.55,
                                       color: Colors.yellow,
                                     ),
                                   ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    category.name,
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                      SizedBox(height: 8.h),
+                                      Text(
+                                        category.name,
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 14.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
                           );
                         },
@@ -189,5 +200,24 @@ class CategoryPages extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _resolveCategoryIcon(String iconName) {
+    final key = iconName.trim();
+    if (key.isEmpty) {
+      return Icons.category;
+    }
+    final mapping = <String, IconData>{
+      'Car': LucideIcons.car,
+      'car': LucideIcons.car,
+      'CookingPot': LucideIcons.cookie,
+      'cookingpot': LucideIcons.cookie,
+      'Cookingpot': LucideIcons.cookie,
+      'Camera': LucideIcons.camera,
+      'camera': LucideIcons.camera,
+      'Home': LucideIcons.home,
+      'home': LucideIcons.home,
+    };
+    return mapping[key] ?? mapping[key.toLowerCase()] ?? Icons.category;
   }
 }

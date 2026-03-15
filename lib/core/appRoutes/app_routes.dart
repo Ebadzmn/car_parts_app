@@ -21,6 +21,7 @@ import 'package:car_parts_app/presentation/notification/pages/notification_pages
 import 'package:car_parts_app/presentation/onboard/pages/onboardv2.dart';
 import 'package:car_parts_app/presentation/privacyPolicy/privacy_policy.dart';
 import 'package:car_parts_app/presentation/productByCategory/pages/product_by_category_page.dart';
+import 'package:car_parts_app/presentation/reviews/pages/product_reviews_page.dart';
 import 'package:car_parts_app/presentation/sellerAccount/seller_account.dart';
 import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/tearm_condition/page/tearms_condition.dart';
@@ -57,6 +58,7 @@ class AppRoutes {
   static const String Myproduct = '/myproduct';
   static const String NotificationScreen = '/notification-screen';
   static const String NewArrivalsListScreen = '/new-arrivals-list-screen';
+  static const String reviewScreen = '/review-screen';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -309,6 +311,19 @@ final GoRouter appRouter = GoRouter(
           return FadeTransition(opacity: animation, child: child);
         },
       ),
+    ),
+
+    GoRoute(
+      path: AppRoutes.reviewScreen,
+      pageBuilder: (context, state) {
+        final productId = state.extra as String? ?? '';
+        return CustomTransitionPage(
+          child: ProductReviewsPage(productId: productId),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        );
+      },
     ),
   ],
 );

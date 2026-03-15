@@ -15,6 +15,8 @@ abstract class ProductRemotedatasource {
     String condition,
     double lowestPrice,
     double highestPrice,
+    double lat,
+    double lng,
   );
 
   Future<Either<Failure, ProductDetailsModel>> getProductDetails(String productId);
@@ -32,6 +34,8 @@ class ProductRemotedatasourceImpl extends ProductRemotedatasource {
     String condition,
     double lowestPrice,
     double highestPrice,
+    double lat,
+    double lng,
   ) async {
     try {
       final endpoint = ApiUrls.productAdvanced;
@@ -42,6 +46,8 @@ class ProductRemotedatasourceImpl extends ProductRemotedatasource {
 
       params['page'] = pageValue;
       params['limit'] = limitValue;
+      params['lat'] = lat;
+      params['lng'] = lng;
       if (category.trim().isNotEmpty) params['category'] = category.trim();
       if (condition.trim().isNotEmpty) params['condition'] = condition.trim();
       if (lowestPrice > 0) params['lowestPrice'] = lowestPrice;

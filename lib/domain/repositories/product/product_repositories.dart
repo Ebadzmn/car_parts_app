@@ -11,6 +11,8 @@ abstract class ProductRepositories {
      String condition,
      double lowestPrice,
      double highestPrice,
+     double lat,
+     double lng,
   );
 
   Future<Either<Failure, ProductDetailsEntity>> getProductDetails(String productId);

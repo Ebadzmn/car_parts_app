@@ -68,6 +68,8 @@ class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> 
         event.condition,
         event.lowestPrice,
         event.highestPrice,
+        event.lat,
+        event.lng,
       ),
     );
 
@@ -87,6 +89,8 @@ class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> 
           condition: event.condition,
           lowestPrice: event.lowestPrice,
           highestPrice: event.highestPrice,
+          lat: event.lat,
+          lng: event.lng,
         ));
       },
     );
@@ -115,6 +119,8 @@ class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> 
         currentState.condition,
         currentState.lowestPrice,
         currentState.highestPrice,
+        currentState.lat,
+        currentState.lng,
       ),
     );
 

@@ -7,14 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:get/get.dart';
+
+class RatingPopUpController extends GetxController {
+  final commentController = TextEditingController();
+  final selectedRating = 0.obs;
+
+  @override
+  void onClose() {
+    commentController.dispose();
+    super.onClose();
+  }
+}
+
 class RatingPopUpWidget extends StatelessWidget {
   final String productId;
   const RatingPopUpWidget({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
-    final commentController = TextEditingController();
-    int selectedRating = 0;
+    // Ensure unique tag if multiple widgets can be opened
+    final controller = Get.put(RatingPopUpController(), tag: productId);
 
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -87,7 +100,7 @@ class RatingPopUpWidget extends StatelessWidget {
                         maxRating: 5,
                         iconSize: 40.0,
                         onRatingChanged: (rating) {
-                          selectedRating = rating;
+                          controller.selectedRating.value = rating;
                         },
                       ),
 
@@ -95,7 +108,7 @@ class RatingPopUpWidget extends StatelessWidget {
 
                       // Comment field
                       TextFormField(
-                        controller: commentController,
+                        controller: controller.commentController,
                         maxLines: 3,
                         style: GoogleFonts.montserrat(
                           fontSize: 12.sp,
@@ -153,7 +166,7 @@ class RatingPopUpWidget extends StatelessWidget {
                                   ? null
                                   : () {
                                       // Validation
-                                      if (selectedRating == 0) {
+                                      if (controller.selectedRating.value == 0) {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
@@ -166,7 +179,7 @@ class RatingPopUpWidget extends StatelessWidget {
                                         );
                                         return;
                                       }
-                                      if (commentController.text
+                                      if (controller.commentController.text
                                           .trim()
                                           .isEmpty) {
                                         ScaffoldMessenger.of(
@@ -185,8 +198,8 @@ class RatingPopUpWidget extends StatelessWidget {
                                       context.read<ReviewSubmitBloc>().add(
                                         SubmitProductReview(
                                           productId: productId,
-                                          rating: selectedRating,
-                                          comment: commentController.text
+                                          rating: controller.selectedRating.value,
+                                          comment: controller.commentController.text
                                               .trim(),
                                         ),
                                       );
