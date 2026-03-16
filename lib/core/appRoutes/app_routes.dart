@@ -27,6 +27,9 @@ import 'package:car_parts_app/presentation/splash/page/splash_screen.dart';
 import 'package:car_parts_app/presentation/tearm_condition/page/tearms_condition.dart';
 import 'package:car_parts_app/presentation/uploadProduct/pages/custom_stepper_page.dart';
 import 'package:car_parts_app/presentation/userProfile/pages/user_profile.dart';
+import 'package:car_parts_app/presentation/userProfile/pages/change_basic_info.dart';
+import 'package:car_parts_app/presentation/userProfile/pages/change_contract.dart';
+import 'package:car_parts_app/presentation/userProfile/pages/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -59,6 +62,9 @@ class AppRoutes {
   static const String NotificationScreen = '/notification-screen';
   static const String NewArrivalsListScreen = '/new-arrivals-list-screen';
   static const String reviewScreen = '/review-screen';
+  static const String changeBasicInfo = '/change-basic-info';
+  static const String changeContact = '/change-contact';
+  static const String changePassword = '/change-password';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -324,6 +330,33 @@ final GoRouter appRouter = GoRouter(
           },
         );
       },
+    ),
+    GoRoute(
+      path: AppRoutes.changeBasicInfo,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const ChangeBasicInfo(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.changeContact,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const ChangeContract(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.changePassword,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const ChangePassword(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
     ),
   ],
 );

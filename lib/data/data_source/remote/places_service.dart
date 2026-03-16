@@ -69,4 +69,26 @@ class PlacesService {
       return null;
     }
   }
+
+  /// Fetches the address for a given [lat] and [lng].
+  Future<String?> reverseGeocode(double lat, double lng) async {
+    try {
+      final response = await _dio.get(
+        'https://maps.googleapis.com/maps/api/geocode/json',
+        queryParameters: {'latlng': '$lat,$lng', 'key': _apiKey},
+      );
+
+      if (response.statusCode == 200) {
+        final results = response.data['results'] as List<dynamic>? ?? [];
+        if (results.isNotEmpty) {
+          return results.first['formatted_address'] as String?;
+        }
+      }
+
+      return null;
+    } catch (e) {
+      print('PlacesService reverse geocode error: $e');
+      return null;
+    }
+  }
 }

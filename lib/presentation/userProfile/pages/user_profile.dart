@@ -3,7 +3,7 @@ import 'package:car_parts_app/core/config/app_color.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/injector/injector.dart'; // sl
 import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
-import 'package:car_parts_app/data/model/auth/signIn_response_model.dart';
+
 import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart'; // ensure this exists
 import 'package:flutter/material.dart';
@@ -53,44 +53,7 @@ class UserProfile extends StatelessWidget {
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
 
-  Widget _buildStatBadge(String text, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: color),
-      ),
-      child: Text(
-        text,
-        style: GoogleFonts.montserrat(
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
-      ),
-    );
-  }
 
-  Widget _buildProfileInfoItem(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: GoogleFonts.montserrat(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(height: 4.h),
-        Text(
-          label,
-          style: GoogleFonts.montserrat(fontSize: 10.sp, color: Colors.grey),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +84,7 @@ class UserProfile extends StatelessWidget {
               builder: (context, authState) {
                 // show profile only when authenticated
                 if (authState is SignInSuccess) {
-                  final LoginResponseModel resp =
-                      authState.response as LoginResponseModel;
-                  final maskedToken =
-                      resp.accessToken != null && resp.accessToken!.isNotEmpty
-                      ? '${resp.accessToken!.substring(0, resp.accessToken!.length > 12 ? 12 : resp.accessToken!.length)}...'
-                      : '—';
+
 
                   final screenHeight = 1.sh;
 
@@ -208,23 +166,7 @@ class UserProfile extends StatelessWidget {
                               final profile = state.profileEntity;
                               final imageUrl = profile.image;
 
-                              const months = [
-                                'January',
-                                'February',
-                                'March',
-                                'April',
-                                'May',
-                                'June',
-                                'July',
-                                'August',
-                                'September',
-                                'October',
-                                'November',
-                                'December',
-                              ];
-                              final date = profile.createdAt;
-                              final formattedDate =
-                                  '${date.day} ${months[date.month - 1]} ${date.year}';
+
 
                               return Column(
                                 children: [
@@ -256,43 +198,7 @@ class UserProfile extends StatelessWidget {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  SizedBox(height: 16.h),
 
-                                  // Stats Row
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      _buildStatBadge(
-                                        profile.role.toUpperCase(),
-                                        Colors.orange,
-                                      ),
-                                      SizedBox(width: 8.w),
-                                      _buildStatBadge(
-                                        profile.status.toUpperCase(),
-                                        Colors.green,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 12.h),
-
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      _buildProfileInfoItem(
-                                        '★ ${profile.averageRating.toStringAsFixed(1)}',
-                                        'Rating',
-                                      ),
-                                      _buildProfileInfoItem(
-                                        profile.ratingsCount.toString(),
-                                        'Total Ratings',
-                                      ),
-                                      _buildProfileInfoItem(
-                                        formattedDate,
-                                        'Member Since',
-                                      ),
-                                    ],
-                                  ),
                                 ],
                               );
                             }
@@ -349,14 +255,7 @@ class UserProfile extends StatelessWidget {
                         ),
 
                         SizedBox(height: 24.h),
-                        Text(
-                          'Token: $maskedToken',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 10.sp,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(height: 24.h),
+
                         Container(
                           height: screenHeight > 1000 ? 260.h : 200.h,
                           width: double.infinity,
@@ -370,46 +269,70 @@ class UserProfile extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Basic Information',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 14.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 6.h),
-                                Text(
-                                  'Update Basic Information',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 10.sp,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
-                                Text(
-                                  'Contact',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 14.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 6.h),
-                                Text(
-                                  'Update contact information',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 10.sp,
-                                    color: Colors.grey,
+                                InkWell(
+                                  onTap: () => context.push(AppRoutes.changeBasicInfo),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Basic Information',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 14.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6.h),
+                                      Text(
+                                        'Update Basic Information',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 10.sp,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 SizedBox(height: 12.h),
-                                Text(
-                                  'Change Password',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 14.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
+                                InkWell(
+                                  onTap: () => context.push(AppRoutes.changeContact),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Contact',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 14.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6.h),
+                                      Text(
+                                        'Update contact information',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 10.sp,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 12.h),
+                                InkWell(
+                                  onTap: () => context.push(AppRoutes.changePassword),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Change Password',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 14.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

@@ -14,6 +14,8 @@ class ProfileModel extends ProfileEntity {
     required super.verified,
     required super.createdAt,
     required super.updatedAt,
+    super.whatsappNumber,
+    super.address,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,8 @@ class ProfileModel extends ProfileEntity {
       verified: data['verified'] ?? false,
       createdAt: DateTime.tryParse(data['createdAt'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(data['updatedAt'] ?? '') ?? DateTime.now(),
+      whatsappNumber: data['whatsappNumber'],
+      address: data['address'],
     );
   }
 
@@ -48,5 +52,7 @@ class ProfileModel extends ProfileEntity {
     "verified": verified,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
+    "whatsappNumber": whatsappNumber,
+    "address": address,
   };
 }

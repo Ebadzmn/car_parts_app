@@ -1,6 +1,7 @@
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChangeContract extends StatelessWidget {
@@ -10,7 +11,7 @@ class ChangeContract extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(20.sp),
             child: Column(
@@ -19,19 +20,17 @@ class ChangeContract extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 40.h,
-                      width: 40.h,
+                      height: 40,
+                      width: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             blurRadius: 0,
                             spreadRadius: 1,
                             offset: Offset(0, 1),
                             color: Colors.grey,
                           ),
-
                           BoxShadow(
                             blurRadius: 1,
                             spreadRadius: 1,
@@ -41,9 +40,12 @@ class ChangeContract extends StatelessWidget {
                         ],
                       ),
                       child: Center(
-                        child: Icon(
-                          Icons.arrow_back_ios_new_outlined,
-                          color: Colors.green,
+                        child: IconButton(
+                          onPressed: () => context.pop(),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
                     ),
@@ -58,9 +60,7 @@ class ChangeContract extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                SizedBox(height: 71.h),
-
+                SizedBox(height: 30.h),
                 Container(
                   height: 60.h,
                   width: 60.w,
@@ -141,10 +141,10 @@ class ChangeContract extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
+            ), // Column
+          ), // Padding
+        ), // SingleChildScrollView
+      ), // SafeArea
+    ); // Scaffold
   }
 }

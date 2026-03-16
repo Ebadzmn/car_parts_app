@@ -13,6 +13,8 @@ class ProfileEntity extends Equatable {
   final bool verified;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? whatsappNumber;
+  final String? address;
 
   const ProfileEntity({
     required this.id,
@@ -27,6 +29,8 @@ class ProfileEntity extends Equatable {
     required this.verified,
     required this.createdAt,
     required this.updatedAt,
+    this.whatsappNumber,
+    this.address,
   });
 
   @override
@@ -43,5 +47,7 @@ class ProfileEntity extends Equatable {
     verified,
     createdAt,
     updatedAt,
+    whatsappNumber,
+    address,
   ];
 }
