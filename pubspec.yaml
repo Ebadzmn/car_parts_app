@@ -57,6 +57,7 @@ dependencies:
   geolocator: ^13.0.1
   lucide_icons: ^0.257.0
   intl: ^0.20.2
+  flutter_dotenv: ^5.1.0
   
 
 dev_dependencies:
@@ -86,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

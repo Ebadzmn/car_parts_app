@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class PlacesService {
-  static const String _apiKey = 'AIzaSyDuKguBEQA-aKJyd-H47t0Gg9GcswNDtrA';
+  static String get _apiKey => dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
   static const String _baseUrl = 'https://maps.googleapis.com/maps/api/place';
 
   final Dio _dio = Dio();

@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:car_parts_app/core/coreWidget/custom_loading_dialog.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -35,15 +36,6 @@ class LoginPage extends StatelessWidget {
       );
     }
 
-    Future<void> _showLoadingDialog() async {
-      if (Navigator.canPop(context)) return; // avoid double dialogs
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => const Center(child: CircularProgressIndicator()),
-      );
-    }
-
     void _hideDialogIfOpen() {
       if (Navigator.canPop(context)) Navigator.pop(context);
     }
@@ -51,7 +43,7 @@ class LoginPage extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
-          _showLoadingDialog();
+          showCustomLoadingDialog(context, message: 'Logging in...');
         } else {
           // hide loading for any non-loading state
           _hideDialogIfOpen();

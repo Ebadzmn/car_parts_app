@@ -11,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:car_parts_app/core/coreWidget/custom_loading_dialog.dart';
+
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
 
@@ -33,15 +35,6 @@ class SignupPage extends StatelessWidget {
   void submitForm(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
 
-    if (!isAddressSelected.value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select an address from the suggestions'),
-        ),
-      );
-      return;
-    }
-
     if (!isChecked.value) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please accept Terms and Conditions')),
@@ -54,7 +47,7 @@ class SignupPage extends StatelessWidget {
       email: emailController.text.trim(),
       contact: contactController.text.trim(),
       password: passwordController.text,
-      address: selectedAddress.value,
+      address: addressController.text.trim(),
       lat: selectedLat.value,
       lng: selectedLng.value,
     );
@@ -71,17 +64,7 @@ class SignupPage extends StatelessWidget {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => const AlertDialog(
-                  title: Text('Loading'),
-                  content: SizedBox(
-                    height: 48,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-              );
+              showCustomLoadingDialog(context, message: 'Creating account...');
             } else {
               if (Navigator.canPop(context)) Navigator.pop(context);
             }
@@ -89,14 +72,14 @@ class SignupPage extends StatelessWidget {
             if (state is SignUpSuccess) {
               final message = state.response['message'] ?? 'Signup success';
               final email = emailController.text.trim();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
               context.push(AppRoutes.OtpPage, extra: email);
             } else if (state is AuthError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           child: Form(
@@ -139,8 +122,8 @@ class SignupPage extends StatelessWidget {
                 // Contact Number (Optional)
                 CustomTextField(
                   controller: contactController,
-                  label: 'Contact Number (Optional)',
-                  hintText: 'Please enter your contact number',
+                  label: 'Whatsapp Number',
+                  hintText: 'Please enter your whatsapp number',
                 ),
 
                 // Address with Autocomplete

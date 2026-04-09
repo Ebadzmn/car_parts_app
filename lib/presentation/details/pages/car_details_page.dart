@@ -328,14 +328,19 @@ class CarDetailsPage extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          context.push(AppRoutes.reviewScreen, extra: productId);
+                          context.push(
+                            AppRoutes.reviewScreen,
+                            extra: productId,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1D1D20),
                           padding: EdgeInsets.symmetric(vertical: 14.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
-                            side: BorderSide(color: Colors.grey.withOpacity(0.5)),
+                            side: BorderSide(
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
                           ),
                         ),
                         child: Row(
@@ -512,9 +517,7 @@ class CarDetailsPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _launchWhatsApp(
-                          product?.seller.whatsappNumber ?? '',
-                        ),
+                        onPressed: () => _launchWhatsApp('01869943362'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
