@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 abstract class CategoryRemotedatasource {
-  Future<Either<Failure, List<CategoryModel>>> getCategories();
+  Future<Either<Failure, List<CategoryModel>>> getCategories({String? searchTerm});
 }
 
 
@@ -14,9 +14,15 @@ class CategoryRemotedatasourceImpl extends CategoryRemotedatasource {
   CategoryRemotedatasourceImpl(this.dio);
 
   @override
-  Future<Either<Failure, List<CategoryModel>>> getCategories() async {
+  Future<Either<Failure, List<CategoryModel>>> getCategories({String? searchTerm}) async {
     try {
-      final response = await dio.get(ApiUrls.getCategories);
+      final trimmedTerm = searchTerm?.trim() ?? '';
+      final response = await dio.get(
+        ApiUrls.getCategories,
+        queryParameters: trimmedTerm.isEmpty
+            ? null
+            : <String, dynamic>{'searchTerm': trimmedTerm},
+      );
 
       if (response.statusCode == 200 && response.data['success'] == true) {
         final List<dynamic> data = response.data['data'];

@@ -95,7 +95,6 @@
 //                         },
 //                       ),
 //                       if (categories.length > 5)
-                        
 
 //                       const Divider(color: Colors.white),
 
@@ -143,7 +142,6 @@
 //                                   ),
 //                                 ),
 
-                                
 //                               ],
 //                             ),
 //                             controlAffinity: ListTileControlAffinity.leading,
@@ -233,7 +231,6 @@
 //   }
 // }
 
-
 import 'package:car_parts_app/presentation/filterProduct/bloc/filter_bloc.dart';
 import 'package:car_parts_app/presentation/filterProduct/bloc/filter_event.dart';
 import 'package:car_parts_app/presentation/filterProduct/bloc/filter_state.dart';
@@ -242,8 +239,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FilterDrawer extends StatelessWidget {
-  const FilterDrawer({super.key});
+  const FilterDrawer({
+    super.key,
+    required this.brandController,
+    required this.carModelsController,
+    required this.chassisNumberController,
+    required this.onFieldChanged,
+    required this.useLocation,
+    required this.isLocationLoading,
+    required this.onUseLocationChanged,
+    this.locationError,
+  });
 
+  final TextEditingController brandController;
+  final TextEditingController carModelsController;
+  final TextEditingController chassisNumberController;
+  final VoidCallback onFieldChanged;
+  final bool useLocation;
+  final bool isLocationLoading;
+  final ValueChanged<bool?> onUseLocationChanged;
+  final String? locationError;
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +296,42 @@ class FilterDrawer extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: useLocation,
+                          onChanged: onUseLocationChanged,
+                          activeColor: Colors.green,
+                        ),
+                        Text(
+                          'Use Location',
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (useLocation && isLocationLoading) ...[
+                          const SizedBox(width: 8),
+                          const SizedBox(
+                            height: 14,
+                            width: 14,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (useLocation && locationError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          locationError!,
+                          style: GoogleFonts.montserrat(
+                            color: Colors.redAccent,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 20),
 
                     // Categories header + toggle
@@ -299,7 +350,9 @@ class FilterDrawer extends StatelessWidget {
                         IconButton(
                           onPressed: () => bloc.add(ToggleShowAllCategories()),
                           icon: Icon(
-                            state.showAllCategories ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                            state.showAllCategories
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
                             color: Colors.white,
                           ),
                         ),
@@ -307,30 +360,29 @@ class FilterDrawer extends StatelessWidget {
                     ),
 
                     // Categories list (safe indexing)
-                    ...List.generate(
-                      visibleCategoryCount,
-                      (index) {
-                        final checked = (state.selectedCategories.length > index)
-                            ? state.selectedCategories[index]
-                            : false;
-                        return CheckboxListTile(
-                          activeColor: Colors.white,
-                          checkColor: Colors.white,
-                          value: checked,
-                          onChanged: (_) => bloc.add(ToggleCategory(index)),
-                          title: Text(
-                            categories[index],
-                            style: GoogleFonts.montserrat(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                    ...List.generate(visibleCategoryCount, (index) {
+                      final checked = (state.selectedCategories.length > index)
+                          ? state.selectedCategories[index]
+                          : false;
+                      return CheckboxListTile(
+                        activeColor: Colors.white,
+                        checkColor: Colors.white,
+                        value: checked,
+                        onChanged: (_) => bloc.add(ToggleCategory(index)),
+                        title: Text(
+                          categories[index],
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                        );
-                      },
-                    ),
+                        ),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                        ),
+                      );
+                    }),
 
                     if (categories.length > 5)
                       Align(
@@ -339,7 +391,10 @@ class FilterDrawer extends StatelessWidget {
                           onPressed: () => bloc.add(ToggleShowAllCategories()),
                           child: Text(
                             state.showAllCategories ? 'Show Less' : 'Show More',
-                            style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12),
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -362,7 +417,9 @@ class FilterDrawer extends StatelessWidget {
                         IconButton(
                           onPressed: () => bloc.add(ToggleShowAllConditions()),
                           icon: Icon(
-                            state.showAllConditions ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                            state.showAllConditions
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
                             color: Colors.white,
                           ),
                         ),
@@ -370,31 +427,30 @@ class FilterDrawer extends StatelessWidget {
                     ),
 
                     // Brands list (safe indexing)
-                    ...List.generate(
-                      visibleBrandCount,
-                      (index) {
-                        final checked = (state.selectedConditions.length > index)
-                            ? state.selectedConditions[index]
-                            : false;      
-                        return CheckboxListTile(
-                          activeColor: Colors.white,
-                          checkColor: Colors.white,
-                          value: checked,
-                          onChanged: (_) => bloc.add(ToggleCondition(index)),
-                          title: Text(
-                            state.conditions[index],
-                            // state.selectedBrands[index],
-                            style: GoogleFonts.montserrat(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                    ...List.generate(visibleBrandCount, (index) {
+                      final checked = (state.selectedConditions.length > index)
+                          ? state.selectedConditions[index]
+                          : false;
+                      return CheckboxListTile(
+                        activeColor: Colors.white,
+                        checkColor: Colors.white,
+                        value: checked,
+                        onChanged: (_) => bloc.add(ToggleCondition(index)),
+                        title: Text(
+                          state.conditions[index],
+                          // state.selectedBrands[index],
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                        );
-                      },
-                    ),
+                        ),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                        ),
+                      );
+                    }),
 
                     if (brands.length > 5)
                       Align(
@@ -403,10 +459,35 @@ class FilterDrawer extends StatelessWidget {
                           onPressed: () => bloc.add(ToggleShowAllConditions()),
                           child: Text(
                             state.showAllConditions ? 'Show Less' : 'Show More',
-                            style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12),
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
+
+                    const Divider(color: Colors.white),
+
+                    _buildInputLabel('Brand'),
+                    _buildInputField(
+                      controller: brandController,
+                      hintText: 'e.g. Michelin',
+                    ),
+                    const SizedBox(height: 10),
+
+                    _buildInputLabel('Car Model'),
+                    _buildInputField(
+                      controller: carModelsController,
+                      hintText: 'e.g. Corolla',
+                    ),
+                    const SizedBox(height: 10),
+
+                    _buildInputLabel('Chassis No'),
+                    _buildInputField(
+                      controller: chassisNumberController,
+                      hintText: 'e.g. ABC12345',
+                    ),
 
                     const Divider(color: Colors.white),
 
@@ -431,24 +512,35 @@ class FilterDrawer extends StatelessWidget {
                       ),
                       activeColor: Colors.white.withOpacity(0.3),
                       inactiveColor: Colors.green,
-                      onChanged: (values) => bloc.add(UpdatePriceRange(values.start, values.end)),
+                      onChanged: (values) =>
+                          bloc.add(UpdatePriceRange(values.start, values.end)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           '\$${state.minPrice.round()}',
-                          style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12),
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                         Text(
                           '\$${state.maxPrice.round()}',
-                          style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12),
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 20),
-                    Container(height: 3, width: double.infinity, color: Colors.white),
+                    Container(
+                      height: 3,
+                      width: double.infinity,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               );
@@ -458,5 +550,48 @@ class FilterDrawer extends StatelessWidget {
       ),
     );
   }
-}
 
+  Widget _buildInputLabel(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.montserrat(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.italic,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String hintText,
+  }) {
+    return TextField(
+      controller: controller,
+      onChanged: (_) => onFieldChanged(),
+      style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: GoogleFonts.montserrat(
+          color: Colors.grey.shade400,
+          fontSize: 12,
+        ),
+        filled: true,
+        fillColor: const Color(0xFF2E2E2E),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade700),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.green),
+        ),
+      ),
+    );
+  }
+}

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/home/widget/search_widget.dart';
@@ -9,8 +11,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CategoryPages extends StatelessWidget {
+class CategoryPages extends StatefulWidget {
   const CategoryPages({super.key});
+
+  @override
+  State<CategoryPages> createState() => _CategoryPagesState();
+}
+
+class _CategoryPagesState extends State<CategoryPages> {
+  late final TextEditingController _searchController;
+  Timer? _searchDebounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String value) {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 350), () {
+      if (!mounted) return;
+      context.read<CategoryBloc>().add(FetchCategoriesEvent(searchTerm: value));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +64,10 @@ class CategoryPages extends StatelessWidget {
               ),
               SizedBox(height: 20.h),
 
-              const SearchWidget(),
+              SearchWidget(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
+              ),
               SizedBox(height: 16.h),
 
               Expanded(

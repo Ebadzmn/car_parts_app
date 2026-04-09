@@ -21,9 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(const HomeLoading(currentCategory: 'All'));
     // Empty pageParams fetches all (default limit/page)
-    final result = await productUsecase.call(
-      pageParams(null, null, null, null, null, null, null, null),
-    );
+    final result = await productUsecase.call(pageParams());
 
     result.fold(
       (failure) => emit(ProductError(message: failure.message)),
@@ -38,7 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading(currentCategory: event.category));
     // Filter by the selected category
     final result = await productUsecase.call(
-      pageParams(null, null, event.category, null, null, null, null, null),
+      pageParams(category: event.category),
     );
 
     result.fold(

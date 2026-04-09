@@ -111,7 +111,7 @@
 //       ),
 //     );
 //   }
-// }import 'package:car_parts_app/core/config/assets_path.dart';
+// }
 import 'dart:async';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/injector/injector.dart' as di;
@@ -164,9 +164,7 @@ class ProductPage extends StatelessWidget {
           create: (_) => di.sl<ProductAdvamceBloc>(),
         ),
       ],
-      child: _ProductPageContent(
-        scaffoldKey: _scaffoldKey,
-      ),
+      child: _ProductPageContent(scaffoldKey: _scaffoldKey),
     );
   }
 }
@@ -183,18 +181,31 @@ class _ProductPageContent extends StatefulWidget {
 class _ProductPageContentState extends State<_ProductPageContent> {
   double? _lat;
   double? _lng;
-  bool _isLocationLoading = true;
+  bool _isLocationLoading = false;
+  bool _useLocation = false;
   String? _locationError;
   FilterState? _pendingFilterState;
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _brandController = TextEditingController();
+  final TextEditingController _carModelsController = TextEditingController();
+  final TextEditingController _chassisController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchLocation();
   }
 
-  Future<void> _fetchLocation() async {
-    if (!mounted) return;
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _brandController.dispose();
+    _carModelsController.dispose();
+    _chassisController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> _fetchLocation({bool fallbackOnFailure = false}) async {
+    if (!mounted) return false;
     setState(() {
       _isLocationLoading = true;
       _locationError = null;
@@ -220,30 +231,56 @@ class _ProductPageContentState extends State<_ProductPageContent> {
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      if (!mounted) return;
+      if (!mounted) return false;
 
       setState(() {
         _lat = position.latitude;
         _lng = position.longitude;
         _isLocationLoading = false;
+        _locationError = null;
       });
 
       final filterState =
           _pendingFilterState ?? context.read<FilterBloc>().state;
       await _fetchProductsForFilter(filterState);
+      return true;
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) return false;
+
+      final errorMessage = e.toString().toLowerCase().contains('permission')
+          ? 'Location permission not granted. Showing results without location.'
+          : 'Unable to get location. Showing results without location.';
+
       setState(() {
         _isLocationLoading = false;
-        _locationError = 'Unable to fetch location';
+        _locationError = errorMessage;
       });
+
+      if (fallbackOnFailure) {
+        setState(() {
+          _useLocation = false;
+        });
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+
+        final fallbackState = context.read<FilterBloc>().state;
+        await _fetchProductsForFilter(fallbackState);
+      }
+
+      return false;
     }
   }
 
   Future<void> _fetchProductsForFilter(FilterState state) async {
     if (!mounted) return;
-    if (_lat == null || _lng == null) {
+
+    if (_useLocation && (_lat == null || _lng == null)) {
       _pendingFilterState = state;
+      if (!_isLocationLoading) {
+        await _fetchLocation(fallbackOnFailure: true);
+      }
       return;
     }
 
@@ -266,26 +303,113 @@ class _ProductPageContentState extends State<_ProductPageContent> {
         }
       }
 
-      final categoryString =
-          selectedCategories.isNotEmpty ? selectedCategories.join(',') : '';
-      final conditionString =
-          selectedConditions.isNotEmpty ? selectedConditions.join(',') : '';
+      final categoryString = selectedCategories.isNotEmpty
+          ? selectedCategories.join(',')
+          : '';
+      final conditionString = selectedConditions.isNotEmpty
+          ? selectedConditions.join(',')
+          : '';
+
+      final title = _searchController.text.trim();
+      final brand = _brandController.text.trim();
+      final carModels = _carModelsController.text.trim();
+      final chassisNumber = _chassisController.text.trim();
 
       if (!productAdvanceBloc.isClosed) {
         productAdvanceBloc.add(
           getProductByAdvancedFilterEvent(
             '1',
             '10',
+            title,
             categoryString,
+            brand,
             conditionString,
+            carModels,
+            chassisNumber,
             state.minPrice,
             state.maxPrice,
-            _lat ?? 0.0,
-            _lng ?? 0.0,
+            _useLocation ? _lat : null,
+            _useLocation ? _lng : null,
           ),
         );
       }
     });
+  }
+
+  Future<void> _triggerFetchFromCurrentFilters() async {
+    if (!mounted) return;
+    final state = context.read<FilterBloc>().state;
+    await _fetchProductsForFilter(state);
+  }
+
+  Future<void> _onUseLocationChanged(bool? checked) async {
+    final shouldUseLocation = checked ?? false;
+    if (!mounted) return;
+
+    setState(() {
+      _useLocation = shouldUseLocation;
+      if (!shouldUseLocation) {
+        _locationError = null;
+      }
+    });
+
+    if (shouldUseLocation && (_lat == null || _lng == null)) {
+      await _fetchLocation(fallbackOnFailure: true);
+    } else {
+      await _triggerFetchFromCurrentFilters();
+    }
+  }
+
+  Future<void> _openFilterPanel() async {
+    final filterBloc = context.read<FilterBloc>();
+
+    await showGeneralDialog<void>(
+      context: context,
+      useRootNavigator: true,
+      barrierDismissible: true,
+      barrierLabel: 'Close filter',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 260),
+      pageBuilder: (dialogContext, _, __) {
+        return StatefulBuilder(
+          builder: (dialogContext, panelSetState) {
+            return BlocProvider.value(
+              value: filterBloc,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: MediaQuery.of(dialogContext).size.width * 0.82,
+                  child: FilterDrawer(
+                    brandController: _brandController,
+                    carModelsController: _carModelsController,
+                    chassisNumberController: _chassisController,
+                    onFieldChanged: _triggerFetchFromCurrentFilters,
+                    useLocation: _useLocation,
+                    isLocationLoading: _isLocationLoading,
+                    onUseLocationChanged: (checked) async {
+                      panelSetState(() {});
+                      await _onUseLocationChanged(checked);
+                      if (mounted) {
+                        panelSetState(() {});
+                      }
+                    },
+                    locationError: _locationError,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      transitionBuilder: (dialogContext, animation, _, child) {
+        final offsetAnimation =
+            Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+            );
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+    );
   }
 
   @override
@@ -295,13 +419,16 @@ class _ProductPageContentState extends State<_ProductPageContent> {
         BlocListener<CategoryBloc, CategoryState>(
           listener: (context, catState) {
             if (catState is CategoryLoaded) {
-              final categories = catState.categories.map((e) => e.name).toList();
+              final categories = catState.categories
+                  .map((e) => e.name)
+                  .toList();
               context.read<FilterBloc>().add(
-                    InitializeFilters(
-                      categories: categories,
-                      conditions: const ['New', 'Used', 'Refurbished'],
-                    ),
-                  );
+                InitializeFilters(
+                  categories: categories,
+                  conditions: const ['New', 'Used', 'Refurbished'],
+                ),
+              );
+              _triggerFetchFromCurrentFilters();
             }
           },
         ),
@@ -319,7 +446,6 @@ class _ProductPageContentState extends State<_ProductPageContent> {
       child: Scaffold(
         key: widget.scaffoldKey,
         backgroundColor: Colors.black,
-        drawer: const FilterDrawer(),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(20.sp),
@@ -341,7 +467,14 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                   children: [
                     Expanded(
                       flex: 10,
-                      child: SizedBox(height: 40.h, child: const SearchWidget()),
+                      child: SizedBox(
+                        height: 40.h,
+                        child: SearchWidget(
+                          controller: _searchController,
+                          onChanged: (_) => _triggerFetchFromCurrentFilters(),
+                          onSubmitted: (_) => _triggerFetchFromCurrentFilters(),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 10.w),
                     Flexible(
@@ -358,8 +491,7 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                             AssetsPath.filterPng,
                             color: Colors.white,
                           ),
-                          onPressed: () =>
-                              widget.scaffoldKey.currentState?.openDrawer(),
+                          onPressed: _openFilterPanel,
                         ),
                       ),
                     ),
@@ -367,13 +499,11 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                 ),
                 SizedBox(height: 20.h),
                 Expanded(
-                  child:
-                      BlocBuilder<ProductAdvamceBloc, ProductAdvamceState>(
+                  child: BlocBuilder<ProductAdvamceBloc, ProductAdvamceState>(
                     builder: (context, state) {
-                      if (_isLocationLoading ||
-                          state is ProductAdvamceLoading) {
+                      if (state is ProductAdvamceLoading) {
                         return _buildShimmerGrid();
-                      } else if (_locationError != null) {
+                      } else if (_useLocation && _locationError != null) {
                         return Center(
                           child: Text(
                             _locationError!,
@@ -392,7 +522,7 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                         if (products.isEmpty) {
                           return const Center(
                             child: Text(
-                              'No products found near your location',
+                              'No products found',
                               style: TextStyle(color: Colors.white),
                             ),
                           );
@@ -403,14 +533,15 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                             if (scrollInfo.metrics.pixels >=
                                 scrollInfo.metrics.maxScrollExtent -
                                     ProductPage._scrollThreshold) {
-                              final blocState =
-                                  context.read<ProductAdvamceBloc>().state;
+                              final blocState = context
+                                  .read<ProductAdvamceBloc>()
+                                  .state;
                               if (blocState is ProductAdvamceSuccess &&
                                   !blocState.isLoadingMore &&
                                   !blocState.hasReachedMax) {
-                                context
-                                    .read<ProductAdvamceBloc>()
-                                    .add(LoadMoreProductsEvent());
+                                context.read<ProductAdvamceBloc>().add(
+                                  LoadMoreProductsEvent(),
+                                );
                               }
                             }
                             return false;
@@ -419,11 +550,11 @@ class _ProductPageContentState extends State<_ProductPageContent> {
                             padding: EdgeInsets.only(top: 10.h),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 16.h,
-                              crossAxisSpacing: 16.w,
-                              childAspectRatio: 0.68,
-                            ),
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                  childAspectRatio: 0.68,
+                                ),
                             itemCount:
                                 products.length + (state.isLoadingMore ? 1 : 0),
                             itemBuilder: (context, index) {
@@ -488,4 +619,3 @@ class _ProductPageContentState extends State<_ProductPageContent> {
     );
   }
 }
-

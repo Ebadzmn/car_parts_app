@@ -7,7 +7,7 @@ class CategoryUsecase {
   final CategoryRepository categoryRepository;
   CategoryUsecase(this.categoryRepository);
 
-  Future<Either<Failure, List<CategoryModel>>> call() {
-    return categoryRepository.getCategories();
+  Future<Either<Failure, List<CategoryModel>>> call({String? searchTerm}) {
+    return categoryRepository.getCategories(searchTerm: searchTerm);
   }
 }

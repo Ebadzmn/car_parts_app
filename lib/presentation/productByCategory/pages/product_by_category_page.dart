@@ -31,16 +31,16 @@
 //     final screenWidth = 1.sw;
 
 //     return Scaffold(
-    
+
 //       body: SafeArea(
-        
+
 //         child: Padding(
 //           padding:  EdgeInsets.symmetric(horizontal: 16.w , vertical: 16.h),
 //           child: Center(
 //             child: Column(
 //            // Minimize vertical space
 //               children: [
-            
+
 //                 Row(
 //                     crossAxisAlignment: CrossAxisAlignment.center,
 //                     children: [
@@ -60,7 +60,7 @@
 //                                 offset: Offset(0, 1),
 //                                 color: Colors.grey,
 //                               ),
-                                    
+
 //                               BoxShadow(
 //                                 blurRadius: 1,
 //                                 spreadRadius: 1,
@@ -88,9 +88,7 @@
 //                       ),
 //                     ],
 //                   ),
-            
-                  
-             
+
 //                 Padding(
 //                   padding: const EdgeInsets.only(top: 20),
 //                   child: SearchWidget(),
@@ -109,9 +107,9 @@
 //                           : screenWidth < 900
 //                           ? 3
 //                           : 3;
-            
+
 //                       double childAspectRatio = screenWidth < 600 ? 2 / 2.9 : 2.2 / 3.2;
-            
+
 //                       return GridView.builder(
 //                         shrinkWrap: true,
 //                         physics:  NeverScrollableScrollPhysics(),
@@ -125,7 +123,7 @@
 //                         itemCount: state.data.length,
 //                         itemBuilder: (context, index) {
 //                           final item = state.data[index];
-            
+
 //                           return GestureDetector(
 //                             onTap: () {
 //                               context.push(
@@ -165,7 +163,7 @@
 //                                       maxLines: 1,
 //                                       overflow: TextOverflow.ellipsis,
 //                                     ),
-                            
+
 //                                     // Car condition
 //                                     Text(
 //               item.carCondition,
@@ -180,9 +178,9 @@
 //             ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
 //               ),
 //             ),
-                            
+
 //                                     SizedBox(height: 8.h),
-                            
+
 //                                     // Car image — responsive width & height
 //                                     Expanded(
 //                                       child: Container(
@@ -197,9 +195,9 @@
 //                                         ),
 //                                       ),
 //                                     ),
-                            
+
 //                                     SizedBox(height: 8.h),
-                            
+
 //                                     // Price section
 //                                     Row(
 //                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -261,20 +259,6 @@
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 // import 'package:car_parts_app/core/config/assets_path.dart';
@@ -642,16 +626,22 @@ class ProductByCategoryPage extends StatelessWidget {
 
     return BlocProvider(
       create: (_) => ProductAdvamceBloc(sl())
-        ..add(getProductByAdvancedFilterEvent(
-          page ?? '1',
-          limit ?? '10',
-          (category == 'All') ? '' : (category ?? ''),
-          condition ?? '',
-          lowestPrice ?? 0.0,
-          highestPrice ?? double.infinity,
-          0.0,
-          0.0,
-        )),
+        ..add(
+          getProductByAdvancedFilterEvent(
+            page ?? '1',
+            limit ?? '10',
+            '',
+            (category == 'All') ? '' : (category ?? ''),
+            '',
+            condition ?? '',
+            '',
+            '',
+            lowestPrice,
+            highestPrice,
+            null,
+            null,
+          ),
+        ),
       child: Scaffold(
         body: SafeArea(
           child: Padding(
@@ -684,7 +674,10 @@ class ProductByCategoryPage extends StatelessWidget {
                           ],
                         ),
                         child: const Center(
-                          child: Icon(Icons.arrow_back_ios_new_outlined, color: Colors.green),
+                          child: Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
                     ),
@@ -710,7 +703,10 @@ class ProductByCategoryPage extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is ProductAdvamceFailure) {
                         return Center(
-                          child: Text(state.message, style: GoogleFonts.montserrat(color: Colors.white)),
+                          child: Text(
+                            state.message,
+                            style: GoogleFonts.montserrat(color: Colors.white),
+                          ),
                         );
                       } else if (state is ProductAdvamceSuccess) {
                         final products = state.products;
@@ -718,7 +714,9 @@ class ProductByCategoryPage extends StatelessWidget {
                           return Center(
                             child: Text(
                               'No products found',
-                              style: GoogleFonts.montserrat(color: Colors.white),
+                              style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                              ),
                             ),
                           );
                         }
@@ -726,18 +724,22 @@ class ProductByCategoryPage extends StatelessWidget {
                         int crossAxisCount = screenWidth < 600
                             ? 2
                             : screenWidth < 900
-                                ? 3
-                                : 4;
-                        double childAspectRatio =
-                            screenWidth < 600 ? 2 / 2.9 : 2.2 / 3.2;
+                            ? 3
+                            : 4;
+                        double childAspectRatio = screenWidth < 600
+                            ? 2 / 2.9
+                            : 2.2 / 3.2;
 
                         return NotificationListener<ScrollNotification>(
                           onNotification: (scrollInfo) {
                             if (scrollInfo.metrics.pixels >=
                                 scrollInfo.metrics.maxScrollExtent - 200) {
                               // Trigger pagination when near bottom
-                              if (!state.isLoadingMore && !state.hasReachedMax) {
-                                context.read<ProductAdvamceBloc>().add(LoadMoreProductsEvent());
+                              if (!state.isLoadingMore &&
+                                  !state.hasReachedMax) {
+                                context.read<ProductAdvamceBloc>().add(
+                                  LoadMoreProductsEvent(),
+                                );
                               }
                             }
                             return false;
@@ -747,146 +749,199 @@ class ProductByCategoryPage extends StatelessWidget {
                               SliverPadding(
                                 padding: EdgeInsets.only(top: 20.h),
                                 sliver: SliverGrid(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
-                                      if (index >= products.length) {
-                                        return state.isLoadingMore
-                                            ? const Center(
-                                                child: CircularProgressIndicator(),
-                                              )
-                                            : const SizedBox();
-                                      }
+                                  delegate: SliverChildBuilderDelegate((
+                                    context,
+                                    index,
+                                  ) {
+                                    if (index >= products.length) {
+                                      return state.isLoadingMore
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : const SizedBox();
+                                    }
 
-                                      final ProductEntity item = products[index];
+                                    final ProductEntity item = products[index];
 
-                                      return GestureDetector(
-                                        onTap: () {
-                                          context.push(
-                                            AppRoutes.detailsScreen,
-                                            extra: {'productId': item.id, 'product': item},
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.grey, width: 1.2),
-                                            borderRadius: BorderRadius.circular(20.r),
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                              colors: [
-                                                Color(0xFF2E2C2A),
-                                                Color(0xFF131313),
-                                                Color(0xFF1D1D20),
-                                              ],
-                                            ),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        context.push(
+                                          AppRoutes.detailsScreen,
+                                          extra: {
+                                            'productId': item.id,
+                                            'product': item,
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            width: 1.2,
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.sp),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  item.title ?? '',
-                                                  style: GoogleFonts.montserrat(
-                                                    decoration: TextDecoration.underline,
-                                                    decorationColor: Colors.grey,
-                                                    color: Colors.grey,
-                                                    fontSize: 11.sp,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                Text(
-                                                  item.condition ?? '',
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                    foreground: Paint()
-                                                      ..shader = LinearGradient(
-                                                        colors: getGradientColors(item.condition ?? ''),
-                                                        begin: Alignment.topLeft,
-                                                        end: Alignment.topRight,
-                                                      ).createShader(Rect.fromLTWH(0, 0, 200, 20)),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8.h),
-                                                Expanded(
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(16.r),
-                                                      color: Colors.black,
-                                                    ),
-                                                    child: Image.asset(
-                                                      AssetsPath.cardtire,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8.h),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          'PRICE',
-                                                          style: GoogleFonts.montserrat(
-                                                            fontSize: 10.sp,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          item.price?.toStringAsFixed(2) ?? '0.00',
-                                                          style: GoogleFonts.montserrat(
-                                                            fontSize: 13.sp,
-                                                            fontWeight: FontWeight.w600,
-                                                            foreground: Paint()
-                                                              ..shader = const LinearGradient(
-                                                                colors: [
-                                                                  Color(0xFF5BB349),
-                                                                  Colors.white,
-                                                                ],
-                                                              ).createShader(
-                                                                Rect.fromLTWH(0, 0, 200, 20),
-                                                              ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Image.asset(
-                                                      AssetsPath.cardbtn,
-                                                      width: 30.w,
-                                                      height: 30.h,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                          borderRadius: BorderRadius.circular(
+                                            20.r,
+                                          ),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xFF2E2C2A),
+                                              Color(0xFF131313),
+                                              Color(0xFF1D1D20),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
-                                    childCount: products.length + 1,
-                                  ),
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    crossAxisSpacing: 10.w,
-                                    mainAxisSpacing: 10.h,
-                                    childAspectRatio: childAspectRatio,
-                                  ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10.sp),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item.title ?? '',
+                                                style: GoogleFonts.montserrat(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  decorationColor: Colors.grey,
+                                                  color: Colors.grey,
+                                                  fontSize: 11.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                item.condition ?? '',
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  foreground: Paint()
+                                                    ..shader =
+                                                        LinearGradient(
+                                                          colors:
+                                                              getGradientColors(
+                                                                item.condition ??
+                                                                    '',
+                                                              ),
+                                                          begin:
+                                                              Alignment.topLeft,
+                                                          end: Alignment
+                                                              .topRight,
+                                                        ).createShader(
+                                                          Rect.fromLTWH(
+                                                            0,
+                                                            0,
+                                                            200,
+                                                            20,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8.h),
+                                              Expanded(
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16.r,
+                                                        ),
+                                                    color: Colors.black,
+                                                  ),
+                                                  child: Image.asset(
+                                                    AssetsPath.cardtire,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8.h),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'PRICE',
+                                                        style:
+                                                            GoogleFonts.montserrat(
+                                                              fontSize: 10.sp,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      ),
+                                                      Text(
+                                                        item.price
+                                                                ?.toStringAsFixed(
+                                                                  2,
+                                                                ) ??
+                                                            '0.00',
+                                                        style: GoogleFonts.montserrat(
+                                                          fontSize: 13.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          foreground: Paint()
+                                                            ..shader =
+                                                                const LinearGradient(
+                                                                  colors: [
+                                                                    Color(
+                                                                      0xFF5BB349,
+                                                                    ),
+                                                                    Colors
+                                                                        .white,
+                                                                  ],
+                                                                ).createShader(
+                                                                  Rect.fromLTWH(
+                                                                    0,
+                                                                    0,
+                                                                    200,
+                                                                    20,
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Image.asset(
+                                                    AssetsPath.cardbtn,
+                                                    width: 30.w,
+                                                    height: 30.h,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }, childCount: products.length + 1),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: crossAxisCount,
+                                        crossAxisSpacing: 10.w,
+                                        mainAxisSpacing: 10.h,
+                                        childAspectRatio: childAspectRatio,
+                                      ),
                                 ),
                               ),
                               if (state.hasReachedMax && products.isNotEmpty)
                                 SliverToBoxAdapter(
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 12.h,
+                                    ),
                                     child: Center(
                                       child: Text(
                                         'No more products',
-                                        style: GoogleFonts.montserrat(color: Colors.white),
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),

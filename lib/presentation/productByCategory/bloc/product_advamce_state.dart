@@ -2,7 +2,7 @@
 
 // sealed class ProductAdvamceState extends Equatable {
 //   const ProductAdvamceState();
-  
+
 //   @override
 //   List<Object> get props => [];
 // }
@@ -19,7 +19,6 @@
 // //   @override
 // //   List<Object> get props => [productEntity];
 // // }
-
 
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 import 'package:equatable/equatable.dart';
@@ -51,12 +50,16 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
   final bool hasReachedMax;
   final bool isLoadingMore;
   final String limit;
+  final String title;
   final String category;
+  final String brand;
   final String condition;
-  final double lowestPrice;
-  final double highestPrice;
-  final double lat;
-  final double lng;
+  final String carModels;
+  final String chassisNumber;
+  final double? lowestPrice;
+  final double? highestPrice;
+  final double? userLat;
+  final double? userLng;
 
   const ProductAdvamceSuccess({
     required this.products,
@@ -64,12 +67,16 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
     required this.hasReachedMax,
     required this.isLoadingMore,
     required this.limit,
+    required this.title,
     required this.category,
+    required this.brand,
     required this.condition,
+    required this.carModels,
+    required this.chassisNumber,
     required this.lowestPrice,
     required this.highestPrice,
-    required this.lat,
-    required this.lng,
+    required this.userLat,
+    required this.userLng,
   });
 
   ProductAdvamceSuccess copyWith({
@@ -78,12 +85,16 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
     bool? hasReachedMax,
     bool? isLoadingMore,
     String? limit,
+    String? title,
     String? category,
+    String? brand,
     String? condition,
+    String? carModels,
+    String? chassisNumber,
     double? lowestPrice,
     double? highestPrice,
-    double? lat,
-    double? lng,
+    double? userLat,
+    double? userLng,
   }) {
     return ProductAdvamceSuccess(
       products: products ?? this.products,
@@ -91,29 +102,35 @@ class ProductAdvamceSuccess extends ProductAdvamceState {
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       limit: limit ?? this.limit,
+      title: title ?? this.title,
       category: category ?? this.category,
+      brand: brand ?? this.brand,
       condition: condition ?? this.condition,
+      carModels: carModels ?? this.carModels,
+      chassisNumber: chassisNumber ?? this.chassisNumber,
       lowestPrice: lowestPrice ?? this.lowestPrice,
       highestPrice: highestPrice ?? this.highestPrice,
-      lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
+      userLat: userLat ?? this.userLat,
+      userLng: userLng ?? this.userLng,
     );
   }
 
   @override
   List<Object?> get props => [
-        products,
-        currentPage,
-        hasReachedMax,
-        isLoadingMore,
-        limit,
-        category,
-        condition,
-        lowestPrice,
-        highestPrice,
-        lat,
-        lng,
-      ];
+    products,
+    currentPage,
+    hasReachedMax,
+    isLoadingMore,
+    limit,
+    title,
+    category,
+    brand,
+    condition,
+    carModels,
+    chassisNumber,
+    lowestPrice,
+    highestPrice,
+    userLat,
+    userLng,
+  ];
 }
-
-

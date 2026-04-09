@@ -24,7 +24,7 @@ class NewArrivalsBloc extends Bloc<NewArrivalsEvent, NewArrivalsState> {
     final limit = event.limit ?? '10';
 
     final result = await productUsecase(
-      pageParams('1', limit, '', 'new', 0.0, 0.0, null, null),
+      pageParams(page: '1', limit: limit, condition: 'new'),
     );
 
     result.fold((failure) => emit(NewArrivalsError(failure.message)), (
@@ -58,14 +58,9 @@ class NewArrivalsBloc extends Bloc<NewArrivalsEvent, NewArrivalsState> {
 
     final result = await productUsecase(
       pageParams(
-        nextPage.toString(),
-        currentState.limit,
-        '',
-        'new',
-        0.0,
-        0.0,
-        null,
-        null,
+        page: nextPage.toString(),
+        limit: currentState.limit,
+        condition: 'new',
       ),
     );
 

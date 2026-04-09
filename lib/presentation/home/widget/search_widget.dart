@@ -3,7 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchWidget extends StatelessWidget {
-  const SearchWidget({super.key});
+  const SearchWidget({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.onSubmitted,
+  });
+
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +20,9 @@ class SearchWidget extends StatelessWidget {
       width: double.infinity, // takes full available width
       height: 56.h, // responsive height
       child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        onSubmitted: onSubmitted,
         textAlign: TextAlign.start,
         style: GoogleFonts.montserrat(
           color: Colors.white,

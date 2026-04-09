@@ -39,31 +39,31 @@
 //   }
 // }
 
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'filter_event.dart';
 import 'filter_state.dart';
 
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
   FilterBloc()
-      : super(
-          FilterState(
-            categories: [],
-            conditions:  ['new', 'used', 'refurbished'],
-            selectedCategories: const [],
-            selectedConditions: [false, false, false],
-            showAllCategories: false,
-            showAllConditions: false,
-            minPrice: 0,
-            maxPrice: 1000,
-          ),
-        ) {
+    : super(
+        FilterState(
+          categories: [],
+          conditions: ['new', 'used', 'refurbished'],
+          selectedCategories: const [],
+          selectedConditions: [false, false, false],
+          showAllCategories: false,
+          showAllConditions: false,
+          minPrice: 0,
+          maxPrice: 1000,
+        ),
+      ) {
     // 🔹 Initialize filters when categories arrive
     on<InitializeFilters>(_onInitializeFilters);
 
     // 🔹 Toggle category
     on<ToggleCategory>((event, emit) {
-      if (event.index < 0 || event.index >= state.selectedCategories.length) return;
+      if (event.index < 0 || event.index >= state.selectedCategories.length)
+        return;
 
       final updated = List<bool>.from(state.selectedCategories);
       updated[event.index] = !updated[event.index];
@@ -72,7 +72,8 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
     // 🔹 Toggle condition
     on<ToggleCondition>((event, emit) {
-      if (event.index < 0 || event.index >= state.selectedConditions.length) return;
+      if (event.index < 0 || event.index >= state.selectedConditions.length)
+        return;
 
       final updated = List<bool>.from(state.selectedConditions);
       updated[event.index] = !updated[event.index];
@@ -91,22 +92,24 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
     // 🔹 Price Range update
     on<UpdatePriceRange>((event, emit) {
-      final min = event.min < 0 ? 0 : event.min;
-      final max = event.max < min ? min : event.max;
+      final double min = event.min < 0 ? 0.0 : event.min;
+      final double max = event.max < min ? min : event.max;
 
-      emit(state.copyWith(minPrice: event.min, maxPrice: event.max));
+      emit(state.copyWith(minPrice: min, maxPrice: max));
     });
 
     // 🔹 Reset filters
     on<ResetFilters>((event, emit) {
-      emit(state.copyWith(
-        selectedCategories: List<bool>.filled(state.categories.length, false),
-        selectedConditions: List<bool>.filled(state.conditions.length, false),
-        minPrice: 0,
-        maxPrice: 1000,
-        showAllCategories: false,
-        showAllConditions: false,
-      ));
+      emit(
+        state.copyWith(
+          selectedCategories: List<bool>.filled(state.categories.length, false),
+          selectedConditions: List<bool>.filled(state.conditions.length, false),
+          minPrice: 0,
+          maxPrice: 1000,
+          showAllCategories: false,
+          showAllConditions: false,
+        ),
+      );
     });
   }
 
@@ -117,14 +120,22 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   ) {
     final newCategories = List<String>.from(event.categories);
     final newConditions = List<String>.from(event.conditions);
-    final newSelectedCategories = List<bool>.filled(newCategories.length, false);
-    final newSelectedConditions = List<bool>.filled(newConditions.length, false);
+    final newSelectedCategories = List<bool>.filled(
+      newCategories.length,
+      false,
+    );
+    final newSelectedConditions = List<bool>.filled(
+      newConditions.length,
+      false,
+    );
 
-    emit(state.copyWith(
-      categories: newCategories,
-      
-      selectedCategories: newSelectedCategories,
-      selectedConditions: newSelectedConditions,
-    ));
+    emit(
+      state.copyWith(
+        categories: newCategories,
+
+        selectedCategories: newSelectedCategories,
+        selectedConditions: newSelectedConditions,
+      ),
+    );
   }
 }

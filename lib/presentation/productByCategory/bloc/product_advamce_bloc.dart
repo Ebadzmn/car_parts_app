@@ -20,7 +20,7 @@
 //   ) async {
 //     emit(ProductAdvamceLoading());
 //     final result = await productUsecase(
-//       pageParams( 
+//       pageParams(
 //         event.page,
 //         event.limit,
 //         event.category,
@@ -37,7 +37,6 @@
 //   }
 // }
 
-
 import 'package:bloc/bloc.dart';
 import 'package:car_parts_app/domain/entities/product/product_entities.dart';
 import 'package:car_parts_app/domain/usecase/product/product_usecase.dart';
@@ -45,8 +44,8 @@ import 'package:car_parts_app/presentation/productByCategory/bloc/product_advamc
 import 'package:equatable/equatable.dart';
 part 'product_advamce_event.dart';
 
-
-class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> {
+class ProductAdvamceBloc
+    extends Bloc<ProductAdvamceEvent, ProductAdvamceState> {
   final ProductUsecase productUsecase;
 
   ProductAdvamceBloc(this.productUsecase) : super(ProductAdvamceInitial()) {
@@ -62,38 +61,47 @@ class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> 
 
     final result = await productUsecase(
       pageParams(
-        event.page,
-        event.limit,
-        event.category,
-        event.condition,
-        event.lowestPrice,
-        event.highestPrice,
-        event.lat,
-        event.lng,
+        page: event.page,
+        limit: event.limit,
+        title: event.title,
+        category: event.category,
+        brand: event.brand,
+        condition: event.condition,
+        carModels: event.carModels,
+        chassisNumber: event.chassisNumber,
+        lowestPrice: event.lowestPrice,
+        highestPrice: event.highestPrice,
+        userLat: event.userLat,
+        userLng: event.userLng,
       ),
     );
 
-    result.fold(
-      (failure) => emit(ProductAdvamceFailure(failure.message)),
-      (products) {
-        // determine page integer safely
-        final int currentPage = int.tryParse(event.page ?? '1') ?? 1;
-        final bool reachedMax = products.isEmpty;
-        emit(ProductAdvamceSuccess(
+    result.fold((failure) => emit(ProductAdvamceFailure(failure.message)), (
+      products,
+    ) {
+      // determine page integer safely
+      final int currentPage = int.tryParse(event.page ?? '1') ?? 1;
+      final bool reachedMax = products.isEmpty;
+      emit(
+        ProductAdvamceSuccess(
           products: products,
           currentPage: currentPage,
           hasReachedMax: reachedMax,
           isLoadingMore: false,
           limit: event.limit ?? '10',
+          title: event.title,
           category: event.category,
+          brand: event.brand,
           condition: event.condition,
+          carModels: event.carModels,
+          chassisNumber: event.chassisNumber,
           lowestPrice: event.lowestPrice,
           highestPrice: event.highestPrice,
-          lat: event.lat,
-          lng: event.lng,
-        ));
-      },
-    );
+          userLat: event.userLat,
+          userLng: event.userLng,
+        ),
+      );
+    });
   }
 
   Future<void> _onLoadMoreProducts(
@@ -113,14 +121,18 @@ class ProductAdvamceBloc extends Bloc<ProductAdvamceEvent, ProductAdvamceState> 
 
     final result = await productUsecase(
       pageParams(
-        nextPage.toString(),
-        currentState.limit,
-        currentState.category,
-        currentState.condition,
-        currentState.lowestPrice,
-        currentState.highestPrice,
-        currentState.lat,
-        currentState.lng,
+        page: nextPage.toString(),
+        limit: currentState.limit,
+        title: currentState.title,
+        category: currentState.category,
+        brand: currentState.brand,
+        condition: currentState.condition,
+        carModels: currentState.carModels,
+        chassisNumber: currentState.chassisNumber,
+        lowestPrice: currentState.lowestPrice,
+        highestPrice: currentState.highestPrice,
+        userLat: currentState.userLat,
+        userLng: currentState.userLng,
       ),
     );
 

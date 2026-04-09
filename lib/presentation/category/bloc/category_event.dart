@@ -7,7 +7,14 @@ abstract class CategoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchCategoriesEvent extends CategoryEvent {}
+class FetchCategoriesEvent extends CategoryEvent {
+  final String? searchTerm;
+
+  const FetchCategoriesEvent({this.searchTerm});
+
+  @override
+  List<Object> get props => [searchTerm ?? ''];
+}
 
 
 
