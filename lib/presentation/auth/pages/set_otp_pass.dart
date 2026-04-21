@@ -31,10 +31,17 @@ class _SetOtpPassState extends State<SetOtpPass> {
     _isExpired = false;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       if (_secondsRemaining > 0) {
         setState(() => _secondsRemaining--);
       } else {
-        setState(() => _isExpired = true);
+        setState(() {
+          _isExpired = true;
+        });
         timer.cancel();
       }
     });
@@ -46,6 +53,20 @@ class _SetOtpPassState extends State<SetOtpPass> {
     return '$minutes:$seconds';
   }
 
+  void _resendOtp() {
+    if (!_isExpired) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('OTP Resent!'),
+        backgroundColor: Colors.amber,
+      ),
+    );
+    _startTimer();
+  }
+
   void _verifyOtp() {
     final otp = _otpController.text.trim();
     if (otp.isEmpty || otp.length < 6) {
@@ -54,7 +75,6 @@ class _SetOtpPassState extends State<SetOtpPass> {
           content: Text('Please enter a valid 6-digit OTP'),
           backgroundColor: Colors.redAccent,
         ),
-        
       );
     } else {
       // ✅ OTP verify logic এখানে লিখো (API call etc.)
@@ -158,15 +178,37 @@ class _SetOtpPassState extends State<SetOtpPass> {
               ),
 
               // ---------- Timer Text ----------
-              Text(
-                _isExpired
-                    ? 'Code expired!'
-                    : 'Code expires in: $_formattedTime',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
-                    color: _isExpired ? Colors.red : Colors.white,
-                    fontWeight: FontWeight.w500,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                    color: _isExpired ? Colors.redAccent : Colors.amber,
+                    width: 1,
                   ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 18.sp,
+                      color: _isExpired ? Colors.redAccent : Colors.amber,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      _isExpired
+                          ? 'Code expired!'
+                          : 'Code expires in: $_formattedTime',
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                          color: _isExpired ? Colors.redAccent : Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -240,16 +282,7 @@ class _SetOtpPassState extends State<SetOtpPass> {
                         fontSize: 14.sp,
                       ),
                       recognizer: _isExpired
-                          ? (TapGestureRecognizer()
-                            ..onTap = () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('OTP Resent!'),
-                                  backgroundColor: Colors.amber,
-                                ),
-                              );
-                              _startTimer();
-                            })
+                          ? (TapGestureRecognizer()..onTap = _resendOtp)
                           : null,
                     ),
                   ],

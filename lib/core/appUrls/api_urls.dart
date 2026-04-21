@@ -1,5 +1,5 @@
 class ApiUrls {
-  static const String baseUrl = 'https://connecticut-powered-into-sara.trycloudflare.com/api/v1';
+  static const String baseUrl = 'https://api.jbay.shop/api/v1';
   static const String signUp = '/auth/register';
   static const String verifyOtp = '/auth/verify-email';
   static const String signIn = '/auth/login';

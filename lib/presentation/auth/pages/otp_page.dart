@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/data/model/auth/verify_account_model.dart';
 import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
@@ -9,13 +10,54 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class OtpPage extends StatelessWidget {
+class OtpPage extends StatefulWidget {
   final String email;
-  OtpPage({super.key, required this.email});
+  const OtpPage({super.key, required this.email});
 
+  @override
+  State<OtpPage> createState() => _OtpPageState();
+}
+
+class _OtpPageState extends State<OtpPage> {
   final TextEditingController _otpController = TextEditingController();
-
   final ValueNotifier<String?> errorMessage = ValueNotifier(null);
+
+  int _secondsRemaining = 180;
+  Timer? _timer;
+  bool _isExpired = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _secondsRemaining = 180;
+    _isExpired = false;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_secondsRemaining > 0) {
+        setState(() => _secondsRemaining--);
+      } else {
+        setState(() {
+          _isExpired = true;
+        });
+        timer.cancel();
+      }
+    });
+  }
+
+  String get _formattedTime {
+    final minutes = (_secondsRemaining ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_secondsRemaining % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
 
   void _verifyOtp(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -40,13 +82,21 @@ class OtpPage extends StatelessWidget {
     errorMessage.value = null;
 
     final verifyAccountModel = VerifyAccountModel(
-      email: email,
+      email: widget.email,
       oneTimeCode: parsed,
     );
 
     context.read<AuthBloc>().add(
       VerifyAccountEvent(verifyAccountModel: verifyAccountModel),
     );
+  }
+
+  @override
+  void dispose() {
+    _otpController.dispose();
+    errorMessage.dispose();
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -116,10 +166,37 @@ class OtpPage extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              Text(
-                'Code expires in: 02:59',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(color: Colors.white),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                    color: _isExpired ? Colors.redAccent : Colors.amber,
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 18.sp,
+                      color: _isExpired ? Colors.redAccent : Colors.amber,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      _isExpired
+                          ? 'Code expired!'
+                          : 'Code expires in: $_formattedTime',
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                          color: _isExpired ? Colors.redAccent : Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 18.h),

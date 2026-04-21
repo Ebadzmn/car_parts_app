@@ -151,13 +151,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
+import 'package:car_parts_app/presentation/home/controllers/home_card_controller.dart';
 
 class HomeCardWidget extends StatelessWidget {
   const HomeCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final HomeCardController controller = Get.put(HomeCardController());
     return Container(
       height: 220.h, // height increased to fit drag button
       decoration: BoxDecoration(
@@ -240,28 +243,76 @@ class HomeCardWidget extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 15.h),
-                    Text(
-                      'Engine',
-                      style: GoogleFonts.montserrat(
-                        textStyle: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                    Obx(() {
+                      if (controller.isLoading.value) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      }
+
+                      final catName =
+                          controller.currentCategory?.name ?? 'Engine';
+                      final catDesc =
+                          controller.currentCategory?.description ??
+                          'Engine is the science of delivering power.';
+
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 800),
+                        layoutBuilder:
+                            (
+                              Widget? currentChild,
+                              List<Widget> previousChildren,
+                            ) {
+                              return Stack(
+                                alignment: Alignment.centerLeft,
+                                children: <Widget>[
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
+                              );
+                            },
+                        child: Column(
+                          key: ValueKey(catName),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              catName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 3.h),
+                            SizedBox(
+                              width: 140.w,
+                              child: Text(
+                                catDesc,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 10.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 3.h),
-                    SizedBox(
-                      width: 140.w,
-                      child: Text(
-                        'Engine is the science of delivering power.',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 10.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                      );
+                    }),
                     SizedBox(height: 20.h),
 
                     drug_button(),
@@ -289,9 +340,13 @@ class HomeCardWidget extends StatelessWidget {
           listenWhen: (prev, curr) => curr.shouldNavigate,
           listener: (context, state) {
             if (state.shouldNavigate) {
-              context.push(AppRoutes.detailsScreen).then((_) {
-                context.read<DragBloc>().add(const DragUpdateEvent(0));
-              });
+              final String catName =
+                  Get.find<HomeCardController>().currentCategory?.name ?? '';
+              context
+                  .push(AppRoutes.ProductByCategoryScreen, extra: catName)
+                  .then((_) {
+                    context.read<DragBloc>().add(const DragUpdateEvent(0));
+                  });
             }
           },
           child: Row(

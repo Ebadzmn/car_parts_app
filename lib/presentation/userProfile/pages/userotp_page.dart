@@ -1,11 +1,71 @@
+import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class UserotpPage extends StatelessWidget {
+class UserotpPage extends StatefulWidget {
   const UserotpPage({super.key});
+
+  @override
+  State<UserotpPage> createState() => _UserotpPageState();
+}
+
+class _UserotpPageState extends State<UserotpPage> {
+  int _secondsRemaining = 180;
+  Timer? _timer;
+  bool _isExpired = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _secondsRemaining = 180;
+    _isExpired = false;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_secondsRemaining > 0) {
+        setState(() => _secondsRemaining--);
+      } else {
+        setState(() {
+          _isExpired = true;
+        });
+        timer.cancel();
+      }
+    });
+  }
+
+  String get _formattedTime {
+    final minutes = (_secondsRemaining ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_secondsRemaining % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
+
+  void _resendOtp() {
+    if (!_isExpired) {
+      return;
+    }
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('OTP Resent!')));
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +165,7 @@ class UserotpPage extends StatelessWidget {
                       ),
 
                       Text(
-                        'A six digits code has sanded to your email',
+                        'A six-digit code has been sent to your email',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             color: Colors.white,
@@ -152,13 +212,45 @@ class UserotpPage extends StatelessWidget {
                         ),
                       ),
 
-                      Text(
-                        'Code expires in: 02:59',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 10.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: _isExpired ? Colors.redAccent : Colors.amber,
+                            width: 1,
                           ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 18.sp,
+                              color: _isExpired
+                                  ? Colors.redAccent
+                                  : Colors.amber,
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              _isExpired
+                                  ? 'Code expired!'
+                                  : 'Code expires in: $_formattedTime',
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: _isExpired
+                                      ? Colors.redAccent
+                                      : Colors.white,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
@@ -203,21 +295,15 @@ class UserotpPage extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: '  Resend',
+                              text: _isExpired ? '  Resend' : '  Wait...',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: _isExpired ? Colors.amber : Colors.grey,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14.sp,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // Action when clicked
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Sign Up tapped!'),
-                                    ),
-                                  );
-                                },
+                              recognizer: _isExpired
+                                  ? (TapGestureRecognizer()..onTap = _resendOtp)
+                                  : null,
                             ),
                           ],
                         ),

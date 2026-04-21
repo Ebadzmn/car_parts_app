@@ -6,6 +6,7 @@ class PlacesService {
   static String get _apiKey => dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
   static const String _baseUrl = 'https://maps.googleapis.com/maps/api/place';
 
+
   final Dio _dio = Dio();
 
   /// Fetches autocomplete suggestions for the given [input] text.
