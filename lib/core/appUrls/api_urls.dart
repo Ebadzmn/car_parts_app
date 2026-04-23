@@ -14,4 +14,6 @@ class ApiUrls {
   static const String myProducts = '/product/my-products';
   static const String categoryRequest = '/category-request';
   static const String productReviews = '/review/product';
+  static const String terms = '/terms';
+  static const String privacyPolicy = '/privacy-policy';
 }

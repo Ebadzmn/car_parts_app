@@ -1,5 +1,9 @@
+import 'package:car_parts_app/core/appUrls/api_urls.dart';
+import 'package:car_parts_app/presentation/tearm_condition/controllers/policy_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TermsCondition extends StatefulWidget {
@@ -11,6 +15,13 @@ class TermsCondition extends StatefulWidget {
 
 class _TermsConditionState extends State<TermsCondition> {
   bool isChecked = false;
+  final PolicyController controller = Get.put(PolicyController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchPolicy(ApiUrls.terms);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,69 +77,58 @@ class _TermsConditionState extends State<TermsCondition> {
                 ],
               ),
               SizedBox(height: 20.h),
-              // Terms and Conditions Text
-              RichText(
-                text: TextSpan(
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w400,
-                      height: 1.5,
-                      color: Colors.white,
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator(color: Colors.green));
+                }
+                if (controller.hasError.value) {
+                  return Center(
+                    child: Text(
+                      controller.errorMessage.value,
+                      style: const TextStyle(color: Colors.red),
                     ),
-                  ),
-                  children: [
-                    const TextSpan(
-                      text:
-                          "Please read these Terms and Conditions carefully before using our Auto Parts mobile application or website (“the Platform”).\n\n",
+                  );
+                }
+                if (controller.policyList.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No terms available at the moment.',
+                      style: GoogleFonts.montserrat(color: Colors.white),
                     ),
-                    TextSpan(
-                      text: "1. Acceptance of Terms\n",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0.sp,
-                      ),
-                    ),
-                    const TextSpan(
-                      text:
-                          "By creating an account and using the Platform, you acknowledge that you have read, understood, and agreed to these Terms and Conditions.\n\n",
-                    ),
-                    TextSpan(
-                      text: "2. User Accounts\n",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0.sp,
-                      ),
-                    ),
-                    const TextSpan(
-                      text:
-                          "By creating an account, you agree to provide accurate, complete, and current information. You are responsible for safeguarding your account details.\n\n",
-                    ),
-                    TextSpan(
-                      text: "3. Privacy Policy\n",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0.sp,
-                      ),
-                    ),
-                    const TextSpan(
-                      text:
-                          "We collect and use personal information in accordance with our Privacy Policy. By using the Platform, you consent to these practices.\n\n",
-                    ),
-                    TextSpan(
-                      text: "4. Governing Law\n",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0.sp,
-                      ),
-                    ),
-                    const TextSpan(
-                      text:
-                          "These Terms shall be governed by the laws of [Insert Country/Region]. Continued use implies acceptance of any updates.\n\n",
-                    ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.policyList.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                  itemBuilder: (context, index) {
+                    final item = controller.policyList[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        HtmlWidget(
+                          item.content,
+                          textStyle: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }),
               // Checkbox
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -117,12 +117,16 @@ class SellerModel extends SellerEntity {
     required String email,
     String whatsappNumber = '',
     String address = '',
+    double lat = 0.0,
+    double lng = 0.0,
   }) : super(
          id: id,
          name: name,
          email: email,
          whatsappNumber: whatsappNumber,
          address: address,
+         lat: lat,
+         lng: lng,
        );
 
   /// Accepts dynamic because backend might return null or Map or sometimes an id string.
@@ -131,12 +135,16 @@ class SellerModel extends SellerEntity {
         ? Map<String, dynamic>.from(json)
         : <String, dynamic>{};
 
+    final coordinates = map['coordinates'] as Map<String, dynamic>?;
+
     return SellerModel(
       id: (map['_id'] ?? map['id'] ?? '').toString(),
       name: (map['name'] ?? '').toString(),
       email: (map['email'] ?? '').toString(),
       whatsappNumber: (map['whatsappNumber'] ?? '').toString(),
       address: (map['address'] ?? '').toString(),
+      lat: (coordinates?['lat'] as num?)?.toDouble() ?? (map['lat'] as num?)?.toDouble() ?? 0.0,
+      lng: (coordinates?['lng'] as num?)?.toDouble() ?? (map['lng'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -147,6 +155,10 @@ class SellerModel extends SellerEntity {
       'email': email,
       'whatsappNumber': whatsappNumber,
       'address': address,
+      'coordinates': {
+        'lat': lat,
+        'lng': lng,
+      },
     };
   }
 }

@@ -582,7 +582,28 @@ class CarDetailsPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final lat = product?.seller.lat ?? 0.0;
+                          final lng = product?.seller.lng ?? 0.0;
+                          if (lat != 0.0 && lng != 0.0) {
+                            final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            } else {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Could not open map')),
+                                );
+                              }
+                            }
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Seller location not available')),
+                              );
+                            }
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.yellow,
                           shape: RoundedRectangleBorder(

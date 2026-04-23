@@ -67,32 +67,73 @@ class ChangeBasicInfo extends StatelessWidget {
                 ),
                 SizedBox(height: 51.h),
 
-                Container(
-                  height: 60.h,
-                  width: 60.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 0,
-                        spreadRadius: 3,
-                        offset: Offset(-1, 1),
-                        color: Colors.white,
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Container(
+                      height: 80.h,
+                      width: 80.h,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black26,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 0,
+                            spreadRadius: 3,
+                            offset: Offset(-1, 1),
+                            color: Colors.white,
+                          ),
+                          BoxShadow(
+                            blurRadius: 1,
+                            spreadRadius: 3,
+                            offset: Offset(1, 2),
+                            color: Color(0xFF373737),
+                          ),
+                        ],
                       ),
-
-                      BoxShadow(
-                        blurRadius: 1,
-                        spreadRadius: 3,
-                        offset: Offset(1, 2),
-                        color: Color(0xFF373737),
+                      child: ClipOval(
+                        child: Obx(() {
+                          if (controller.selectedImage.value != null) {
+                            return Image.file(
+                              controller.selectedImage.value!,
+                              fit: BoxFit.cover,
+                            );
+                          } else if (controller.currentImageUrl.value.isNotEmpty) {
+                            return Image.network(
+                              controller.currentImageUrl.value,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stack) => Icon(
+                                Icons.person_outline,
+                                size: 42.sp,
+                                color: Colors.white,
+                              ),
+                            );
+                          } else {
+                            return Icon(
+                              Icons.person_outline,
+                              size: 42.sp,
+                              color: Colors.white,
+                            );
+                          }
+                        }),
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.person_outline,
-                    size: 42.sp,
-                    color: Colors.white,
-                  ),
+                    ),
+                    GestureDetector(
+                      onTap: () => controller.pickImage(),
+                      child: Container(
+                        padding: EdgeInsets.all(6.sp),
+                        decoration: const BoxDecoration(
+                          color: Colors.amber,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 16.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 6.h),
                 Text(

@@ -1,12 +1,16 @@
+import 'dart:io';
 import 'package:car_parts_app/core/appUrls/api_urls.dart';
 import 'package:car_parts_app/core/injector/injector.dart';
 import 'package:car_parts_app/core/network/network_caller.dart';
 import 'package:car_parts_app/data/data_source/remote/places_service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide MultipartFile, FormData;
+import 'package:image_picker/image_picker.dart';
 
 class ChangeBasicInfoController extends GetxController {
   final NetworkCaller _networkCaller = sl<NetworkCaller>();
+  final ImagePicker _picker = ImagePicker();
 
   final fullNameController = TextEditingController();
   final addressController = TextEditingController();
@@ -18,6 +22,9 @@ class ChangeBasicInfoController extends GetxController {
 
   final RxBool isLoading = true.obs;
   final RxBool isUpdating = false.obs;
+
+  final Rx<File?> selectedImage = Rx<File?>(null);
+  final RxString currentImageUrl = ''.obs;
 
   @override
   void onInit() {
@@ -33,6 +40,17 @@ class ChangeBasicInfoController extends GetxController {
     super.onClose();
   }
 
+  Future<void> pickImage() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      debugPrint("Error picking image: $e");
+    }
+  }
+
   Future<void> fetchUserProfile() async {
     isLoading.value = true;
     try {
@@ -43,6 +61,7 @@ class ChangeBasicInfoController extends GetxController {
 
         fullNameController.text = data['name'] ?? '';
         whatsappController.text = data['whatsappNumber']?.toString() ?? '';
+        currentImageUrl.value = data['image']?.toString() ?? data['profilePicture']?.toString() ?? '';
 
         String address = data['address'] ?? '';
 
@@ -109,14 +128,26 @@ class ChangeBasicInfoController extends GetxController {
     isUpdating.value = true;
 
     try {
+      final Map<String, dynamic> bodyData = {
+        "name": name,
+        "address": address,
+        "whatsappNumber": whatsappNumber,
+        "coordinates[lat]": selectedLat.value,
+        "coordinates[lng]": selectedLng.value,
+      };
+
+      if (selectedImage.value != null) {
+        bodyData["image"] = await MultipartFile.fromFile(
+          selectedImage.value!.path,
+          filename: selectedImage.value!.path.split(Platform.pathSeparator).last,
+        );
+      }
+
+      final formData = FormData.fromMap(bodyData);
+
       final response = await _networkCaller.patch(
         ApiUrls.userProfile,
-        body: {
-          "name": name,
-          "address": address,
-          "whatsappNumber": whatsappNumber,
-          "coordinates": {"lat": selectedLat.value, "lng": selectedLng.value},
-        },
+        body: formData,
       );
 
       if (response.success) {

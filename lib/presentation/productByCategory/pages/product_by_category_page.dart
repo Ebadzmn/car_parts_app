@@ -850,10 +850,19 @@ class ProductByCategoryPage extends StatelessWidget {
                                                         ),
                                                     color: Colors.black,
                                                   ),
-                                                  child: Image.asset(
-                                                    AssetsPath.cardtire,
-                                                    fit: BoxFit.contain,
-                                                  ),
+                                                  child: (item.mainImage.isNotEmpty)
+                                                      ? Image.network(
+                                                          item.mainImage,
+                                                          fit: BoxFit.contain,
+                                                          errorBuilder: (context, error, stack) => Image.asset(
+                                                            AssetsPath.cardtire,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        )
+                                                      : Image.asset(
+                                                          AssetsPath.cardtire,
+                                                          fit: BoxFit.contain,
+                                                        ),
                                                 ),
                                               ),
                                               SizedBox(height: 8.h),

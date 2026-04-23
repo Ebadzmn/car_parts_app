@@ -1,9 +1,26 @@
+import 'package:car_parts_app/core/appUrls/api_urls.dart';
+import 'package:car_parts_app/presentation/tearm_condition/controllers/policy_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PrivacyPolicyPage extends StatelessWidget {
+class PrivacyPolicyPage extends StatefulWidget {
   const PrivacyPolicyPage({super.key});
+
+  @override
+  State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
+}
+
+class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+  final PolicyController controller = Get.put(PolicyController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchPolicy(ApiUrls.privacyPolicy);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,181 +78,58 @@ class PrivacyPolicyPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20.h),
-
-              // Effective Date
-              Text(
-                "Effective Date: [Insert Date]",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 10.h),
-
-              // Intro
-              Text(
-                "At E PARTS, your privacy is our priority. This policy explains how we collect, use, and protect your information when you use our app or services.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 20.h),
-
-              // Section 1
-              Text(
-                "1. Information We Collect",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "We collect data to provide and improve your experience:\n\n"
-                "• Personal Info: Name, email, phone number, address.\n"
-                "• Usage Info: App interactions, preferences, and search history.\n"
-                "• Transaction Info: Payment details (handled securely via trusted gateways).",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 2
-              Text(
-                "2. How We Use Your Data",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "Your data helps us:\n\n"
-                "• Process and deliver your orders.\n"
-                "• Improve app performance and product recommendations.\n"
-                "• Send updates, offers, and important notifications.\n"
-                "• Maintain security and prevent fraud.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 3
-              Text(
-                "3. Sharing Your Data",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "We do not sell your personal information.\n\n"
-                "We may share limited data with:\n"
-                "• Trusted service providers (payments, delivery, analytics).\n"
-                "• Legal authorities, if required by law.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 4
-              Text(
-                "4. Data Security",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "We use encryption and secure servers to protect your information.\nHowever, no online system is 100% secure, so we recommend keeping your login details private.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 5
-              Text(
-                "5. Your Rights",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "You can:\n\n"
-                "• View, edit, or delete your account information.\n"
-                "• Opt out of promotional notifications.\n"
-                "• Request data removal by contacting our support.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 6
-              Text(
-                "6. Cookies",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "We use cookies to enhance your experience and remember your preferences.\nYou can disable them anytime in your settings.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 15.h),
-
-              // Section 7
-              Text(
-                "7. Updates to This Policy",
-                style: GoogleFonts.montserrat(
-                  fontSize: 15.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                "We may update this policy occasionally. The latest version will always be available inside the app.",
-                style: GoogleFonts.montserrat(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 20.h),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator(color: Colors.green));
+                }
+                if (controller.hasError.value) {
+                  return Center(
+                    child: Text(
+                      controller.errorMessage.value,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+                if (controller.policyList.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No privacy policy available at the moment.',
+                      style: GoogleFonts.montserrat(color: Colors.white),
+                    ),
+                  );
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.policyList.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                  itemBuilder: (context, index) {
+                    final item = controller.policyList[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        HtmlWidget(
+                          item.content,
+                          textStyle: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }),
             ],
           ),
         ),

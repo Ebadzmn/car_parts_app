@@ -7,6 +7,8 @@ class SellerEntity extends Equatable {
   final String email;
   final String whatsappNumber;
   final String address;
+  final double lat;
+  final double lng;
 
   const SellerEntity({
     required this.id,
@@ -14,10 +16,12 @@ class SellerEntity extends Equatable {
     required this.email,
     this.whatsappNumber = '',
     this.address = '',
+    this.lat = 0.0,
+    this.lng = 0.0,
   });
 
   @override
-  List<Object?> get props => [id, name, email, whatsappNumber, address];
+  List<Object?> get props => [id, name, email, whatsappNumber, address, lat, lng];
 }
 
 class ProductDetailsEntity extends Equatable {
