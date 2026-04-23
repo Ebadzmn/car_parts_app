@@ -166,7 +166,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Assets import
+import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 import 'package:car_parts_app/presentation/home/pages/home_page.dart';
 import 'package:car_parts_app/presentation/filterProduct/pages/product_page.dart';
 import 'package:car_parts_app/presentation/category/pages/category_pages.dart';
@@ -190,9 +192,28 @@ class MainScreen extends StatelessWidget {
   ];
 
   // Custom circular nav icon
-  Widget _buildNavIcon(String iconPath, bool isSelected, int index) {
+  Widget _buildNavIcon(
+    BuildContext context,
+    String iconPath,
+    bool isSelected,
+    int index,
+  ) {
     return GestureDetector(
-      onTap: () => controller.changeTabIndex(index),
+      onTap: () async {
+        final loggedIn = await hasAuthToken();
+
+        if (!context.mounted) return;
+
+        if (index == 3 && !loggedIn) {
+          await redirectToLogin(
+            context,
+            intendedLocation: AppRoutes.SellarScreen,
+          );
+          return;
+        }
+
+        controller.changeTabIndex(index);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         height: 55.h,
@@ -279,13 +300,13 @@ class MainScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavIcon(AssetsPath.navhome, controller.currentIndex.value == 0, 0),
+                    _buildNavIcon(context, AssetsPath.navhome, controller.currentIndex.value == 0, 0),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.nav2, controller.currentIndex.value == 1, 1),
+                    _buildNavIcon(context, AssetsPath.nav2, controller.currentIndex.value == 1, 1),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.navcat, controller.currentIndex.value == 2, 2),
+                    _buildNavIcon(context, AssetsPath.navcat, controller.currentIndex.value == 2, 2),
                     SizedBox(width: 6.w),
-                    _buildNavIcon(AssetsPath.navcart, controller.currentIndex.value == 3, 3),
+                    _buildNavIcon(context, AssetsPath.navcart, controller.currentIndex.value == 3, 3),
                   ],
                 ),
               ),

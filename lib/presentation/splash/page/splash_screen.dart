@@ -3,9 +3,10 @@ import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/injector/injector.dart';
 import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
-import 'package:car_parts_app/presentation/home/pages/home_page.dart';
+import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,11 +73,14 @@ class _SplashScreenState extends State<SplashScreen>
       final authLocal = sl<AuthLocalDatasource>();
       final token = await authLocal.getToken();
 
+      if (!mounted) return;
+
       if (token != null && token.isNotEmpty) {
-        context.go(AppRoutes.MainScreen);
-      } else {
-        context.go(AppRoutes.LoginPage);
+        context.read<AuthBloc>().add(CheckInStatusEvent());
+        context.read<UserProfileBloc>().add(const GetUserProfileEvent());
       }
+
+      context.go(AppRoutes.MainScreen);
     }
   }
 

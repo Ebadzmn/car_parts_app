@@ -53,7 +53,84 @@ class UserProfile extends StatelessWidget {
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
 
+  Future<void> _performLogout(BuildContext context) async {
+    try {
+      final authLocal = sl<AuthLocalDatasource>();
+      await authLocal.clearToken();
+      await authLocal.clearRefreshToken();
+      if (context.mounted) {
+        context.read<AuthBloc>().add(const ResetAuthEvent());
+        context.read<UserProfileBloc>().add(const ResetUserProfileEvent());
+      }
+    } catch (e) {
+      debugPrint('Delete account: failed to clear auth data – $e');
+    }
 
+    if (context.mounted) {
+      context.go(AppRoutes.LoginPage);
+    }
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColor.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          side: const BorderSide(color: Colors.grey),
+        ),
+        title: Text(
+          'Delete Account?',
+          style: GoogleFonts.montserrat(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to delete your account?',
+          style: GoogleFonts.montserrat(
+            fontSize: 14.sp,
+            color: Colors.grey.shade300,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.montserrat(
+                fontSize: 14.sp,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              await _performLogout(context);
+            },
+            child: Text(
+              'Delete',
+              style: GoogleFonts.montserrat(
+                fontSize: 14.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +161,6 @@ class UserProfile extends StatelessWidget {
               builder: (context, authState) {
                 // show profile only when authenticated
                 if (authState is SignInSuccess) {
-
-
                   final screenHeight = 1.sh;
 
                   return Padding(
@@ -166,8 +241,6 @@ class UserProfile extends StatelessWidget {
                               final profile = state.profileEntity;
                               final imageUrl = profile.image;
 
-
-
                               return Column(
                                 children: [
                                   CircleAvatar(
@@ -198,7 +271,6 @@ class UserProfile extends StatelessWidget {
                                       color: Colors.grey,
                                     ),
                                   ),
-
                                 ],
                               );
                             }
@@ -270,37 +342,14 @@ class UserProfile extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InkWell(
-                                  onTap: () => context.push(AppRoutes.changeBasicInfo),
+                                  onTap: () =>
+                                      context.push(AppRoutes.changeBasicInfo),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Basic Information',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 14.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(height: 6.h),
-                                      Text(
-                                        'Update Basic Information',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 10.sp,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
-                                InkWell(
-                                  onTap: () => context.push(AppRoutes.changeContact),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Contact',
                                         style: GoogleFonts.montserrat(
                                           fontSize: 14.sp,
                                           color: Colors.white,
@@ -320,9 +369,11 @@ class UserProfile extends StatelessWidget {
                                 ),
                                 SizedBox(height: 12.h),
                                 InkWell(
-                                  onTap: () => context.push(AppRoutes.changePassword),
+                                  onTap: () =>
+                                      context.push(AppRoutes.changePassword),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Change Password',
@@ -333,6 +384,44 @@ class UserProfile extends StatelessWidget {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                               
+                                SizedBox(height: 28.h),
+                                InkWell(
+                                  onTap: () =>
+                                      _showDeleteAccountDialog(context),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 12.h,
+                                      horizontal: 12.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withOpacity(0.12),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      border: Border.all(
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.redAccent,
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Text(
+                                          'Delete Account',
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 14.sp,
+                                            color: Colors.redAccent,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

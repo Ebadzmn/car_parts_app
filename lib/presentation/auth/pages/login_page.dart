@@ -1,203 +1,252 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
+import 'package:car_parts_app/core/coreWidget/custom_loading_dialog.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
 import 'package:car_parts_app/data/model/auth/sign_In_model.dart';
 import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:car_parts_app/core/coreWidget/custom_loading_dialog.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final ValueNotifier<bool> isChecked = ValueNotifier(false);
+    final formKey = GlobalKey<FormState>();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final isChecked = ValueNotifier(false);
 
-    void _signIn() {
-      // validate first
-      if (!_formKey.currentState!.validate()) return;
-
-      // dispatch bloc event
-      context.read<AuthBloc>().add(
-        SignInEvent(
-          signInModel: SignInModel(
-            email: emailController.text.trim(),
-            password: passwordController.text,
-          ),
-        ),
-      );
+    Future<void> handleBackNavigation() async {
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go(AppRoutes.MainScreen);
+      }
     }
 
-    void _hideDialogIfOpen() {
+    void hideDialogIfOpen() {
       if (Navigator.canPop(context)) Navigator.pop(context);
     }
 
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthLoading) {
-          showCustomLoadingDialog(context, message: 'Logging in...');
-        } else {
-          // hide loading for any non-loading state
-          _hideDialogIfOpen();
-        }
+    void signIn() {
+      if (!formKey.currentState!.validate()) return;
 
-        if (state is AuthError) {
-          // show error
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        } else if (state is SignInSuccess) {
-          // navigate on success (example: home screen)
-          // ensure no dialog is left
-          _hideDialogIfOpen();
-          context.go(AppRoutes.MainScreen);
-        }
+      context.read<AuthBloc>().add(
+            SignInEvent(
+              signInModel: SignInModel(
+                email: emailController.text.trim(),
+                password: passwordController.text,
+              ),
+            ),
+          );
+    }
+
+    return WillPopScope(
+      onWillPop: () async {
+        await handleBackNavigation();
+        return false;
       },
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              Image.asset(AssetsPath.newLogo, width: 150.w, height: 150.h),
-              Padding(
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            showCustomLoadingDialog(context, message: 'Logging in...');
+          } else {
+            hideDialogIfOpen();
+          }
+
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          } else if (state is SignInSuccess) {
+            hideDialogIfOpen();
+
+            context.read<UserProfileBloc>().add(const GetUserProfileEvent());
+
+            final from = Uri.decodeComponent(
+              GoRouterState.of(context).uri.queryParameters['from'] ?? '',
+            );
+
+            if (from.isNotEmpty) {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final rootContext = rootNavigatorKey.currentContext;
+                if (rootContext != null) {
+                  rootContext.push(from);
+                }
+              });
+            } else {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              } else {
+                context.go(AppRoutes.MainScreen);
+              }
+            }
+          }
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
                 padding: EdgeInsets.all(18.sp),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        controller: emailController,
-                        label: 'Email',
-                        hintText: 'Please enter your email address',
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email address';
-                          } else if (!RegExp(
-                            r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
-                          ).hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-                          return null;
-                        },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: handleBackNavigation,
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                        color: Colors.white,
                       ),
-
-                      CustomTextField(
-                        controller: passwordController,
-                        label: 'Password',
-                        hintText: 'Please enter your Password',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          } else if (value.length < 6) {
-                            return 'Password must be at least 6 characters long';
-                          }
-                          return null;
-                        },
+                    ),
+                    Center(
+                      child: Image.asset(
+                        AssetsPath.newLogo,
+                        width: 150.w,
+                        height: 150.h,
                       ),
-
-                      ValueListenableBuilder<bool>(
-                        valueListenable: isChecked,
-                        builder: (context, value, child) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                    ),
+                    SizedBox(height: 12.h),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            controller: emailController,
+                            label: 'Email',
+                            hintText: 'Please enter your email address',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email address';
+                              } else if (!RegExp(
+                                r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
+                              ).hasMatch(value)) {
+                                return 'Please enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            controller: passwordController,
+                            label: 'Password',
+                            hintText: 'Please enter your Password',
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password';
+                              } else if (value.length < 6) {
+                                return 'Password must be at least 6 characters long';
+                              }
+                              return null;
+                            },
+                          ),
+                          ValueListenableBuilder<bool>(
+                            valueListenable: isChecked,
+                            builder: (context, value, child) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Checkbox(
-                                    value: value,
-                                    onChanged: (newValue) {
-                                      isChecked.value = newValue ?? false;
-                                    },
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: value,
+                                        onChanged: (newValue) {
+                                          isChecked.value = newValue ?? false;
+                                        },
+                                      ),
+                                      Text(
+                                        'Remember Me',
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'Remember Me',
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(color: Colors.white),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.push(AppRoutes.forgetPassword);
+                                    },
+                                    child: Text(
+                                      'Forget Password',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: 12.r),
+                          Container(
+                            height: 44.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                              color: Colors.amber,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  context.push(AppRoutes.forgetPassword);
-                                },
-                                child: Text(
-                                  'Forget Password',
-                                  style: GoogleFonts.montserrat(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                              onPressed: signIn,
+                              child: Text(
+                                'Login',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ],
-                          );
-                        },
-                      ),
-
-                      SizedBox(height: 12.r),
-
-                      Container(
-                        height: 44.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          color: Colors.amber,
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                          ),
-                          onPressed: _signIn,
-                          child: Text(
-                            'Login',
-                            style: GoogleFonts.montserrat(
-                              fontSize: 16.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      RichText(
-                        text: TextSpan(
-                          text: "Don't have an account? ",
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(color: Colors.white),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Sign Up',
-                              style: const TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
+                          SizedBox(height: 12.h),
+                          Center(
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Don't have an account? ",
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Sign Up',
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        context.push(AppRoutes.RegisterPage);
+                                      },
+                                  ),
+                                ],
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.push(AppRoutes.RegisterPage);
-                                },
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
           ),
         ),
       ),

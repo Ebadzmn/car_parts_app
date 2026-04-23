@@ -3,6 +3,8 @@ import 'package:car_parts_app/core/config/app_color.dart';
 import 'package:car_parts_app/core/injector/injector.dart';
 import 'package:car_parts_app/data/data_source/local/auth_local_datasource.dart';
 import 'package:car_parts_app/presentation/home/widget/drawer_component.dart';
+import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +86,10 @@ class DrawerWidget extends StatelessWidget {
       final authLocal = sl<AuthLocalDatasource>();
       await authLocal.clearToken();
       await authLocal.clearRefreshToken();
+      if (context.mounted) {
+        context.read<AuthBloc>().add(const ResetAuthEvent());
+        context.read<UserProfileBloc>().add(const ResetUserProfileEvent());
+      }
     } catch (e) {
       debugPrint('Logout: failed to clear tokens – $e');
     }
@@ -105,60 +111,96 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlocBuilder<UserProfileBloc, UserProfileState>(
-                  builder: (context, state) {
-                    String imageUrl = '';
-                    String userName = 'Nickesha';
-                    String userEmail = 'ebad3e@gmail.com';
+                FutureBuilder<bool>(
+                  future: hasAuthToken(),
+                  builder: (context, snapshot) {
+                    final isLoggedIn = snapshot.data == true;
 
-                    if (state is UserLoaded) {
-                      imageUrl = state.profileEntity.image;
-                      userName = state.profileEntity.name.isNotEmpty
-                          ? state.profileEntity.name
-                          : 'Nickesha';
-                      userEmail = state.profileEntity.email.isNotEmpty
-                          ? state.profileEntity.email
-                          : 'ebad3e@gmail.com';
-                    }
+                    return BlocBuilder<UserProfileBloc, UserProfileState>(
+                      builder: (context, state) {
+                        final hasProfileData = state is UserLoaded;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 100.w,
-                          width: 100.w,
-                          child: CircleAvatar(
-                            backgroundImage: imageUrl.isNotEmpty
-                                ? NetworkImage(imageUrl)
-                                : null,
-                            child: imageUrl.isEmpty
-                                ? Icon(Icons.person, size: 32)
-                                : null,
-                          ),
-                        ),
-                        SizedBox(height: 12.h),
-                        Text(
-                          userName,
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 24.sp,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                        final imageUrl = isLoggedIn && hasProfileData
+                            ? state.profileEntity.image
+                            : '';
+                        final userName = isLoggedIn && hasProfileData
+                            ? (state.profileEntity.name.isNotEmpty
+                                ? state.profileEntity.name
+                                : 'Guest User')
+                            : 'Guest User';
+                        final userEmail = isLoggedIn && hasProfileData
+                            ? (state.profileEntity.email.isNotEmpty
+                                ? state.profileEntity.email
+                                : 'Sign in to view your account')
+                            : 'Sign in to view your account';
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: isLoggedIn
+                                  ? null
+                                  : () => context.push(AppRoutes.LoginPage),
+                              child: SizedBox(
+                                height: 100.w,
+                                width: 100.w,
+                                child: CircleAvatar(
+                                  backgroundImage: imageUrl.isNotEmpty
+                                      ? NetworkImage(imageUrl)
+                                      : null,
+                                  child: imageUrl.isEmpty
+                                      ? Icon(
+                                          isLoggedIn
+                                              ? Icons.person
+                                              : Icons.person_outline,
+                                          size: 32,
+                                          color: Colors.white,
+                                        )
+                                      : null,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Text(
-                          userEmail,
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
+                            SizedBox(height: 12.h),
+                            GestureDetector(
+                              onTap: isLoggedIn
+                                  ? null
+                                  : () => context.push(AppRoutes.LoginPage),
+                              child: Text(
+                                userName,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 24.sp,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
+                            GestureDetector(
+                              onTap: isLoggedIn
+                                  ? null
+                                  : () => context.push(AppRoutes.LoginPage),
+                              child: Text(
+                                userEmail,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: isLoggedIn
+                                        ? Colors.grey
+                                        : Colors.amberAccent,
+                                    decoration: isLoggedIn
+                                        ? TextDecoration.none
+                                        : TextDecoration.underline,
+                                    decorationColor: Colors.amberAccent,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),
@@ -175,7 +217,17 @@ class DrawerWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () => context.push(AppRoutes.userProfileScreen),
+                      onTap: () async {
+                        if (!await hasAuthToken()) {
+                          await redirectToLogin(
+                            context,
+                            intendedLocation: AppRoutes.userProfileScreen,
+                          );
+                          return;
+                        }
+
+                        context.push(AppRoutes.userProfileScreen);
+                      },
                       child: ProfileInfoTile(
                         icon: Icons.person_outline,
                         title: 'User Profile',
@@ -238,33 +290,54 @@ class DrawerWidget extends StatelessWidget {
 
                     SizedBox(height: 70.h),
 
-                    GestureDetector(
-                      onTap: () => _showLogoutDialog(context),
-                      child: Container(
-                        height: 40.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: Colors.white, width: 2.w),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.logout_outlined, color: Colors.white),
-                            SizedBox(width: 6.w),
-                            Text(
-                              'Logout',
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
+                    FutureBuilder<bool>(
+                      future: hasAuthToken(),
+                      builder: (context, snapshot) {
+                        final isLoggedIn = snapshot.data == true;
+
+                        return GestureDetector(
+                          onTap: () {
+                            if (isLoggedIn) {
+                              _showLogoutDialog(context);
+                            } else {
+                              context.push(AppRoutes.LoginPage);
+                            }
+                          },
+                          child: Container(
+                            height: 40.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(
+                                color: isLoggedIn ? Colors.white : Colors.green,
+                                width: 2.w,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  isLoggedIn
+                                      ? Icons.logout_outlined
+                                      : Icons.login_outlined,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  isLoggedIn ? 'Logout' : 'Login',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

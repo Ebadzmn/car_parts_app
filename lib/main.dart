@@ -5,10 +5,8 @@ import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:car_parts_app/presentation/category/bloc/category_bloc.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
 import 'package:car_parts_app/presentation/faqs/bloc/faqs_bloc.dart';
-import 'package:car_parts_app/presentation/filterProduct/bloc/filter_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/drug_bloc.dart';
 import 'package:car_parts_app/presentation/home/bloc/home_bloc.dart';
-import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
 import 'package:car_parts_app/presentation/onboard/bloc/onboard_bloc.dart';
 import 'package:car_parts_app/presentation/userProfile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +66,7 @@ class MyApp extends StatelessWidget {
                   di.sl<CategoryBloc>()..add(FetchCategoriesEvent()),
             ),
             BlocProvider(create: (context) => di.sl<AuthBloc>()),
-            BlocProvider(
-              create: (context) =>
-                  di.sl<UserProfileBloc>()..add(const GetUserProfileEvent()),
-            ),
+                 BlocProvider(create: (context) => di.sl<UserProfileBloc>()),
           ],
           child: MaterialApp.router(
             theme: ThemeData(scaffoldBackgroundColor: const Color(0xFF212121)),

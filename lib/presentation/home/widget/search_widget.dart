@@ -8,11 +8,13 @@ class SearchWidget extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.onSubmitted,
+    this.onTap,
   });
 
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class SearchWidget extends StatelessWidget {
       height: 56.h, // responsive height
       child: TextField(
         controller: controller,
+        onTap: onTap,
         onChanged: onChanged,
         onSubmitted: onSubmitted,
         textAlign: TextAlign.start,

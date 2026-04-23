@@ -35,3 +35,7 @@ class SignInEvent extends AuthEvent {
 }
 
 class CheckInStatusEvent extends AuthEvent {}
+
+class ResetAuthEvent extends AuthEvent {
+  const ResetAuthEvent();
+}

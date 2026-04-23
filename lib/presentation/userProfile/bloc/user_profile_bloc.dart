@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:car_parts_app/data/model/user/userProfile_model.dart';
 import 'package:car_parts_app/domain/entities/user/userProfile.dart';
 import 'package:car_parts_app/domain/usecase/auth/auth_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +10,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   final GetUserProfileUsecase getUserProfileUsecase;
   UserProfileBloc(this.getUserProfileUsecase) : super(UserProfileInitial()) {
     on<GetUserProfileEvent>(_onProfileRequested);
+    on<ResetUserProfileEvent>(_onProfileReset);
   }
   Future<void> _onProfileRequested(
     GetUserProfileEvent event,
@@ -19,5 +19,12 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     emit(UserLoading());
     final result = await getUserProfileUsecase.getUserProfile();
     result.fold((l) => emit(UserError(l.message)), (r) => emit(UserLoaded(r)));
+  }
+
+  void _onProfileReset(
+    ResetUserProfileEvent event,
+    Emitter<UserProfileState> emit,
+  ) {
+    emit(UserProfileInitial());
   }
 }

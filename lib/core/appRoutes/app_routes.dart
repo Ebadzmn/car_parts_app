@@ -1,4 +1,3 @@
-import 'package:car_parts_app/data/model/product/product_details_model.dart';
 import 'package:car_parts_app/data/model/product/product_model.dart';
 import 'package:car_parts_app/core/injector/injector.dart' as di;
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
@@ -33,6 +32,8 @@ import 'package:car_parts_app/presentation/userProfile/pages/change_password.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   static const String splashScreen = '/splash-screen';
@@ -69,6 +70,7 @@ class AppRoutes {
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splashScreen,
+  navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
       path: AppRoutes.splashScreen,
@@ -98,6 +100,7 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.detailsScreen,
       builder: (context, state) {
         final extra = state.extra;
+        final queryProductId = state.uri.queryParameters['productId'] ?? '';
         // if a map with 'product' exists and it's already a ProductModel, use it
         if (extra is Map && extra['product'] != null) {
           final product = extra['product'];
@@ -114,7 +117,7 @@ final GoRouter appRouter = GoRouter(
             ? extra
             : extra is Map
             ? (extra['productId'] ?? extra['id'] ?? '').toString()
-            : state.pathParameters['id'] ?? '';
+            : state.pathParameters['id'] ?? queryProductId;
         return BlocProvider<DetailsBloc>(
           create: (_) => di.sl<DetailsBloc>(),
           child: CarDetailsPage(productId: id),
@@ -322,7 +325,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.reviewScreen,
       pageBuilder: (context, state) {
-        final productId = state.extra as String? ?? '';
+        final productId =
+            state.extra as String? ?? state.uri.queryParameters['productId'] ?? '';
         return CustomTransitionPage(
           child: ProductReviewsPage(productId: productId),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {

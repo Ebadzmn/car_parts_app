@@ -3,6 +3,7 @@ import 'package:car_parts_app/data/model/product/product_model.dart';
 import 'package:car_parts_app/presentation/details/widget/carosel_widget.dart';
 import 'package:car_parts_app/presentation/details/widget/rating_pop_up_widget.dart';
 import 'package:car_parts_app/presentation/details/bloc/details_bloc.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,7 +120,21 @@ class CarDetailsPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            final currentDetailsLocation =
+                                '${AppRoutes.detailsScreen}?productId=${Uri.encodeComponent(productId)}';
+                            final loggedIn = await hasAuthToken();
+
+                            if (!context.mounted) return;
+
+                            if (!loggedIn) {
+                              await redirectToLogin(
+                                context,
+                                intendedLocation: currentDetailsLocation,
+                              );
+                              return;
+                            }
+
                             final selId =
                                 context
                                     .read<DetailsBloc>()
@@ -157,7 +172,21 @@ class CarDetailsPage extends StatelessWidget {
                         ),
                         SizedBox(width: 8.w),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            final currentDetailsLocation =
+                                '${AppRoutes.detailsScreen}?productId=${Uri.encodeComponent(productId)}';
+                            final loggedIn = await hasAuthToken();
+
+                            if (!context.mounted) return;
+
+                            if (!loggedIn) {
+                              await redirectToLogin(
+                                context,
+                                intendedLocation: currentDetailsLocation,
+                              );
+                              return;
+                            }
+
                             showGeneralDialog(
                               context: context,
                               barrierDismissible: true,
@@ -208,7 +237,9 @@ class CarDetailsPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product?.title?.toUpperCase() ?? 'PRODUCT',
+                                product == null
+                                    ? 'PRODUCT'
+                                    : product.title.toUpperCase(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
@@ -303,7 +334,9 @@ class CarDetailsPage extends StatelessWidget {
                         ..._buildStars(product?.averageRating ?? 0),
                         SizedBox(width: 8.w),
                         Text(
-                          '${product?.averageRating?.toStringAsFixed(1) ?? '0.0'}',
+                          product == null
+                              ? '0.0'
+                              : product.averageRating.toStringAsFixed(1),
                           style: GoogleFonts.montserrat(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
@@ -329,8 +362,7 @@ class CarDetailsPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           context.push(
-                            AppRoutes.reviewScreen,
-                            extra: productId,
+                            '${AppRoutes.reviewScreen}?productId=${Uri.encodeComponent(productId)}',
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -499,7 +531,9 @@ class CarDetailsPage extends StatelessWidget {
                             ),
                             SizedBox(width: 4.w),
                             Text(
-                              '${product?.sellerRating?.toStringAsFixed(1) ?? '0.0'}',
+                              product == null
+                                  ? '0.0'
+                                  : product.sellerRating.toStringAsFixed(1),
                               style: GoogleFonts.montserrat(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,

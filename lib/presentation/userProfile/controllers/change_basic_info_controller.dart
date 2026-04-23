@@ -79,22 +79,29 @@ class ChangeBasicInfoController extends GetxController {
     final whatsappNumber = whatsappController.text.trim();
     final address = addressController.text.trim();
 
+    void showMessage(String title, String message, Color backgroundColor) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('$title: $message'),
+            backgroundColor: backgroundColor,
+          ),
+        );
+    }
+
     if (name.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Full Name is required',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showMessage('Error', 'Full Name is required', Colors.red);
       return;
     }
 
     if (!isAddressSelected.value || selectedLat.value == 0.0) {
-      Get.snackbar(
+      showMessage(
         'Error',
         'Please select an address from suggestions',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        Colors.red,
       );
       return;
     }
@@ -113,26 +120,19 @@ class ChangeBasicInfoController extends GetxController {
       );
 
       if (response.success) {
-        Get.snackbar(
+        showMessage(
           'Success',
           response.message ?? 'Profile updated successfully',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          Colors.green,
         );
       } else {
-        Get.snackbar(
-          'Error',
-          response.message ?? 'Update failed',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        showMessage('Error', response.message ?? 'Update failed', Colors.red);
       }
     } catch (e) {
-      Get.snackbar(
+      showMessage(
         'Error',
         'Something went wrong. Please try again.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        Colors.red,
       );
     } finally {
       isUpdating.value = false;

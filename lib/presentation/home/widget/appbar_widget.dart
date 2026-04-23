@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/presentation/home/pages/main_screen.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,7 +120,15 @@ class AppBarWidget extends StatelessWidget {
           // Right side notification icon
           Builder(
             builder: (context) => IconButton(
-              onPressed: () {
+              onPressed: () async {
+                if (!await hasAuthToken()) {
+                  await redirectToLogin(
+                    context,
+                    intendedLocation: AppRoutes.NotificationScreen,
+                  );
+                  return;
+                }
+
                 context.push(AppRoutes.NotificationScreen);
               },
               icon: Icon(

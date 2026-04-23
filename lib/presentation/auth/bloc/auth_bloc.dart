@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyAccountEvent>(_verifyAccount);
     on<SignInEvent>(_signIn);
     on<CheckInStatusEvent>(_checkInStatus);
+    on<ResetAuthEvent>(_resetAuth);
   }
 
   Future<void> _signIn(SignInEvent event, Emitter<AuthState> emit) async {
@@ -105,5 +106,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       emit(AuthError(message: 'No token found'));
     }
+  }
+
+  void _resetAuth(ResetAuthEvent event, Emitter<AuthState> emit) {
+    emit(AuthInitial());
   }
 }
