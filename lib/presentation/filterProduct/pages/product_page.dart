@@ -327,7 +327,7 @@ class _ProductPageContentState extends State<_ProductPageContent> {
             carModels,
             chassisNumber,
             state.minPrice,
-            state.maxPrice,
+            state.maxPrice == 1000 ? null : state.maxPrice,
             _useLocation ? _lat : null,
             _useLocation ? _lng : null,
           ),

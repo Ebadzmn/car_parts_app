@@ -93,64 +93,103 @@ class _CustomHorizontalStepperPageState extends State<CustomHorizontalStepperPag
                 Obx(() {
                   final currentStep = controller.currentStep.value;
                   final double screenWidth = MediaQuery.of(context).size.width;
-                  final double progressWidth = ((currentStep - 1) / (3 - 1)) * (screenWidth - 32.w);
+                  final double progressWidth = ((currentStep - 1) / (3 - 1)) * (screenWidth - 48.w);
 
-                  return SizedBox(
-                    height: 60.h,
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
                     child: Stack(
-                      alignment: Alignment.center,
+                      alignment: Alignment.topCenter,
                       children: [
+                        // Background Line
                         Positioned(
-                          top: 10.h,
-                          left: 0,
-                          right: 0,
+                          top: 16.h,
+                          left: 20.w,
+                          right: 20.w,
                           child: Container(
-                            height: 3.h,
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        Positioned(
-                          top: 10.h,
-                          left: 0,
-                          child: AnimatedContainer(
-                            duration: const Duration(
-                              milliseconds: 400,
+                            height: 2.h,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(2),
                             ),
-                            height: 3.h,
-                            width: progressWidth,
-                            color: Colors.green,
                           ),
                         ),
+                        // Progress Line
+                        Positioned(
+                          top: 16.h,
+                          left: 20.w,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                            height: 2.h,
+                            width: progressWidth,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFFD100), Color(0xFFFFB800)],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFFD100).withOpacity(0.3),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ),
+                        // Steps
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(3, (index) {
                             final step = index + 1;
-                            final bool isActive = step <= currentStep;
+                            final bool isCompleted = step < currentStep;
+                            final bool isActive = step == currentStep;
+                            
                             return Column(
                               children: [
-                                Container(
-                                  height: 20.h,
-                                  width: 20.w,
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  height: 32.h,
+                                  width: 32.h,
                                   decoration: BoxDecoration(
-                                    color: isActive ? Colors.green : Colors.grey.shade300,
+                                    color: (isActive || isCompleted) 
+                                      ? const Color(0xFFFFD100) 
+                                      : const Color(0xFF2C2C2C),
                                     shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isActive 
+                                        ? Colors.white 
+                                        : (isCompleted ? const Color(0xFFFFD100) : Colors.white.withOpacity(0.1)),
+                                      width: isActive ? 2 : 1,
+                                    ),
+                                    boxShadow: isActive ? [
+                                      BoxShadow(
+                                        color: const Color(0xFFFFD100).withOpacity(0.4),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      )
+                                    ] : [],
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      '$step',
-                                      style: TextStyle(
-                                        fontSize: 10.sp,
-                                        color: isActive ? Colors.white : Colors.black,
-                                      ),
-                                    ),
+                                    child: isCompleted
+                                      ? Icon(Icons.check, size: 18.sp, color: Colors.black)
+                                      : Text(
+                                          '$step',
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: (isActive || isCompleted) ? Colors.black : Colors.white54,
+                                          ),
+                                        ),
                                   ),
                                 ),
                                 SizedBox(height: 8.h),
                                 Text(
-                                  'Step $step',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: isActive ? Colors.green : Colors.grey,
+                                  step == 1 ? 'Basic Info' : (step == 2 ? 'Details' : 'Media'),
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 10.sp,
+                                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                                    color: isActive ? const Color(0xFFFFD100) : Colors.grey,
                                   ),
                                 ),
                               ],
