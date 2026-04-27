@@ -58,13 +58,15 @@ class StepOneForm extends StatelessWidget {
             ),
             Obx(() => DropdownButtonFormField<String>(
               value: controller.formData['category'],
-              decoration: InputDecoration(
-                hintText: controller.isCategoryLoading.value ? 'Loading...' : 'Select Category',
-                hintStyle: GoogleFonts.montserrat(
+              hint: Text(
+                controller.isCategoryLoading.value ? 'Loading...' : 'Select Category',
+                style: GoogleFonts.montserrat(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
-                  color: Colors.grey,
+                  color: Colors.yellow,
                 ),
+              ),
+              decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF383838),
                 contentPadding: EdgeInsets.symmetric(
@@ -81,6 +83,7 @@ class StepOneForm extends StatelessWidget {
                 ),
               ),
               dropdownColor: const Color(0xFF383838),
+              iconEnabledColor: Colors.yellow,
               style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
               items: controller.categories.map((cat) {
                 return DropdownMenuItem<String>(
@@ -99,10 +102,61 @@ class StepOneForm extends StatelessWidget {
           keyboardType: TextInputType.number,
           onChanged: (v) => controller.updateFormData({'price': v}),
         ),
-        CustomTextField(
-          label: 'Condition',
-          hintText: 'Enter condition (new, used, refurbished, newly imported)',
-          onChanged: (v) => controller.updateFormData({'condition': v}),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, bottom: 6.h),
+              child: Text(
+                'Condition',
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            Obx(() => DropdownButtonFormField<String>(
+              value: controller.formData['condition'],
+              hint: Text(
+                'Select Condition',
+                style: GoogleFonts.montserrat(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.yellow,
+                ),
+              ),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFF383838),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 14.h,
+                  horizontal: 12.w,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                  borderSide: const BorderSide(color: Colors.white, width: 1.2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                  borderSide: const BorderSide(color: Colors.white, width: 1.8),
+                ),
+              ),
+              dropdownColor: const Color(0xFF383838),
+              iconEnabledColor: Colors.yellow,
+              style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
+              items: ['New', 'Used', 'Refurbished', 'Newly Imported'].map((condition) {
+                return DropdownMenuItem<String>(
+                  value: condition,
+                  child: Text(condition),
+                );
+              }).toList(),
+              onChanged: (v) => controller.updateFormData({'condition': v}),
+            )),
+            SizedBox(height: 14.h),
+          ],
         ),
         CustomTextField(
           label: 'Description',
