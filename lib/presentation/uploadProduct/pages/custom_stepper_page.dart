@@ -206,55 +206,72 @@ class _CustomHorizontalStepperPageState extends State<CustomHorizontalStepperPag
                           ],
                         ),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10.h,
-                            horizontal: 14.w,
-                          ),
-                        ),
-                        onPressed: isUploading
-                            ? null
-                            : () {
-                                if (currentStep < 3) {
-                                  controller.nextStep();
-                                } else {
-                                  controller.uploadProduct(context);
-                                }
-                              },
-                        child: Row(
-                          children: [
-                            if (isUploading && currentStep == 3) ...[
-                              SizedBox(
-                                height: 16.h,
-                                width: 16.h,
-                                child: const CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFFD100).withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
                               ),
-                              SizedBox(width: 8.w),
                             ],
-                            Text(
-                              currentStep == 3 ? (isUploading ? 'Uploading product...' : 'Submit') : 'Next',
-                              style: GoogleFonts.montserrat(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFFD100),
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
                               ),
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              elevation: 0,
                             ),
-                            SizedBox(width: 4.w),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 14.sp,
-                              color: Colors.white,
+                            onPressed: isUploading
+                                ? null
+                                : () {
+                                    if (currentStep < 3) {
+                                      controller.nextStep();
+                                    } else {
+                                      controller.uploadProduct(context);
+                                    }
+                                  },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isUploading && currentStep == 3) ...[
+                                  SizedBox(
+                                    height: 18.h,
+                                    width: 18.h,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                ],
+                                Text(
+                                  currentStep == 3 
+                                    ? (isUploading ? 'UPLOADING...' : 'SUBMIT PRODUCT') 
+                                    : 'CONTINUE TO STEP ${currentStep + 1}',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.5,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  size: 18.sp,
+                                  color: Colors.black,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ],

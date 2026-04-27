@@ -188,8 +188,9 @@ class HomeCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 136.w,
@@ -318,6 +319,7 @@ class HomeCardWidget extends StatelessWidget {
                     drug_button(),
                   ],
                 ),
+              ),
                 Image.asset(AssetsPath.heroparts, height: 170.h, width: 165.w),
               ],
             ),
