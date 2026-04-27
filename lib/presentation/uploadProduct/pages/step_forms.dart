@@ -36,29 +36,62 @@ class StepOneForm extends StatelessWidget {
     return Column(
       children: [
         CustomTextField(
-          label: 'Product Name',
-          hintText: 'Enter your product name',
+          label: 'Product Title',
+          hintText: 'Enter your product title',
           onChanged: (v) => controller.updateFormData({'title': v}),
         ),
-        CustomTextField(
-          label: 'Category',
-          hintText: 'Enter your category',
-          onChanged: (v) => controller.updateFormData({'category': v}),
-        ),
-        CustomTextField(
-          label: 'Brand',
-          hintText: 'Enter your brand',
-          onChanged: (v) => controller.updateFormData({'brand': v}),
-        ),
-        CustomTextField(
-          label: 'Chassis Number',
-          hintText: 'Enter your chassis number',
-          onChanged: (v) => controller.updateFormData({'chassisNumber': v}),
-        ),
-        CustomTextField(
-          label: 'Car Models',
-          hintText: 'Enter car models (comma separated)',
-          onChanged: (v) => controller.updateFormData({'carModelsRaw': v}),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, bottom: 6.h),
+              child: Text(
+                'Category',
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            Obx(() => DropdownButtonFormField<String>(
+              value: controller.formData['category'],
+              decoration: InputDecoration(
+                hintText: controller.isCategoryLoading.value ? 'Loading...' : 'Select Category',
+                hintStyle: GoogleFonts.montserrat(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
+                filled: true,
+                fillColor: const Color(0xFF383838),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 14.h,
+                  horizontal: 12.w,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                  borderSide: const BorderSide(color: Colors.white, width: 1.2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                  borderSide: const BorderSide(color: Colors.white, width: 1.8),
+                ),
+              ),
+              dropdownColor: const Color(0xFF383838),
+              style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.white),
+              items: controller.categories.map((cat) {
+                return DropdownMenuItem<String>(
+                  value: cat.name, // or cat.id depending on what the API expects
+                  child: Text(cat.name),
+                );
+              }).toList(),
+              onChanged: (v) => controller.updateFormData({'category': v}),
+            )),
+            SizedBox(height: 14.h),
+          ],
         ),
         CustomTextField(
           label: 'Price',
@@ -68,19 +101,14 @@ class StepOneForm extends StatelessWidget {
         ),
         CustomTextField(
           label: 'Condition',
-          hintText: 'Enter your condition',
+          hintText: 'Enter condition (new, used, refurbished, newly imported)',
           onChanged: (v) => controller.updateFormData({'condition': v}),
         ),
         CustomTextField(
-          label: 'Warranty',
-          hintText: 'Enter warranty details',
-          onChanged: (v) => controller.updateFormData({'warranty': v}),
-        ),
-        CustomTextField(
-          label: 'Discount',
-          hintText: 'Enter discount (optional)',
-          keyboardType: TextInputType.number,
-          onChanged: (v) => controller.updateFormData({'discount': v}),
+          label: 'Description',
+          hintText: 'Enter your product description',
+          maxLines: 4,
+          onChanged: (v) => controller.updateFormData({'description': v}),
         ),
       ],
     );
@@ -96,10 +124,46 @@ class StepTwoForm extends StatelessWidget {
     return Column(
       children: [
         CustomTextField(
-          label: 'Description',
-          hintText: 'Enter your product description',
-          maxLines: 6,
-          onChanged: (v) => controller.updateFormData({'description': v}),
+          label: 'Brand',
+          hintText: 'Enter brand (e.g. Toyota)',
+          onChanged: (v) => controller.updateFormData({'brand': v}),
+        ),
+        CustomTextField(
+          label: 'Model',
+          hintText: 'Enter vehicle model (e.g. Camry)',
+          onChanged: (v) => controller.updateFormData({'model': v}),
+        ),
+        CustomTextField(
+          label: 'Year',
+          hintText: 'Enter year',
+          keyboardType: TextInputType.number,
+          onChanged: (v) => controller.updateFormData({'year': v}),
+        ),
+        CustomTextField(
+          label: 'Chassis Number',
+          hintText: 'Enter chassis number',
+          onChanged: (v) => controller.updateFormData({'chassisNumber': v}),
+        ),
+        CustomTextField(
+          label: 'Parts Number',
+          hintText: 'Enter parts number',
+          onChanged: (v) => controller.updateFormData({'partsNumber': v}),
+        ),
+        CustomTextField(
+          label: 'Discount (%)',
+          hintText: 'Enter discount percentage',
+          keyboardType: TextInputType.number,
+          onChanged: (v) => controller.updateFormData({'discount': v}),
+        ),
+        CustomTextField(
+          label: 'Warranty',
+          hintText: 'Enter warranty details',
+          onChanged: (v) => controller.updateFormData({'warranty': v}),
+        ),
+        CustomTextField(
+          label: 'Compatible Car Models',
+          hintText: 'Enter car models (comma separated)',
+          onChanged: (v) => controller.updateFormData({'carModelsRaw': v}),
         ),
       ],
     );

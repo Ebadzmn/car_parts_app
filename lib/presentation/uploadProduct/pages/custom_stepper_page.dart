@@ -241,7 +241,7 @@ class _CustomHorizontalStepperPageState extends State<CustomHorizontalStepperPag
                               SizedBox(width: 8.w),
                             ],
                             Text(
-                              currentStep == 3 ? (isUploading ? 'Uploading...' : 'Finish') : 'Next',
+                              currentStep == 3 ? (isUploading ? 'Uploading product...' : 'Submit') : 'Next',
                               style: GoogleFonts.montserrat(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
