@@ -30,9 +30,6 @@ class LoginPage extends StatelessWidget {
       }
     }
 
-    void hideDialogIfOpen() {
-      if (Navigator.canPop(context)) Navigator.pop(context);
-    }
 
     void signIn() {
       if (!formKey.currentState!.validate()) return;
@@ -57,38 +54,37 @@ class LoginPage extends StatelessWidget {
           if (state is AuthLoading) {
             showCustomLoadingDialog(context, message: 'Logging in...');
           } else {
-            hideDialogIfOpen();
-          }
+            // Dismiss the loading dialog
+            if (Navigator.canPop(context)) Navigator.pop(context);
 
-          if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          } else if (state is SignInSuccess) {
-            hideDialogIfOpen();
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            } else if (state is SignInSuccess) {
+              context.read<UserProfileBloc>().add(const GetUserProfileEvent());
 
-            context.read<UserProfileBloc>().add(const GetUserProfileEvent());
+              final from = Uri.decodeComponent(
+                GoRouterState.of(context).uri.queryParameters['from'] ?? '',
+              );
 
-            final from = Uri.decodeComponent(
-              GoRouterState.of(context).uri.queryParameters['from'] ?? '',
-            );
-
-            if (from.isNotEmpty) {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
-
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                final rootContext = rootNavigatorKey.currentContext;
-                if (rootContext != null) {
-                  rootContext.push(from);
+              if (from.isNotEmpty) {
+                if (Navigator.canPop(context)) {
+                  Navigator.of(context).pop(); // Close login page
                 }
-              });
-            } else {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final rootContext = rootNavigatorKey.currentContext;
+                  if (rootContext != null) {
+                    rootContext.push(from);
+                  }
+                });
               } else {
-                context.go(AppRoutes.MainScreen);
+                if (Navigator.canPop(context)) {
+                  Navigator.of(context).pop(); // Close login page
+                } else {
+                  context.go(AppRoutes.MainScreen);
+                }
               }
             }
           }

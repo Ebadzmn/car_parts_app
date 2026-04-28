@@ -78,7 +78,6 @@ class CustomLoadingDialog extends StatelessWidget {
 }
 
 Future<void> showCustomLoadingDialog(BuildContext context, {String message = 'Logging in...'}) async {
-  if (Navigator.canPop(context)) return;
   showDialog(
     context: context,
     barrierDismissible: false,
