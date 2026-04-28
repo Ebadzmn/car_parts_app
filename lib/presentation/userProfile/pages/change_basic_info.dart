@@ -1,5 +1,6 @@
 import 'package:car_parts_app/core/coreWidget/address_autocomplete_field.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
+import 'package:car_parts_app/core/coreWidget/custom_phone_field.dart';
 import 'package:car_parts_app/presentation/userProfile/controllers/change_basic_info_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -169,10 +170,13 @@ class ChangeBasicInfo extends StatelessWidget {
                               },
                             ),
                             SizedBox(height: 12.h),
-                            CustomTextField(
+                            CustomPhoneField(
                               label: 'WhatsApp Number',
                               hintText: 'Enter your WhatsApp Number',
                               controller: controller.whatsappController,
+                              onChanged: (phone) {
+                                controller.completeWhatsappNumber.value = phone.completeNumber;
+                              },
                             ),
                             SizedBox(height: 36.h),
                             Container(

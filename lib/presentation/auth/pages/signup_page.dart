@@ -2,6 +2,7 @@ import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:car_parts_app/core/config/assets_path.dart';
 import 'package:car_parts_app/core/coreWidget/address_autocomplete_field.dart';
 import 'package:car_parts_app/core/coreWidget/custom_text_widget.dart';
+import 'package:car_parts_app/core/coreWidget/custom_phone_field.dart';
 import 'package:car_parts_app/data/model/auth/sign_up_model.dart';
 import 'package:car_parts_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:flutter/gestures.dart';
@@ -24,6 +25,7 @@ class SignupPage extends StatelessWidget {
   final passwordController = TextEditingController();
   final addressController = TextEditingController();
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
+  final ValueNotifier<String> completeContactNumber = ValueNotifier('');
 
   // Address-related state
   final ValueNotifier<String> selectedAddress = ValueNotifier('');
@@ -45,7 +47,7 @@ class SignupPage extends StatelessWidget {
     final model = SignupModel(
       name: fullNameController.text.trim(),
       email: emailController.text.trim(),
-      contact: contactController.text.trim(),
+      contact: completeContactNumber.value.isEmpty ? contactController.text.trim() : completeContactNumber.value,
       password: passwordController.text,
       address: addressController.text.trim(),
       lat: selectedLat.value,
@@ -120,10 +122,13 @@ class SignupPage extends StatelessWidget {
                 ),
 
                 // Contact Number (Optional)
-                CustomTextField(
+                CustomPhoneField(
                   controller: contactController,
                   label: 'Whatsapp Number',
                   hintText: 'Please enter your whatsapp number',
+                  onChanged: (phone) {
+                    completeContactNumber.value = phone.completeNumber;
+                  },
                 ),
 
                 // Address with Autocomplete

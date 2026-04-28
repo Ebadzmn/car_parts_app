@@ -15,6 +15,7 @@ class ChangeBasicInfoController extends GetxController {
   final fullNameController = TextEditingController();
   final addressController = TextEditingController();
   final whatsappController = TextEditingController();
+  final RxString completeWhatsappNumber = ''.obs;
 
   final RxDouble selectedLat = 0.0.obs;
   final RxDouble selectedLng = 0.0.obs;
@@ -61,6 +62,7 @@ class ChangeBasicInfoController extends GetxController {
 
         fullNameController.text = data['name'] ?? '';
         whatsappController.text = data['whatsappNumber']?.toString() ?? '';
+        completeWhatsappNumber.value = data['whatsappNumber']?.toString() ?? '';
         currentImageUrl.value = data['image']?.toString() ?? data['profilePicture']?.toString() ?? '';
 
         String address = data['address'] ?? '';
@@ -95,7 +97,9 @@ class ChangeBasicInfoController extends GetxController {
 
   Future<void> updateUserProfile(BuildContext context) async {
     final name = fullNameController.text.trim();
-    final whatsappNumber = whatsappController.text.trim();
+    final whatsappNumber = completeWhatsappNumber.value.isNotEmpty 
+        ? completeWhatsappNumber.value 
+        : whatsappController.text.trim();
     final address = addressController.text.trim();
 
     void showMessage(String title, String message, Color backgroundColor) {
