@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class SignupModel extends Equatable {
   final String name;
   final String email;
-  final String contact;
+  final String whatsappNumber;
   final String password;
   final String address;
   final double lat;
@@ -12,7 +12,7 @@ class SignupModel extends Equatable {
   SignupModel({
     required this.name,
     required this.email,
-    required this.contact,
+    required this.whatsappNumber,
     required this.password,
     this.address = '',
     this.lat = 0.0,
@@ -24,7 +24,7 @@ class SignupModel extends Equatable {
     return SignupModel(
       name: json['name'],
       email: json['email'],
-      contact: json['contact'],
+      whatsappNumber: json['whatsappNumber'] ?? json['contact'],
       password: json['password'],
       address: json['address'] ?? '',
       lat: (coordinates?['lat'] ?? 0.0).toDouble(),
@@ -36,7 +36,7 @@ class SignupModel extends Equatable {
     return {
       'name': name,
       'email': email,
-      'contact': contact,
+      'whatsappNumber': whatsappNumber,
       'password': password,
       'address': address,
       'coordinates': {
@@ -47,5 +47,5 @@ class SignupModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, email, contact, password, address, lat, lng];
+  List<Object?> get props => [name, email, whatsappNumber, password, address, lat, lng];
 }

@@ -26,135 +26,129 @@ class NewArrivalsWidget extends StatelessWidget {
 
     double childAspectRatio = screenWidth < 600 ? 2 / 2.9 : 2.2 / 3.2;
 
-    return SafeArea(
-      top: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          /// ===== HEADER =====
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<NewArrivalsBloc, NewArrivalsState>(
+      builder: (context, state) {
+        if (state is NewArrivalsLoaded && state.products.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  context.push(AppRoutes.NewArrivalsListScreen);
-                },
-                child: Text(
-                  'See More',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 16.sp,
-                    color: Colors.grey,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.grey,
-                    fontStyle: FontStyle.italic,
+              SizedBox(height: 20.h),
+              /// ===== HEADER =====
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      context.push(AppRoutes.NewArrivalsListScreen);
+                    },
+                    child: Text(
+                      'See More',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16.sp,
+                        color: Colors.grey,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.grey,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 15.h),
+
+              /// ===== Content =====
+              Builder(
+                builder: (context) {
+                  // ── Loading ──
+                  if (state is NewArrivalsLoading) {
+                    return _buildShimmerGrid(crossAxisCount, childAspectRatio);
+                  }
+
+                  // ── Error ──
+                  if (state is NewArrivalsError) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40.h),
+                        child: Column(
+                          children: [
+                            Text(
+                              state.message,
+                              style: GoogleFonts.montserrat(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 12.h),
+                            ElevatedButton(
+                              onPressed: () {
+                                context.read<NewArrivalsBloc>().add(
+                                  const FetchNewArrivalsRequested(limit: '6'),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                              ),
+                              child: Text(
+                                'Retry',
+                                style: GoogleFonts.montserrat(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  // ── Loaded ──
+                  if (state is NewArrivalsLoaded) {
+                    final products = state.products;
+
+                    // Show limited items on home (first 6)
+                    final displayProducts = products.length > 6
+                        ? products.sublist(0, 6)
+                        : products;
+
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 0.w,
+                        vertical: 10.h,
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 10.w,
+                        mainAxisSpacing: 10.h,
+                        childAspectRatio: childAspectRatio,
+                      ),
+                      itemCount: displayProducts.length,
+                      itemBuilder: (context, index) {
+                        final item = displayProducts[index];
+                        return _buildProductCard(context, item);
+                      },
+                    );
+                  }
+
+                  return const SizedBox();
+                },
               ),
             ],
           ),
-
-          SizedBox(height: 15.h),
-
-          /// ===== BlocBuilder =====
-          BlocBuilder<NewArrivalsBloc, NewArrivalsState>(
-            builder: (context, state) {
-              // ── Loading ──
-              if (state is NewArrivalsLoading) {
-                return _buildShimmerGrid(crossAxisCount, childAspectRatio);
-              }
-
-              // ── Error ──
-              if (state is NewArrivalsError) {
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40.h),
-                    child: Column(
-                      children: [
-                        Text(
-                          state.message,
-                          style: GoogleFonts.montserrat(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 12.h),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.read<NewArrivalsBloc>().add(
-                              const FetchNewArrivalsRequested(limit: '6'),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          child: Text(
-                            'Retry',
-                            style: GoogleFonts.montserrat(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              // ── Loaded ──
-              if (state is NewArrivalsLoaded) {
-                final products = state.products;
-
-                if (products.isEmpty) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40.h),
-                    child: Center(
-                      child: Text(
-                        'No new arrivals available',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.grey,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
-                // Show limited items on home (first 6)
-                final displayProducts = products.length > 6
-                    ? products.sublist(0, 6)
-                    : products;
-
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 0.w,
-                    vertical: 10.h,
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 10.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: childAspectRatio,
-                  ),
-                  itemCount: displayProducts.length,
-                  itemBuilder: (context, index) {
-                    final item = displayProducts[index];
-                    return _buildProductCard(context, item);
-                  },
-                );
-              }
-
-              return const SizedBox();
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

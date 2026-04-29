@@ -47,7 +47,7 @@ class SignupPage extends StatelessWidget {
     final model = SignupModel(
       name: fullNameController.text.trim(),
       email: emailController.text.trim(),
-      contact: completeContactNumber.value.isEmpty ? contactController.text.trim() : completeContactNumber.value,
+      whatsappNumber: completeContactNumber.value.isEmpty ? contactController.text.trim() : completeContactNumber.value,
       password: passwordController.text,
       address: addressController.text.trim(),
       lat: selectedLat.value,

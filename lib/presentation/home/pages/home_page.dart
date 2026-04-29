@@ -29,8 +29,14 @@ class HomePage extends StatelessWidget {
           children: [
             // 🔹 Main Scrollable Content
             SafeArea(
+              bottom: false,
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(10.sp),
+                padding: EdgeInsets.only(
+                  left: 10.sp,
+                  right: 10.sp,
+                  top: 10.sp,
+                  bottom: 120.h,
+                ),
                 child: Column(
                   children: [
                     SizedBox(height: 2.h),
@@ -53,7 +59,6 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: 12.h),
                     BecomeSellerCardWidget(),
-                    SizedBox(height: 20.h),
                     const NewArrivalsWidget(title: 'NEW ARRIVALS'),
                   ],
                 ),
