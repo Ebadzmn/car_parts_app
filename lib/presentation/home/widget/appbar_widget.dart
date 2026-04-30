@@ -88,16 +88,21 @@ class AppBarWidget extends StatelessWidget {
                         height: 40.w,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: (imageUrl.isNotEmpty)
-                                ? NetworkImage(imageUrl)
-                                : const NetworkImage(
-                                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop',
-                                      )
-                                      as ImageProvider,
-                            fit: BoxFit.cover,
-                          ),
+                          color: Colors.grey.withOpacity(0.2),
+                          image: (imageUrl.isNotEmpty)
+                              ? DecorationImage(
+                                  image: NetworkImage(imageUrl),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
+                        child: (imageUrl.isEmpty)
+                            ? Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 24.sp,
+                              )
+                            : null,
                       ),
                       SizedBox(width: 12.w),
                       Text(

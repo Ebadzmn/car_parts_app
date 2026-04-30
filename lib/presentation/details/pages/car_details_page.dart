@@ -551,7 +551,7 @@ class CarDetailsPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _launchWhatsApp('01869943362'),
+                        onPressed: () => _launchWhatsApp(product?.seller.whatsappNumber ?? ''),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
@@ -894,8 +894,21 @@ class CarDetailsPage extends StatelessWidget {
   // ── WHATSAPP LAUNCH ──
   Future<void> _launchWhatsApp(String phone) async {
     if (phone.isEmpty) return;
-    final cleaned = phone.replaceAll(RegExp(r'[^0-9+]'), '');
-    final uri = Uri.parse('https://wa.me/$cleaned');
+    // Remove all non-numeric characters (including +)
+    final cleaned = phone.replaceAll(RegExp(r'[^0-9]'), '');
+    
+    String formattedPhone = cleaned;
+
+    // If it's 10 digits, prepend 1 (US/Canada country code)
+    if (cleaned.length == 10) {
+      formattedPhone = '1$cleaned';
+    }
+    // If it's a Bangladesh number starting with 0 (11 digits), prepend 88
+    else if (cleaned.startsWith('0') && cleaned.length == 11) {
+      formattedPhone = '88$cleaned';
+    }
+    
+    final uri = Uri.parse('https://wa.me/$formattedPhone');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }

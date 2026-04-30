@@ -30,7 +30,5 @@ class AssetsPath {
   static const String favourite = '$_imageBaseUrl/favourite.png';
   static const String sellarpic = '$_imageBaseUrl/sellerpic.png';
   static const String filterPng = '$_imageBaseUrl/MagnifyingGlass.png';
-  static const String newLogo = '$_imageBaseUrl/appLOGOV2.png';
-  
-
+  static const String newLogo = '$_imageBaseUrl/newLgo.png';
 }
