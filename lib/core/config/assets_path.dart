@@ -31,4 +31,5 @@ class AssetsPath {
   static const String sellarpic = '$_imageBaseUrl/sellerpic.png';
   static const String filterPng = '$_imageBaseUrl/MagnifyingGlass.png';
   static const String newLogo = '$_imageBaseUrl/newLgo.png';
+  static const String splashLogo = '$_imageBaseUrl/spiamg.png';
 }

@@ -25,14 +25,29 @@ class SellerAccount extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Seller Account',
-                  style: GoogleFonts.montserrat(
-                    fontSize: isTablet ? 28.sp : 24.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                        size: isTablet ? 24.sp : 22.sp,
+                      ),
+                      onPressed: () => context.pop(),
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(
+                      'Seller Account',
+                      style: GoogleFonts.montserrat(
+                        fontSize: isTablet ? 28.sp : 24.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
                 ),
 
                 SizedBox(height: 20.h),

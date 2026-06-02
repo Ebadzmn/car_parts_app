@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ReusableProductCardWidget extends StatelessWidget {
   final ProductEntity item;
@@ -82,26 +83,29 @@ class ReusableProductCardWidget extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.r),
-                    color: Colors.black,
+                    color: Colors.transparent,
                   ),
-                  child: (item.mainImage.isNotEmpty)
-                      ? Image.network(
-                          item.mainImage,
-                          fit: BoxFit.contain,
-                          errorBuilder: (
-                            context,
-                            error,
-                            stack,
-                          ) =>
-                              Image.asset(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: (item.mainImage.isNotEmpty)
+                        ? Image.network(
+                            item.mainImage,
+                            fit: BoxFit.cover,
+                            errorBuilder: (
+                              context,
+                              error,
+                              stack,
+                            ) =>
+                                Image.asset(
+                              AssetsPath.cardtire,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(
                             AssetsPath.cardtire,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                           ),
-                        )
-                      : Image.asset(
-                          AssetsPath.cardtire,
-                          fit: BoxFit.contain,
-                        ),
+                  ),
                 ),
               ),
               SizedBox(height: 8.h),
@@ -119,7 +123,7 @@ class ReusableProductCardWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$${item.price.toStringAsFixed(2)}',
+                        '\$${NumberFormat('#,##0.00').format(item.price)}',
                         style: GoogleFonts.montserrat(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,

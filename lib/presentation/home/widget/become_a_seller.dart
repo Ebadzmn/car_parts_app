@@ -49,7 +49,9 @@ class SellerCardWidget extends StatelessWidget {
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(AppRoutes.SellarScreen);
+                        },
                         child: Text(
                           'Become a Seller',
                           style: GoogleFonts.montserrat(

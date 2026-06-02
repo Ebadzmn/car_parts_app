@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:car_parts_app/presentation/details/widget/selectTab_widget.dart';
@@ -647,7 +648,7 @@ class CarDetailsPage extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              '\$${price.toStringAsFixed(2)}',
+              '\$${NumberFormat('#,##0.00').format(price)}',
               style: GoogleFonts.montserrat(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -674,7 +675,7 @@ class CarDetailsPage extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              '\$${discountedPrice.toStringAsFixed(2)}',
+              '\$${NumberFormat('#,##0.00').format(discountedPrice)}',
               style: GoogleFonts.montserrat(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
@@ -699,7 +700,7 @@ class CarDetailsPage extends StatelessWidget {
           ),
           SizedBox(width: 10.w),
           Text(
-            '\$${price.toStringAsFixed(2)}',
+            '\$${NumberFormat('#,##0.00').format(price)}',
             style: GoogleFonts.montserrat(
               fontSize: 20.sp,
               fontWeight: FontWeight.w700,

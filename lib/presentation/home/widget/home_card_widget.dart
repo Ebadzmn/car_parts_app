@@ -191,135 +191,137 @@ class HomeCardWidget extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 136.w,
-                      height: 30.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(92.r),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 0,
-                            offset: const Offset(-1, 0),
-                            spreadRadius: 0,
-                            color: Colors.white54,
-                          ),
-                          BoxShadow(
-                            blurRadius: 2,
-                            offset: const Offset(1, 1),
-                            spreadRadius: 0,
-                            color: const Color(0xFF5B5B5B),
-                          ),
-                          BoxShadow(
-                            blurRadius: 0,
-                            offset: const Offset(2, 2),
-                            spreadRadius: 0,
-                            color: const Color(0xFF5B5B5B),
-                          ),
-                        ],
-                      ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(92.r),
-                          ),
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size(double.infinity, double.infinity),
-                        ),
-                        onPressed: () {},
-                        child: Center(
-                          child: Text(
-                            'Premium Product',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.montserrat(
-                              fontSize: 10.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              height: 1,
+                    children: [
+                      Container(
+                        width: 136.w,
+                        height: 30.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(92.r),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 0,
+                              offset: const Offset(-1, 0),
+                              spreadRadius: 0,
+                              color: Colors.white54,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Obx(() {
-                      if (controller.isLoading.value) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
+                            BoxShadow(
+                              blurRadius: 2,
+                              offset: const Offset(1, 1),
+                              spreadRadius: 0,
+                              color: const Color(0xFF5B5B5B),
                             ),
-                          ),
-                        );
-                      }
-
-                      final catName =
-                          controller.currentCategory?.name ?? 'Engine';
-                      final catDesc =
-                          controller.currentCategory?.description ??
-                          'Engine is the science of delivering power.';
-
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 800),
-                        layoutBuilder:
-                            (
-                              Widget? currentChild,
-                              List<Widget> previousChildren,
-                            ) {
-                              return Stack(
-                                alignment: Alignment.centerLeft,
-                                children: <Widget>[
-                                  ...previousChildren,
-                                  if (currentChild != null) currentChild,
-                                ],
-                              );
-                            },
-                        child: Column(
-                          key: ValueKey(catName),
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              catName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 3.h),
-                            SizedBox(
-                              width: 140.w,
-                              child: Text(
-                                catDesc,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 10.sp,
-                                  color: Colors.white,
-                                ),
-                              ),
+                            BoxShadow(
+                              blurRadius: 0,
+                              offset: const Offset(2, 2),
+                              spreadRadius: 0,
+                              color: const Color(0xFF5B5B5B),
                             ),
                           ],
                         ),
-                      );
-                    }),
-                    SizedBox(height: 20.h),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(92.r),
+                            ),
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size(double.infinity, double.infinity),
+                          ),
+                          onPressed: () {
+                            context.push(AppRoutes.uploadProductScreen);
+                          },
+                          child: Center(
+                            child: Text(
+                              'Add Product',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                fontSize: 12.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15.h),
+                      Obx(() {
+                        if (controller.isLoading.value) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          );
+                        }
 
-                    drug_button(),
-                  ],
+                        final catName =
+                            controller.currentCategory?.name ?? 'Engine';
+                        final catDesc =
+                            controller.currentCategory?.description ??
+                            'Engine is the science of delivering power.';
+
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 800),
+                          layoutBuilder:
+                              (
+                                Widget? currentChild,
+                                List<Widget> previousChildren,
+                              ) {
+                                return Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: <Widget>[
+                                    ...previousChildren,
+                                    if (currentChild != null) currentChild,
+                                  ],
+                                );
+                              },
+                          child: Column(
+                            key: ValueKey(catName),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                catName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 3.h),
+                              SizedBox(
+                                width: 140.w,
+                                child: Text(
+                                  catDesc,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 10.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 20.h),
+
+                      drug_button(),
+                    ],
+                  ),
                 ),
-              ),
                 Image.asset(AssetsPath.heroparts, height: 170.h, width: 165.w),
               ],
             ),

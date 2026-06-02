@@ -47,6 +47,23 @@ class _CategoryPagesState extends State<CategoryPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 75.h), // pushes it above the bottom nav
+        child: FloatingActionButton.extended(
+          backgroundColor: Colors.yellow,
+          onPressed: () {
+            context.push(AppRoutes.AddNewCategoryScreen);
+          },
+          icon: const Icon(Icons.add, color: Colors.black),
+          label: Text(
+            'Add Category',
+            style: GoogleFonts.montserrat(
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(20.w),

@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+import 'package:car_parts_app/presentation/home/controllers/main_screen_controller.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
@@ -216,6 +218,106 @@ class DrawerWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (Get.isRegistered<MainScreenController>()) {
+                          Get.find<MainScreenController>().changeTabIndex(0);
+                        }
+                        context.pop();
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.home_outlined,
+                        title: 'Home',
+                        subtitle: 'Go to home page',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () {
+                        if (Get.isRegistered<MainScreenController>()) {
+                          Get.find<MainScreenController>().changeTabIndex(1);
+                        }
+                        context.pop();
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.inventory_2_outlined,
+                        title: 'Product',
+                        subtitle: 'Browse all products',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () {
+                        if (Get.isRegistered<MainScreenController>()) {
+                          Get.find<MainScreenController>().changeTabIndex(2);
+                        }
+                        context.pop();
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.category_outlined,
+                        title: 'Category',
+                        subtitle: 'Browse by category',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () async {
+                        if (!await hasAuthToken()) {
+                          await redirectToLogin(
+                            context,
+                            intendedLocation: AppRoutes.uploadProductScreen,
+                          );
+                          return;
+                        }
+                        context.pop();
+                        context.push(AppRoutes.uploadProductScreen);
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.add_box_outlined,
+                        title: 'Add Product',
+                        subtitle: 'Upload new product',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () async {
+                        if (!await hasAuthToken()) {
+                          await redirectToLogin(
+                            context,
+                            intendedLocation: AppRoutes.Myproduct,
+                          );
+                          return;
+                        }
+                        context.pop();
+                        context.push(AppRoutes.Myproduct);
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.list_alt_outlined,
+                        title: 'My Product',
+                        subtitle: 'View your products',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () async {
+                        if (!await hasAuthToken()) {
+                          await redirectToLogin(
+                            context,
+                            intendedLocation: AppRoutes.AddNewCategoryScreen,
+                          );
+                          return;
+                        }
+                        context.pop();
+                        context.push(AppRoutes.AddNewCategoryScreen);
+                      },
+                      child: ProfileInfoTile(
+                        icon: Icons.create_new_folder_outlined,
+                        title: 'Add Category',
+                        subtitle: 'Request a new category',
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+
                     GestureDetector(
                       onTap: () async {
                         if (!await hasAuthToken()) {

@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 class NewArrivalsListPage extends StatelessWidget {
@@ -295,7 +296,7 @@ class NewArrivalsListPage extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.r),
-                    color: Colors.black,
+                    color: Colors.transparent,
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
@@ -305,10 +306,10 @@ class NewArrivalsListPage extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Image.asset(
                               AssetsPath.cardtire,
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             ),
                           )
-                        : Image.asset(AssetsPath.cardtire, fit: BoxFit.contain),
+                        : Image.asset(AssetsPath.cardtire, fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -331,7 +332,7 @@ class NewArrivalsListPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '\$${item.price.toStringAsFixed(2)}',
+                          '\$${NumberFormat('#,##0.00').format(item.price)}',
                           style: GoogleFonts.montserrat(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,

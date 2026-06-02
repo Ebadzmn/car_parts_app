@@ -6,6 +6,7 @@ import 'package:car_parts_app/core/appRoutes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:car_parts_app/presentation/home/controllers/main_screen_controller.dart';
@@ -49,7 +50,9 @@ class BecomeSellerCardWidget extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push(AppRoutes.SellarScreen);
+                    },
                     child: Text(
                       'Become a Seller',
                       style: GoogleFonts.montserrat(
@@ -104,7 +107,9 @@ class BecomeSellerCardWidget extends StatelessWidget {
                           if (Get.isRegistered<MainScreenController>()) {
                             Get.find<MainScreenController>().changeTabIndex(3);
                           }
-                          context.read<DragBloc>().add(const DragUpdateEvent(0));
+                          context.read<DragBloc>().add(
+                            const DragUpdateEvent(0),
+                          );
                         }
                       },
                       child: Container(
@@ -140,12 +145,19 @@ class BecomeSellerCardWidget extends StatelessWidget {
                                   child: GestureDetector(
                                     onPanUpdate: (details) {
                                       final maxDx = isTablet ? 130.0 : 110.0;
-                                      final newDx = (state.dx + details.delta.dx)
-                                          .clamp(0.0, maxDx);
-                                      context.read<DragBloc>().add(DragUpdateEvent(newDx));
+                                      final newDx =
+                                          (state.dx + details.delta.dx).clamp(
+                                            0.0,
+                                            maxDx,
+                                          );
+                                      context.read<DragBloc>().add(
+                                        DragUpdateEvent(newDx),
+                                      );
                                     },
                                     onPanEnd: (_) {
-                                      context.read<DragBloc>().add(DragEndEvent(state.dx));
+                                      context.read<DragBloc>().add(
+                                        DragEndEvent(state.dx),
+                                      );
                                     },
                                     child: Container(
                                       width: isTablet ? 35.w : 30.w,
@@ -153,9 +165,15 @@ class BecomeSellerCardWidget extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         color: Colors.yellow,
                                         shape: BoxShape.circle,
-                                        border: Border.all(color: Colors.yellow, width: 2),
+                                        border: Border.all(
+                                          color: Colors.yellow,
+                                          width: 2,
+                                        ),
                                       ),
-                                      child: const Icon(Icons.check, color: Colors.black),
+                                      child: const Icon(
+                                        Icons.check,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -170,9 +188,15 @@ class BecomeSellerCardWidget extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       color: Colors.black,
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.white, width: 2),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
                                     ),
-                                    child: const Icon(Icons.check, color: Colors.white),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],

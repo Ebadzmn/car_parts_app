@@ -216,8 +216,8 @@ class MainScreen extends StatelessWidget {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        height: 55.h,
-        width: 55.h,
+        height: 45.h,
+        width: 45.h,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -273,27 +273,30 @@ class MainScreen extends StatelessWidget {
           _screens[controller.currentIndex.value],
           Align(
             alignment: Alignment.bottomCenter,
-            child: SafeArea(
-              child: Container(
-                height: 85.h,
-                margin: EdgeInsets.only(
-                  left: 20.w,
-                  right: 20.w,
-                  bottom: 20.h,
-                ), // floating margin
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Container(
+              height: 65.h + MediaQuery.of(context).padding.bottom,
+              margin: EdgeInsets.zero,
+              padding: EdgeInsets.only(
+                left: 10.w,
+                right: 10.w,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0F0F0F),
-                  borderRadius: BorderRadius.circular(50.r),
-                  border: Border.all(
-                    color: const Color(0xFF2A2A2A),
-                    width: 1.5,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(24.r),
+                  ),
+                  border: Border(
+                    top: BorderSide(
+                      color: const Color(0xFF2A2A2A),
+                      width: 1.5,
+                    ),
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.5),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, -4),
                     ),
                   ],
                 ),
@@ -311,7 +314,6 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
         ],
       )),
     );
