@@ -124,10 +124,10 @@ class SignupPage extends StatelessWidget {
                 // Contact Number (Optional)
                 CustomPhoneField(
                   controller: contactController,
-                  label: 'Whatsapp Number',
-                  hintText: 'Please enter your whatsapp number',
+                  label: 'Contact Number',
+                  hintText: 'Please enter your contact number',
                   onChanged: (phone) {
-                    completeContactNumber.value = phone.completeNumber;
+                    completeContactNumber.value = phone;
                   },
                 ),
 

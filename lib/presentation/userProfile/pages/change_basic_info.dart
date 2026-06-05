@@ -171,11 +171,11 @@ class ChangeBasicInfo extends StatelessWidget {
                             ),
                             SizedBox(height: 12.h),
                             CustomPhoneField(
-                              label: 'WhatsApp Number',
-                              hintText: 'Enter your WhatsApp Number',
+                              label: 'Contact Number',
+                              hintText: 'Enter your Contact Number',
                               controller: controller.whatsappController,
                               onChanged: (phone) {
-                                controller.completeWhatsappNumber.value = phone.completeNumber;
+                                controller.completeWhatsappNumber.value = phone;
                               },
                             ),
                             SizedBox(height: 36.h),

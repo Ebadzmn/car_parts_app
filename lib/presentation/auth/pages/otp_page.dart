@@ -284,9 +284,7 @@ class _OtpPageState extends State<OtpPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Login tapped!')),
-                          );
+                          context.push(AppRoutes.LoginPage);
                         },
                     ),
                   ],

@@ -35,7 +35,13 @@ class SellerAccount extends StatelessWidget {
                         color: Colors.white,
                         size: isTablet ? 24.sp : 22.sp,
                       ),
-                      onPressed: () => context.pop(),
+                      onPressed: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go(AppRoutes.MainScreen);
+                        }
+                      },
                     ),
                     SizedBox(width: 10.w),
                     Text(
