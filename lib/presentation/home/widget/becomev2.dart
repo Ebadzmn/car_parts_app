@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:car_parts_app/presentation/home/controllers/main_screen_controller.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 
 class BecomeSellerCardWidget extends StatelessWidget {
   const BecomeSellerCardWidget({super.key});
@@ -50,8 +51,17 @@ class BecomeSellerCardWidget extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                     ),
-                    onPressed: () {
-                      context.push(AppRoutes.SellarScreen);
+                    onPressed: () async {
+                      final loggedIn = await hasAuthToken();
+                      if (!context.mounted) return;
+                      if (loggedIn) {
+                        context.push(AppRoutes.SellarScreen);
+                      } else {
+                        await redirectToLogin(
+                          context,
+                          intendedLocation: AppRoutes.SellarScreen,
+                        );
+                      }
                     },
                     child: Text(
                       'Become a Seller',
@@ -102,14 +112,27 @@ class BecomeSellerCardWidget extends StatelessWidget {
                     height: isTablet ? 50.h : 40.h,
                     child: BlocListener<DragBloc, DragState>(
                       listenWhen: (prev, curr) => curr.shouldNavigate,
-                      listener: (context, state) {
+                      listener: (context, state) async {
                         if (state.shouldNavigate) {
-                          if (Get.isRegistered<MainScreenController>()) {
-                            Get.find<MainScreenController>().changeTabIndex(3);
+                          final loggedIn = await hasAuthToken();
+                          if (!context.mounted) return;
+                          
+                          if (loggedIn) {
+                            if (Get.isRegistered<MainScreenController>()) {
+                              Get.find<MainScreenController>().changeTabIndex(3);
+                            }
+                          } else {
+                            await redirectToLogin(
+                              context,
+                              intendedLocation: AppRoutes.SellarScreen, // SellarScreen handles the tab 3 logic if pushed, but since drag relies on tab index maybe AppRoutes.SellarScreen is fine as fallback
+                            );
                           }
-                          context.read<DragBloc>().add(
-                            const DragUpdateEvent(0),
-                          );
+                          
+                          if (context.mounted) {
+                            context.read<DragBloc>().add(
+                              const DragUpdateEvent(0),
+                            );
+                          }
                         }
                       },
                       child: Container(

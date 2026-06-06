@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 
 class SellerCardWidget extends StatelessWidget {
   const SellerCardWidget({super.key});
@@ -18,7 +19,7 @@ class SellerCardWidget extends StatelessWidget {
       builder: (context, constraints) {
         // Check if device is tablet (600dp or more width)
         bool isTablet = constraints.maxWidth >= 600;
-        
+
         return Container(
           height: isTablet ? 320.h : 200.h, // Tablet → 280.h , Mobile → 200.h
           decoration: BoxDecoration(
@@ -49,48 +50,68 @@ class SellerCardWidget extends StatelessWidget {
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                         ),
-                        onPressed: () {
-                          context.push(AppRoutes.SellarScreen);
+                        onPressed: () async {
+                          final loggedIn = await hasAuthToken();
+                          if (!context.mounted) return;
+                          if (loggedIn) {
+                            context.push(AppRoutes.SellarScreen);
+                          } else {
+                            await redirectToLogin(
+                              context,
+                              intendedLocation: AppRoutes.SellarScreen,
+                            );
+                          }
                         },
                         child: Text(
                           'Become a Seller',
                           style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               color: Colors.black,
-                              fontSize: isTablet ? 12.sp : 10.sp, // Responsive font size
+                              fontSize: isTablet
+                                  ? 12.sp
+                                  : 10.sp, // Responsive font size
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: isTablet ? 12.h : 8.h), // Responsive spacing
+                    SizedBox(
+                      height: isTablet ? 12.h : 8.h,
+                    ), // Responsive spacing
                     // Heading text
                     Text(
                       'Drive Your \nBusiness Forward',
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: Colors.black,
-                          fontSize: isTablet ? 16.sp : 16.sp, // Responsive font size
+                          fontSize: isTablet
+                              ? 16.sp
+                              : 16.sp, // Responsive font size
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
                     ),
-                    SizedBox(height: isTablet ? 8.h : 4.h), // Responsive spacing
+                    SizedBox(
+                      height: isTablet ? 8.h : 4.h,
+                    ), // Responsive spacing
                     // Subtext
                     Text(
                       'Sell today, reach \neverywhere.',
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: Colors.black,
-                          fontSize: isTablet ? 14.sp : 12.sp, // Responsive font size
+                          fontSize: isTablet
+                              ? 14.sp
+                              : 12.sp, // Responsive font size
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    SizedBox(height: isTablet ? 16.h : 12.h), // Responsive spacing
-
+                    SizedBox(
+                      height: isTablet ? 16.h : 12.h,
+                    ), // Responsive spacing
                     // Drag Button
                     BlocProvider(
                       create: (_) => DragBloc(),
@@ -102,7 +123,9 @@ class SellerCardWidget extends StatelessWidget {
                           listener: (context, state) {
                             if (state.shouldNavigate) {
                               context.push(AppRoutes.detailsScreen).then((_) {
-                                context.read<DragBloc>().add(const DragUpdateEvent(0));
+                                context.read<DragBloc>().add(
+                                  const DragUpdateEvent(0),
+                                );
                               });
                             }
                           },
@@ -110,7 +133,10 @@ class SellerCardWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.black26,
                               borderRadius: BorderRadius.circular(49),
-                              border: Border.all(color: Colors.black, width: 1.5),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1.5,
+                              ),
                             ),
                             child: BlocBuilder<DragBloc, DragState>(
                               builder: (context, state) {
@@ -119,14 +145,18 @@ class SellerCardWidget extends StatelessWidget {
                                   children: [
                                     // Left blinking arrow
                                     Positioned(
-                                      left: isTablet ? 80.w : 60.w, // Responsive position
+                                      left: isTablet
+                                          ? 80.w
+                                          : 60.w, // Responsive position
                                       top: 0,
                                       bottom: 0,
                                       child: const _BlinkingArrow(),
                                     ),
                                     // Right blinking arrow
                                     Positioned(
-                                      right: isTablet ? 80.w : 60.w, // Responsive position
+                                      right: isTablet
+                                          ? 80.w
+                                          : 60.w, // Responsive position
                                       top: 0,
                                       bottom: 0,
                                       child: const _BlinkingArrow(),
@@ -138,26 +168,35 @@ class SellerCardWidget extends StatelessWidget {
                                       bottom: 0,
                                       child: GestureDetector(
                                         onPanUpdate: (details) {
-                                          final maxDx = isTablet ? 130.0 : 110.0; // Responsive max drag
-                                          final newDx = (state.dx + details.delta.dx)
-                                              .clamp(0.0, maxDx);
-                                          context
-                                              .read<DragBloc>()
-                                              .add(DragUpdateEvent(newDx));
+                                          final maxDx = isTablet
+                                              ? 130.0
+                                              : 110.0; // Responsive max drag
+                                          final newDx =
+                                              (state.dx + details.delta.dx)
+                                                  .clamp(0.0, maxDx);
+                                          context.read<DragBloc>().add(
+                                            DragUpdateEvent(newDx),
+                                          );
                                         },
                                         onPanEnd: (_) {
-                                          context
-                                              .read<DragBloc>()
-                                              .add(DragEndEvent(state.dx));
+                                          context.read<DragBloc>().add(
+                                            DragEndEvent(state.dx),
+                                          );
                                         },
                                         child: Container(
-                                          width: isTablet ? 35.w : 30.w, // Responsive size
-                                          height: isTablet ? 35.h : 30.h, // Responsive size
+                                          width: isTablet
+                                              ? 35.w
+                                              : 30.w, // Responsive size
+                                          height: isTablet
+                                              ? 35.h
+                                              : 30.h, // Responsive size
                                           decoration: BoxDecoration(
                                             color: Colors.yellow,
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                                color: Colors.yellow, width: 2),
+                                              color: Colors.yellow,
+                                              width: 2,
+                                            ),
                                           ),
                                           child: const Icon(
                                             Icons.check,
@@ -172,16 +211,24 @@ class SellerCardWidget extends StatelessWidget {
                                       top: 0,
                                       bottom: 0,
                                       child: Container(
-                                        width: isTablet ? 35.w : 30.w, // Responsive size
-                                        height: isTablet ? 35.h : 30.h, // Responsive size
+                                        width: isTablet
+                                            ? 35.w
+                                            : 30.w, // Responsive size
+                                        height: isTablet
+                                            ? 35.h
+                                            : 30.h, // Responsive size
                                         decoration: BoxDecoration(
                                           color: Colors.black,
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                              color: Colors.white, width: 2),
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
                                         ),
-                                        child: const Icon(Icons.check,
-                                            color: Colors.white),
+                                        child: const Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -245,8 +292,7 @@ class _BlinkingArrowState extends State<_BlinkingArrow>
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _opacity,
-      child: const Icon(Icons.arrow_forward_ios,
-          color: Colors.black, size: 20),
+      child: const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20),
     );
   }
 }

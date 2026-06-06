@@ -23,19 +23,12 @@ class ReusableProductCardWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.2,
-          ),
+          border: Border.all(color: Colors.grey, width: 1.2),
           borderRadius: BorderRadius.circular(20.r),
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF2E2C2A),
-              Color(0xFF131313),
-              Color(0xFF1D1D20),
-            ],
+            colors: [Color(0xFF2E2C2A), Color(0xFF131313), Color(0xFF1D1D20)],
           ),
         ),
         child: Padding(
@@ -62,21 +55,33 @@ class ReusableProductCardWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   foreground: Paint()
                     ..shader = LinearGradient(
-                      colors: getGradientColors(
-                        item.condition,
-                      ),
+                      colors: getGradientColors(item.condition),
                       begin: Alignment.topLeft,
                       end: Alignment.topRight,
-                    ).createShader(
-                      const Rect.fromLTWH(
-                        0,
-                        0,
-                        200,
-                        20,
-                      ),
-                    ),
+                    ).createShader(const Rect.fromLTWH(0, 0, 200, 20)),
                 ),
               ),
+              if (item.sellerName.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: 2.h),
+                  child: Row(
+                    children: [
+                      Icon(Icons.storefront, size: 12.sp, color: Colors.white),
+                      SizedBox(width: 4.w),
+                      Expanded(
+                        child: Text(
+                          item.sellerName,
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 9.sp,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               SizedBox(height: 8.h),
               Expanded(
                 child: Container(
@@ -91,20 +96,13 @@ class ReusableProductCardWidget extends StatelessWidget {
                         ? Image.network(
                             item.mainImage,
                             fit: BoxFit.cover,
-                            errorBuilder: (
-                              context,
-                              error,
-                              stack,
-                            ) =>
+                            errorBuilder: (context, error, stack) =>
                                 Image.asset(
-                              AssetsPath.cardtire,
-                              fit: BoxFit.cover,
-                            ),
+                                  AssetsPath.cardtire,
+                                  fit: BoxFit.cover,
+                                ),
                           )
-                        : Image.asset(
-                            AssetsPath.cardtire,
-                            fit: BoxFit.cover,
-                          ),
+                        : Image.asset(AssetsPath.cardtire, fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -129,27 +127,13 @@ class ReusableProductCardWidget extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           foreground: Paint()
                             ..shader = const LinearGradient(
-                              colors: [
-                                Color(0xFF5BB349),
-                                Color(0xFFFFFFFF),
-                              ],
-                            ).createShader(
-                              const Rect.fromLTWH(
-                                0,
-                                0,
-                                200,
-                                20,
-                              ),
-                            ),
+                              colors: [Color(0xFF5BB349), Color(0xFFFFFFFF)],
+                            ).createShader(const Rect.fromLTWH(0, 0, 200, 20)),
                         ),
                       ),
                     ],
                   ),
-                  Image.asset(
-                    AssetsPath.cardbtn,
-                    width: 30.w,
-                    height: 30.h,
-                  ),
+                  Image.asset(AssetsPath.cardbtn, width: 30.w, height: 30.h),
                 ],
               ),
             ],

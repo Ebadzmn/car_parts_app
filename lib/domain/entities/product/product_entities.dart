@@ -15,6 +15,7 @@ class ProductEntity extends Equatable {
   final String mainImage;
   final List<String> galleryImages;
   final String sellerId;
+  final String sellerName;
   final double sellerRating;
   final double averageRating;
   final int totalRatings;
@@ -37,6 +38,7 @@ class ProductEntity extends Equatable {
     required this.mainImage,
     required this.galleryImages,
     required this.sellerId,
+    required this.sellerName,
     required this.sellerRating,
     required this.averageRating,
     required this.totalRatings,
@@ -61,6 +63,7 @@ class ProductEntity extends Equatable {
         mainImage,
         galleryImages,
         sellerId,
+        sellerName,
         sellerRating,
         averageRating,
         totalRatings,

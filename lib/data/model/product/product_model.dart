@@ -16,6 +16,7 @@ class ProductModel extends ProductEntity {
     required super.mainImage,
     required super.galleryImages,
     required super.sellerId,
+    required super.sellerName,
     required super.sellerRating,
     required super.averageRating,
     required super.totalRatings,
@@ -56,6 +57,13 @@ class ProductModel extends ProductEntity {
       return raw?.toString() ?? '';
     }
 
+    String parseSellerName(dynamic raw) {
+      if (raw is Map<String, dynamic>) {
+        return (raw['name'] ?? raw['fullName'] ?? '').toString();
+      }
+      return '';
+    }
+
     return ProductModel(
       id: (json['_id'] ?? '').toString(),
       title: (json['title'] ?? '').toString(),
@@ -71,6 +79,7 @@ class ProductModel extends ProductEntity {
       mainImage: json['mainImage']?.toString() ?? '',
       galleryImages: parseStringList(json['galleryImages']),
       sellerId: parseSellerId(json['sellerId']),
+      sellerName: parseSellerName(json['sellerId']),
       sellerRating: parseDouble(json['sellerRating']),
       averageRating: parseDouble(json['averageRating']),
       totalRatings: parseInt(json['totalRatings']),
@@ -100,6 +109,7 @@ class ProductModel extends ProductEntity {
       'mainImage': mainImage,
       'galleryImages': galleryImages,
       'sellerId': sellerId,
+      'sellerName': sellerName,
       'sellerRating': sellerRating,
       'averageRating': averageRating,
       'totalRatings': totalRatings,
@@ -125,6 +135,7 @@ class ProductModel extends ProductEntity {
       mainImage: mainImage,
       galleryImages: galleryImages,
       sellerId: sellerId,
+      sellerName: sellerName,
       sellerRating: sellerRating,
       averageRating: averageRating,
       totalRatings: totalRatings,

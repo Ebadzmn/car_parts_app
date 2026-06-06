@@ -180,7 +180,8 @@ import 'package:get/get.dart';
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
 
   final MainScreenController controller = Get.put(MainScreenController());
 
@@ -195,6 +196,7 @@ class MainScreen extends StatelessWidget {
   Widget _buildNavIcon(
     BuildContext context,
     String iconPath,
+    String label,
     bool isSelected,
     int index,
   ) {
@@ -214,50 +216,65 @@ class MainScreen extends StatelessWidget {
 
         controller.changeTabIndex(index);
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        height: 45.h,
-        width: 45.h,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isSelected ? Colors.white : null,
-          boxShadow: isSelected
-              ? []
-              : [
-                  const BoxShadow(
-                    color: Colors.black, // Dark rim base
-                  ),
-                  BoxShadow(
-                    color: Colors.white.withOpacity(
-                      0.45,
-                    ), // Top-left light edge glow
-                    spreadRadius: -2.0,
-                    blurRadius: 0.2,
-                    offset: const Offset(-1.5, -1.5),
-                  ),
-                  const BoxShadow(
-                    color: Color(0xFF262626), // Inner surface dark grey
-                    spreadRadius: -2.0,
-                    blurRadius: 1,
-                    offset: Offset(
-                      1.5,
-                      1.5,
-                    ), // Shifts surface to expose white on top-left and black on bottom-right
-                  ),
-                ],
-          border: isSelected
-              ? Border.all(color: const Color(0xFFFFA500), width: 2.5.w)
-              : Border.all(color: Colors.transparent, width: 2.5.w),
-        ),
-        child: Center(
-          child: Image.asset(
-            iconPath,
-            height: 26.h,
-            width: 26.h,
-            color: isSelected ? Colors.black : Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            height: 38.h,
+            width: 38.h,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSelected ? Colors.white : null,
+              boxShadow: isSelected
+                  ? []
+                  : [
+                      const BoxShadow(
+                        color: Colors.black, // Dark rim base
+                      ),
+                      BoxShadow(
+                        color: Colors.white.withOpacity(
+                          0.45,
+                        ), // Top-left light edge glow
+                        spreadRadius: -2.0,
+                        blurRadius: 0.2,
+                        offset: const Offset(-1.5, -1.5),
+                      ),
+                      const BoxShadow(
+                        color: Color(0xFF262626), // Inner surface dark grey
+                        spreadRadius: -2.0,
+                        blurRadius: 1,
+                        offset: Offset(
+                          1.5,
+                          1.5,
+                        ), // Shifts surface to expose white on top-left and black on bottom-right
+                      ),
+                    ],
+              border: isSelected
+                  ? Border.all(color: const Color(0xFFFFA500), width: 2.5.w)
+                  : Border.all(color: Colors.transparent, width: 2.5.w),
+            ),
+            child: Center(
+              child: Image.asset(
+                iconPath,
+                height: 20.h,
+                width: 20.h,
+                color: isSelected ? Colors.black : Colors.white,
+              ),
+            ),
           ),
-        ),
+          SizedBox(height: 2.h),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFFFFA500) : Colors.white70,
+              fontSize: 9.sp,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -268,29 +285,27 @@ class MainScreen extends StatelessWidget {
       key: MainScreen.scaffoldKey,
       extendBody: true,
       drawer: DrawerWidget(),
-      body: Obx(() => Stack(
-        children: [
-          _screens[controller.currentIndex.value],
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 65.h + MediaQuery.of(context).padding.bottom,
-              margin: EdgeInsets.zero,
-              padding: EdgeInsets.only(
-                left: 10.w,
-                right: 10.w,
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
+      body: Obx(
+        () => Stack(
+          children: [
+            _screens[controller.currentIndex.value],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 65.h + MediaQuery.of(context).padding.bottom,
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.only(
+                  left: 10.w,
+                  right: 10.w,
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0F0F0F),
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24.r),
                   ),
                   border: Border(
-                    top: BorderSide(
-                      color: const Color(0xFF2A2A2A),
-                      width: 1.5,
-                    ),
+                    top: BorderSide(color: const Color(0xFF2A2A2A), width: 1.5),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -303,19 +318,41 @@ class MainScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavIcon(context, AssetsPath.navhome, controller.currentIndex.value == 0, 0),
-                    SizedBox(width: 6.w),
-                    _buildNavIcon(context, AssetsPath.nav2, controller.currentIndex.value == 1, 1),
-                    SizedBox(width: 6.w),
-                    _buildNavIcon(context, AssetsPath.navcat, controller.currentIndex.value == 2, 2),
-                    SizedBox(width: 6.w),
-                    _buildNavIcon(context, AssetsPath.navcart, controller.currentIndex.value == 3, 3),
+                    _buildNavIcon(
+                      context,
+                      AssetsPath.navhome,
+                      "Home",
+                      controller.currentIndex.value == 0,
+                      0,
+                    ),
+                    _buildNavIcon(
+                      context,
+                      AssetsPath.nav2,
+                      "Products",
+                      controller.currentIndex.value == 1,
+                      1,
+                    ),
+                    _buildNavIcon(
+                      context,
+                      AssetsPath.navcat,
+                      "Category",
+                      controller.currentIndex.value == 2,
+                      2,
+                    ),
+                    _buildNavIcon(
+                      context,
+                      AssetsPath.navcart,
+                      "Account",
+                      controller.currentIndex.value == 3,
+                      3,
+                    ),
                   ],
                 ),
               ),
             ),
-        ],
-      )),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -153,6 +153,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
+import 'package:car_parts_app/core/utils/auth_gate.dart';
 import 'package:car_parts_app/presentation/home/controllers/home_card_controller.dart';
 
 class HomeCardWidget extends StatelessWidget {
@@ -228,8 +229,17 @@ class HomeCardWidget extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             minimumSize: Size(double.infinity, double.infinity),
                           ),
-                          onPressed: () {
-                            context.push(AppRoutes.uploadProductScreen);
+                          onPressed: () async {
+                            final loggedIn = await hasAuthToken();
+                            if (!context.mounted) return;
+                            if (loggedIn) {
+                              context.push(AppRoutes.uploadProductScreen);
+                            } else {
+                              await redirectToLogin(
+                                context,
+                                intendedLocation: AppRoutes.uploadProductScreen,
+                              );
+                            }
                           },
                           child: Center(
                             child: Text(
