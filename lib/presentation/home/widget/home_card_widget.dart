@@ -379,20 +379,7 @@ class HomeCardWidget extends StatelessWidget {
                     return Stack(
                       alignment: Alignment.centerLeft,
                       children: [
-                        Positioned(
-                          right: 10,
-                          left: 0,
-                          top: 0,
-                          bottom: 0,
-                          child: const _BlinkingArrow(),
-                        ),
-                        Positioned(
-                          right: 0,
-                          left: 15,
-                          top: 0,
-                          bottom: 0,
-                          child: const _BlinkingArrow(),
-                        ),
+                        Positioned.fill(child: const _BlinkingSwipeText()),
                         Positioned(
                           right: 10,
                           top: 0,
@@ -467,14 +454,14 @@ class HomeCardWidget extends StatelessWidget {
 }
 
 // Blinking arrow widget
-class _BlinkingArrow extends StatefulWidget {
-  const _BlinkingArrow();
+class _BlinkingSwipeText extends StatefulWidget {
+  const _BlinkingSwipeText();
 
   @override
-  State<_BlinkingArrow> createState() => _BlinkingArrowState();
+  State<_BlinkingSwipeText> createState() => _BlinkingSwipeTextState();
 }
 
-class _BlinkingArrowState extends State<_BlinkingArrow>
+class _BlinkingSwipeTextState extends State<_BlinkingSwipeText>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacity;
@@ -499,7 +486,25 @@ class _BlinkingArrowState extends State<_BlinkingArrow>
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _opacity,
-      child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 22),
+      child: Center(
+        child: Text(
+          'SWIPE',
+          style: GoogleFonts.montserrat(
+            color: Colors.white,
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w800,
+            fontStyle: FontStyle.italic,
+            letterSpacing: 3.0,
+            shadows: const [
+              Shadow(
+                color: Colors.black54,
+                blurRadius: 4,
+                offset: Offset(1, 2),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
