@@ -39,7 +39,7 @@ class ProfileInfoTile extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.person_outline, color: Colors.white),
+          child: Icon(icon, color: Colors.white),
         ),
         SizedBox(width: 10.w),
         Column(

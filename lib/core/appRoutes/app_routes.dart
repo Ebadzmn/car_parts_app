@@ -264,12 +264,15 @@ final GoRouter appRouter = GoRouter(
 
     GoRoute(
       path: AppRoutes.setOtpPassword,
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: SetOtpPass(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
+      pageBuilder: (context, state) {
+        final email = state.extra as String? ?? '';
+        return CustomTransitionPage(
+          child: SetOtpPass(email: email),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        );
+      },
     ),
 
     GoRoute(

@@ -354,7 +354,7 @@ class DrawerWidget extends StatelessWidget {
                       onTap: () =>
                           context.push(AppRoutes.TearmsConditionScreen),
                       child: ProfileInfoTile(
-                        icon: Icons.person_outline,
+                        icon: Icons.description_outlined,
                         title: 'Terms & Conditions',
                         subtitle: 'Read terms & conditions before use',
                       ),
@@ -365,7 +365,7 @@ class DrawerWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: () => context.push(AppRoutes.AboutScreen),
                       child: ProfileInfoTile(
-                        icon: Icons.person_outline,
+                        icon: Icons.info_outline,
                         title: 'About',
                         subtitle: 'Learn more about our app and mission.',
                       ),
@@ -376,7 +376,7 @@ class DrawerWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: () => context.push(AppRoutes.FaqsPage),
                       child: ProfileInfoTile(
-                        icon: Icons.person_outline,
+                        icon: Icons.help_outline,
                         title: 'FAQ',
                         subtitle: 'Find answers to common questions.',
                       ),
@@ -385,7 +385,7 @@ class DrawerWidget extends StatelessWidget {
                     SizedBox(height: 20.h),
 
                     ProfileInfoTile(
-                      icon: Icons.person_outline,
+                      icon: Icons.star_border_outlined,
                       title: 'Rating',
                       subtitle: 'Share your feedback and rate us.',
                     ),

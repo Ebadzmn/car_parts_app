@@ -5,35 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgetPassword extends StatefulWidget {
-  const ForgetPassword({super.key});
+import 'package:car_parts_app/presentation/auth/controllers/forget_password_controller.dart';
+import 'package:get/get.dart';
 
-  @override
-  State<ForgetPassword> createState() => _ForgetPasswordState();
-}
+class ForgetPassword extends StatelessWidget {
+  ForgetPassword({super.key});
 
-class _ForgetPasswordState extends State<ForgetPassword> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  void _sendOtp() {
-    if (_formKey.currentState!.validate()) {
-      // ✅ form valid hole OTP send logic call hobe
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('OTP sent successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      context.push(AppRoutes.OtpPage);
-    }
-  }
+  final ForgetPasswordController controller = Get.put(ForgetPasswordController());
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +22,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           child: Padding(
             padding: EdgeInsets.all(20.sp),
             child: Form(
-              key: _formKey,
+              key: controller.formKeyForgetPass,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -93,7 +71,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
                   // ---------- Email Field ----------
                   CustomTextField(
-                    controller: _emailController,
+                    controller: controller.emailController,
                     label: 'Email',
                     hintText: 'Please enter your email',
                     validator: (value) {
@@ -130,23 +108,48 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   SizedBox(
                     height: 44.h,
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                    child: Obx(() {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.amber,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
-                      ),
-                      onPressed: _sendOtp,
-                      child: Text(
-                        'Send OTP',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 16.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                        onPressed: controller.isLoading.value ? null : () => controller.sendOtp(context),
+                        child: controller.isLoading.value
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 16.h,
+                                    width: 16.h,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    'Sending...',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                'Send OTP',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      );
+                    }),
                   ),
                 ],
               ),

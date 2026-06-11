@@ -1,99 +1,19 @@
-import 'dart:async';
 import 'package:car_parts_app/core/appRoutes/app_routes.dart';
+import 'package:car_parts_app/presentation/auth/controllers/forget_password_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class SetOtpPass extends StatefulWidget {
-  const SetOtpPass({super.key});
+class SetOtpPass extends StatelessWidget {
+  final String email;
 
-  @override
-  State<SetOtpPass> createState() => _SetOtpPassState();
-}
+  SetOtpPass({super.key, required this.email});
 
-class _SetOtpPassState extends State<SetOtpPass> {
-  final TextEditingController _otpController = TextEditingController();
-  int _secondsRemaining = 180; // 3 minutes = 180 seconds
-  Timer? _timer;
-  bool _isExpired = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer();
-  }
-
-  void _startTimer() {
-    _secondsRemaining = 180;
-    _isExpired = false;
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-
-      if (_secondsRemaining > 0) {
-        setState(() => _secondsRemaining--);
-      } else {
-        setState(() {
-          _isExpired = true;
-        });
-        timer.cancel();
-      }
-    });
-  }
-
-  String get _formattedTime {
-    final minutes = (_secondsRemaining ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_secondsRemaining % 60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
-  }
-
-  void _resendOtp() {
-    if (!_isExpired) {
-      return;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('OTP Resent!'),
-        backgroundColor: Colors.amber,
-      ),
-    );
-    _startTimer();
-  }
-
-  void _verifyOtp() {
-    final otp = _otpController.text.trim();
-    if (otp.isEmpty || otp.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a valid 6-digit OTP'),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
-    } else {
-      // ✅ OTP verify logic এখানে লিখো (API call etc.)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('OTP Verified Successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      context.push(AppRoutes.set_new_password);
-    }
-  }
-
-  @override
-  void dispose() {
-    _otpController.dispose();
-    _timer?.cancel();
-    super.dispose();
-  }
+  final ForgetPasswordController controller = Get.find<ForgetPasswordController>();
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +76,7 @@ class _SetOtpPassState extends State<SetOtpPass> {
               PinCodeTextField(
                 appContext: context,
                 length: 6,
-                controller: _otpController,
+                controller: controller.otpController,
                 keyboardType: TextInputType.number,
                 animationType: AnimationType.fade,
                 enableActiveFill: true,
@@ -178,39 +98,44 @@ class _SetOtpPassState extends State<SetOtpPass> {
               ),
 
               // ---------- Timer Text ----------
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(
-                    color: _isExpired ? Colors.redAccent : Colors.amber,
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      size: 18.sp,
-                      color: _isExpired ? Colors.redAccent : Colors.amber,
+              Obx(() {
+                final isExpired = controller.isExpired.value;
+                final formattedTime = controller.formattedTime;
+                
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: isExpired ? Colors.redAccent : Colors.amber,
+                      width: 1,
                     ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      _isExpired
-                          ? 'Code expired!'
-                          : 'Code expires in: $_formattedTime',
-                      style: GoogleFonts.montserrat(
-                        textStyle: TextStyle(
-                          color: _isExpired ? Colors.redAccent : Colors.white,
-                          fontWeight: FontWeight.w600,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 18.sp,
+                        color: isExpired ? Colors.redAccent : Colors.amber,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        isExpired
+                            ? 'Code expired!'
+                            : 'Code expires in: $formattedTime',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: isExpired ? Colors.redAccent : Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                );
+              }),
 
               SizedBox(height: 18.h),
 
@@ -218,30 +143,57 @@ class _SetOtpPassState extends State<SetOtpPass> {
               SizedBox(
                 height: 44.h,
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                child: Obx(() {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.amber,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
-                  ),
-                  onPressed: _verifyOtp,
-                  child: Text(
-                    'Continue',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                    onPressed: controller.isLoading.value 
+                        ? null 
+                        : () => controller.verifyOtp(context, email, controller.otpController.text.trim()),
+                    child: controller.isLoading.value
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 16.h,
+                                width: 16.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: 10.w),
+                              Text(
+                                'Verifying...',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            'Continue',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 16.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                  );
+                }),
               ),
 
               SizedBox(height: 12.h),
 
               // ---------- Back to Login ----------
               GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.go(AppRoutes.LoginPage),
                 child: Container(
                   height: 40.h,
                   width: double.infinity,
@@ -267,27 +219,30 @@ class _SetOtpPassState extends State<SetOtpPass> {
               SizedBox(height: 12.h),
 
               // ---------- Resend OTP ----------
-              RichText(
-                text: TextSpan(
-                  text: "Didn’t receive any code?",
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(color: Colors.white),
-                  ),
-                  children: [
-                    TextSpan(
-                      text: _isExpired ? '  Resend' : '  Wait...',
-                      style: TextStyle(
-                        color: _isExpired ? Colors.amber : Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
-                      recognizer: _isExpired
-                          ? (TapGestureRecognizer()..onTap = _resendOtp)
-                          : null,
+              Obx(() {
+                final isExpired = controller.isExpired.value;
+                return RichText(
+                  text: TextSpan(
+                    text: "Didn’t receive any code?",
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(color: Colors.white),
                     ),
-                  ],
-                ),
-              ),
+                    children: [
+                      TextSpan(
+                        text: isExpired ? '  Resend' : '  Wait...',
+                        style: TextStyle(
+                          color: isExpired ? Colors.amber : Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                        recognizer: isExpired
+                            ? (TapGestureRecognizer()..onTap = () => controller.resendOtp(context))
+                            : null,
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ),

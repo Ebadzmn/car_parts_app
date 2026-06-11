@@ -3,6 +3,8 @@ class ApiUrls {
   static const String signUp = '/auth/register';
   static const String verifyOtp = '/auth/verify-email';
   static const String signIn = '/auth/login';
+  static const String forgetPassword = '/auth/forget-password';
+  static const String resetPassword = '/auth/reset-password';
   static const String getCategories = '/category';
   static const String productAdvanced = '/product';
   static const String productSearch = '/product/search';
