@@ -1,4 +1,4 @@
-package com.example.car_parts_app
+package com.jbay.app
 
 import io.flutter.embedding.android.FlutterActivity
 

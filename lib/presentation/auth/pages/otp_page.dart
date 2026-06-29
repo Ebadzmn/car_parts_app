@@ -118,6 +118,38 @@ class _OtpPageState extends State<OtpPage> {
                 ),
               ),
               SizedBox(height: 6.h),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(color: Colors.amber.withOpacity(0.5)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: Colors.amber, size: 20.sp),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12.sp,
+                            color: Colors.white,
+                          ),
+                          children: const [
+                            TextSpan(text: "Didn't receive the email? Check your "),
+                            TextSpan(
+                              text: "Spam",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),
+                            ),
+                            TextSpan(text: " folder."),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: 30.sp),
 
               // OTP Input Field
